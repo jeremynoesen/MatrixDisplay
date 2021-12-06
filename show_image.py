@@ -3,7 +3,9 @@
 """
 Draw an image of any size to the Unicorn HAT. Images will be scaled to fit a 1:1 aspect ratio. The scaling algorithm
 will divide the image up into an 8 by 8 grid, evenly among the x and y axes. The average color per grid block will be
-mapped directly to one LED on the matrix. To use, run the file with one argument, which will be the path to the image.
+mapped directly to one LED on the matrix. Essentially, this applies the equivalent to a pixelation filter.
+
+Usage: sudo python show_image.py path/to/image
 """
 
 import sys
