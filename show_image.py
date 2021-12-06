@@ -18,13 +18,13 @@ unicorn.rotation(90)
 unicorn.brightness(0.5)
 
 # Get image and dimensions
-image = Image.open(str(sys.argv)[0])
+image = Image.open(str(sys.argv[0]))
 scale_x = int(image.size[0] / 8)
 scale_y = int(image.size[1] / 8)
 
 # Draw all pixels of matrix
-for matrix_x in range(int(8)):
-    for matrix_y in range(int(8)):
+for matrix_x in range(8):
+    for matrix_y in range(8):
 
         # Reset RGB values for next calculation cycle
         r = 0
@@ -32,8 +32,8 @@ for matrix_x in range(int(8)):
         b = 0
 
         # Sum all RGB values in a block of pixels
-        for block_x in range(int(matrix_x * scale_x), int((matrix_x * scale_x) + scale_x - 1)):
-            for block_y in range(int(matrix_y * scale_y), int((matrix_y * scale_y) + scale_y - 1)):
+        for block_x in range(matrix_x * scale_x, (matrix_x * scale_x) + scale_x):
+            for block_y in range(matrix_y * scale_y, (matrix_y * scale_y) + scale_y):
                 pixel = image.getpixel((block_x, block_y))
                 r += int(pixel[0])
                 g += int(pixel[1])
