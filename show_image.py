@@ -17,8 +17,12 @@ unicorn.set_layout(unicorn.HAT)
 unicorn.rotation(90)
 unicorn.brightness(0.5)
 
-# Get image and dimensions
-image = Image.open(str(sys.argv[0]))
+# Load image, replacing alpha with black color
+raw = Image.open(str(sys.argv[0])).convert("RGBA")
+background = Image.new("RGBA", raw.size, (0, 0, 0))
+image = Image.alpha_composite(background, raw)
+
+# Get scale factors for filtering
 scale_x = int(image.size[0] / 8)
 scale_y = int(image.size[1] / 8)
 
