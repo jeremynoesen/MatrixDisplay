@@ -17,8 +17,10 @@ unicorn.set_layout(unicorn.HAT)
 unicorn.rotation(90)
 unicorn.brightness(0.5)
 
+# TODO add gif support
+
 # Load image, replacing alpha with black color
-raw = Image.open(str(sys.argv[0])).convert("RGBA")
+raw = Image.open(str(sys.argv[1])).convert("RGBA")
 background = Image.new("RGBA", raw.size, (0, 0, 0))
 image = Image.alpha_composite(background, raw)
 
