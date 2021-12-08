@@ -14,8 +14,8 @@ import unicornhat as unicorn
 
 # Configure the Unicorn HAT
 unicorn.set_layout(unicorn.HAT)
-unicorn.rotation(90)
-unicorn.brightness(0.5)
+unicorn.rotation(270)
+unicorn.brightness(1)
 
 # TODO add gif support
 
@@ -52,4 +52,4 @@ for matrix_x in range(8):
 
         # Show pixel on matrix
         unicorn.set_pixel(matrix_x, matrix_y, r, g, b)
-        unicorn.show()
+unicorn.show()
