@@ -20,7 +20,7 @@ try:
     unicorn.brightness(1)
 
     # Load raw image
-    print(f"Loading image {str(sys.argv[1])}")
+    print(f"Loading image: {str(sys.argv[1])}")
     input_image = Image.open(str(sys.argv[1]))
 
     # Get scale factors for filtering
@@ -35,7 +35,7 @@ try:
         frame_step = 60
 
     # Process all frames of image before displaying
-    print("Processing frames, this may take a while...")
+    print("Processing image; this may take a while!")
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
 
     for i in range(frame_count):
@@ -68,7 +68,7 @@ try:
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
     # Display frames of image on a loop
-    print("Displaying image!")
+    print("Displaying image.")
     current_frame_index = 0
     while True:
         current_frame = processed_frames[current_frame_index]
