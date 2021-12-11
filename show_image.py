@@ -70,11 +70,12 @@ for i in range(frames):
 # Display frames of image on a loop
 current_frame_index = 0
 while True:
+    current_frame = processed_frames[current_frame_index]
 
     # Draw image
-    for matrix_x in range(width):
-        for matrix_y in range(height):
-            unicorn.set_pixel(matrix_x, matrix_y, processed_frames[current_frame_index][matrix_x][matrix_y])
+    for matrix_x in range(8):
+        for matrix_y in range(8):
+            unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
     unicorn.show()
 
     # Increment frame counter
