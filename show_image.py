@@ -19,31 +19,28 @@ unicorn.rotation(270)
 unicorn.brightness(1)
 
 # Load raw image
-raw = Image.open(str(sys.argv[1]))
+input_image = Image.open(str(sys.argv[1]))
 
 # Get scale factors for filtering
-width = raw.size[0]
-height = raw.size[1]
-scale_x = int(width / 8)
-scale_y = int(height / 8)
+scale_x = int(input_image.size[0] / 8)
+scale_y = int(input_image.size[1] / 8)
 
 # Get animation data
-frames = getattr(raw, "n_frames", 1)
-if getattr(raw, "is_animated", False) is True:
-    frame_step = raw.info['duration'] / float(frames)
+frame_count = getattr(input_image, "n_frames", 1)
+if getattr(input_image, "is_animated", False) is True:
+    frame_step = input_image.info['duration'] / 1000.0
 else:
     frame_step = 60
 
 # Process all frames of image before displaying
-processed_frames = [[[(0, 0, 0)] * width for i in range(height)] for j in range(frames)]
+processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
 
-for i in range(frames):
-    raw.seek(i)
+for i in range(frame_count):
+    input_image.seek(i)
 
     # Draw black background behind image
-    frame = raw.convert("RGBA")
-    background = Image.new("RGBA", raw.size, (0, 0, 0))
-    image = Image.alpha_composite(background, frame)
+    background = Image.new("RGBA", input_image.size, (0, 0, 0))
+    image = Image.alpha_composite(background, input_image.convert("RGBA"))
 
     for matrix_x in range(8):
         for matrix_y in range(8):
@@ -79,7 +76,7 @@ while True:
     unicorn.show()
 
     # Increment frame counter
-    if current_frame_index < frames - 1:
+    if current_frame_index < frame_count - 1:
         current_frame_index += 1
     else:
         current_frame_index = 0
