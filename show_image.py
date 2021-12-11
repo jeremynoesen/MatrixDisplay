@@ -13,73 +13,80 @@ import time
 from PIL import Image
 import unicornhat as unicorn
 
-# Configure the Unicorn HAT
-unicorn.set_layout(unicorn.HAT)
-unicorn.rotation(270)
-unicorn.brightness(1)
+try:
+    # Configure the Unicorn HAT
+    unicorn.set_layout(unicorn.HAT)
+    unicorn.rotation(270)
+    unicorn.brightness(1)
 
-# Load raw image
-input_image = Image.open(str(sys.argv[1]))
+    # Load raw image
+    print(f"Loading image {str(sys.argv[1])}")
+    input_image = Image.open(str(sys.argv[1]))
 
-# Get scale factors for filtering
-scale_x = int(input_image.size[0] / 8)
-scale_y = int(input_image.size[1] / 8)
+    # Get scale factors for filtering
+    scale_x = int(input_image.size[0] / 8)
+    scale_y = int(input_image.size[1] / 8)
 
-# Get animation data
-frame_count = getattr(input_image, "n_frames", 1)
-if getattr(input_image, "is_animated", False) is True:
-    frame_step = input_image.info['duration'] / 1000.0
-else:
-    frame_step = 60
-
-# Process all frames of image before displaying
-processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
-
-for i in range(frame_count):
-    input_image.seek(i)
-
-    # Draw black background behind image
-    background = Image.new("RGBA", input_image.size, (0, 0, 0))
-    image = Image.alpha_composite(background, input_image.convert("RGBA"))
-
-    for matrix_x in range(8):
-        for matrix_y in range(8):
-            r = 0
-            g = 0
-            b = 0
-
-            # Sum all RGB values in a block of pixels
-            for block_x in range(matrix_x * scale_x, (matrix_x * scale_x) + scale_x):
-                for block_y in range(matrix_y * scale_y, (matrix_y * scale_y) + scale_y):
-                    pixel = image.getpixel((block_x, block_y))
-                    r += int(pixel[0])
-                    g += int(pixel[1])
-                    b += int(pixel[2])
-
-            # Get average RGB values for block
-            r = int(r / (scale_x * scale_y))
-            g = int(g / (scale_x * scale_y))
-            b = int(b / (scale_x * scale_y))
-
-            # Store processed image
-            processed_frames[i][matrix_x][matrix_y] = (r, g, b)
-
-# Display frames of image on a loop
-current_frame_index = 0
-while True:
-    current_frame = processed_frames[current_frame_index]
-
-    # Draw image
-    for matrix_x in range(8):
-        for matrix_y in range(8):
-            unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
-    unicorn.show()
-
-    # Increment frame counter
-    if current_frame_index < frame_count - 1:
-        current_frame_index += 1
+    # Get animation data
+    frame_count = getattr(input_image, "n_frames", 1)
+    if getattr(input_image, "is_animated", False) is True:
+        frame_step = input_image.info['duration'] / 1000.0
     else:
-        current_frame_index = 0
+        frame_step = 60
 
-    # Wait before next frame
-    time.sleep(frame_step)
+    # Process all frames of image before displaying
+    print("Processing frames, this may take a while...")
+    processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
+
+    for i in range(frame_count):
+        input_image.seek(i)
+
+        # Draw black background behind image
+        background = Image.new("RGBA", input_image.size, (0, 0, 0))
+        image = Image.alpha_composite(background, input_image.convert("RGBA"))
+
+        for matrix_x in range(8):
+            for matrix_y in range(8):
+                r = 0
+                g = 0
+                b = 0
+
+                # Sum all RGB values in a block of pixels
+                for block_x in range(matrix_x * scale_x, (matrix_x * scale_x) + scale_x):
+                    for block_y in range(matrix_y * scale_y, (matrix_y * scale_y) + scale_y):
+                        pixel = image.getpixel((block_x, block_y))
+                        r += int(pixel[0])
+                        g += int(pixel[1])
+                        b += int(pixel[2])
+
+                # Get average RGB values for block
+                r = int(r / (scale_x * scale_y))
+                g = int(g / (scale_x * scale_y))
+                b = int(b / (scale_x * scale_y))
+
+                # Store processed image
+                processed_frames[i][matrix_x][matrix_y] = (r, g, b)
+
+    # Display frames of image on a loop
+    print("Displaying image!")
+    current_frame_index = 0
+    while True:
+        current_frame = processed_frames[current_frame_index]
+
+        # Draw image
+        for matrix_x in range(8):
+            for matrix_y in range(8):
+                unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
+        unicorn.show()
+
+        # Increment frame counter
+        if current_frame_index < frame_count - 1:
+            current_frame_index += 1
+        else:
+            current_frame_index = 0
+
+        # Wait before next frame
+        time.sleep(frame_step)
+
+except KeyboardInterrupt:
+    print("Stopping.")
