@@ -69,20 +69,19 @@ for i in range(frames):
 
 # Display frames of image on a loop
 current_frame_index = 0
-
 while True:
-    current_frame = processed_frames[current_frame_index]
 
-    # Display image
+    # Draw image
     for matrix_x in range(width):
         for matrix_y in range(height):
-            pixel = current_frame[matrix_x][matrix_y]
-            unicorn.set_pixel(matrix_x, matrix_y, pixel)
+            unicorn.set_pixel(matrix_x, matrix_y, processed_frames[current_frame_index][matrix_x][matrix_y])
     unicorn.show()
 
-    # Wait before next frame
-    if current_frame_index is frames - 1:
-        current_frame_index = 0
-    else:
+    # Increment frame counter
+    if current_frame_index < frames - 1:
         current_frame_index += 1
+    else:
+        current_frame_index = 0
+
+    # Wait before next frame
     time.sleep(frame_step)
