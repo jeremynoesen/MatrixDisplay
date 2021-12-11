@@ -36,15 +36,17 @@ else:
 
 # Process all frames of image before displaying
 processed_frames = [[[(0, 0, 0)] * width for i in range(height)] for j in range(frames)]
+
 for i in range(frames):
     raw.seek(i)
+
+    # Draw black background behind image
     frame = raw.convert("RGBA")
     background = Image.new("RGBA", raw.size, (0, 0, 0))
     image = Image.alpha_composite(background, frame)
+
     for matrix_x in range(8):
         for matrix_y in range(8):
-
-            # Reset RGB values for next calculation cycle
             r = 0
             g = 0
             b = 0
@@ -67,6 +69,7 @@ for i in range(frames):
 
 # Display frames of image on a loop
 current_frame_index = 0
+
 while True:
     current_frame = processed_frames[current_frame_index]
 
@@ -77,7 +80,7 @@ while True:
             unicorn.set_pixel(matrix_x, matrix_y, pixel)
     unicorn.show()
 
-    # Wait for next frame
+    # Wait before next frame
     if current_frame_index is frames - 1:
         current_frame_index = 0
     else:
