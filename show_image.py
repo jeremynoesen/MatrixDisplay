@@ -19,25 +19,21 @@ try:
     unicorn.rotation(270)
     unicorn.brightness(1)
 
-    # Load raw image
+    # Load image
     print(f"Loading image: {str(sys.argv[1])}")
     input_image = Image.open(str(sys.argv[1]))
+
+    # Process all frames of image before displaying
+    print("Processing image; this may take a while!")
+    frame_count = getattr(input_image, "n_frames", 1)
+    processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
+    frame_durations = []
 
     # Get scale factors for filtering
     scale_x = int(input_image.size[0] / 8)
     scale_y = int(input_image.size[1] / 8)
 
-    # Get animation data
-    frame_count = getattr(input_image, "n_frames", 1)
-    if getattr(input_image, "is_animated", False) is True:
-        frame_step = input_image.info['duration'] / 1000.0
-    else:
-        frame_step = 60
-
-    # Process all frames of image before displaying
-    print("Processing image; this may take a while!")
-    processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
-
+    # Apply filtering
     for i in range(frame_count):
         input_image.seek(i)
 
@@ -64,8 +60,14 @@ try:
                 g = int(g / (scale_x * scale_y))
                 b = int(b / (scale_x * scale_y))
 
-                # Store processed image
+                # Store processed pixel
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
+
+        # Store frame duration
+        if getattr(input_image, "is_animated", False) is True:
+            frame_durations.append(input_image.info['duration'] / 1000.0)
+        else:
+            frame_durations.append(60)
 
     # Display frames of image on a loop
     print("Displaying image.")
@@ -79,14 +81,14 @@ try:
                 unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
         unicorn.show()
 
+        # Wait before next frame
+        time.sleep(frame_durations[current_frame_index])
+
         # Increment frame counter
         if current_frame_index < frame_count - 1:
             current_frame_index += 1
         else:
             current_frame_index = 0
-
-        # Wait before next frame
-        time.sleep(frame_step)
 
 except KeyboardInterrupt:
     print("Stopping.")
