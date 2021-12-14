@@ -29,9 +29,11 @@ try:
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
 
-    # Get scale factors for filtering
+    # Get values needed for filtering
     scale_x = int(input_image.size[0] / 8)
     scale_y = int(input_image.size[1] / 8)
+    offset_x = int((input_image.size[0] % 8) / 2)
+    offset_y = int((input_image.size[1] % 8) / 2)
 
     # Apply filtering
     for i in range(frame_count):
@@ -48,8 +50,8 @@ try:
                 b = 0
 
                 # Sum all RGB values in a block of pixels
-                for block_x in range(matrix_x * scale_x, (matrix_x * scale_x) + scale_x):
-                    for block_y in range(matrix_y * scale_y, (matrix_y * scale_y) + scale_y):
+                for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
+                    for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
                         pixel = image.getpixel((block_x, block_y))
                         r += int(pixel[0])
                         g += int(pixel[1])
