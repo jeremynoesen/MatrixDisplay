@@ -17,7 +17,6 @@ try:
     # Configure the Unicorn HAT
     unicorn.set_layout(unicorn.HAT)
     unicorn.rotation(270)
-    unicorn.brightness(1)
 
     # Load image
     print(f"Loading image: {str(sys.argv[1])}")
@@ -74,6 +73,7 @@ try:
     # Display frames of image on a loop
     print("Displaying image.")
     current_frame_index = 0
+    faded_in = False
     while True:
         current_frame = processed_frames[current_frame_index]
 
@@ -82,6 +82,14 @@ try:
             for matrix_y in range(8):
                 unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
         unicorn.show()
+
+        # Fade in if showing for the first time
+        if faded_in is False:
+            faded_in = True
+            for i in range(25, 101):
+                unicorn.brightness(i / 100.0)
+                unicorn.show()
+                time.sleep(0.002)
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])
@@ -94,3 +102,9 @@ try:
 
 except KeyboardInterrupt:
     print("Stopping.")
+
+    # Fade image out
+    for i in range(0, 76):
+        unicorn.brightness(1 - (i / 100.0))
+        unicorn.show()
+        time.sleep(0.01)
