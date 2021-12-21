@@ -81,7 +81,7 @@ try:
         # Draw image
         for matrix_x in range(8):
             for matrix_y in range(8):
-                unicorn.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
+                filter.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
         unicorn.show()
 
         # Fade in if showing for the first time
@@ -101,4 +101,3 @@ try:
 except KeyboardInterrupt:
     print("Stopping.")
     animation.fade_out(100, 0, 1)
-
