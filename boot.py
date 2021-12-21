@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 """
-Play the boot animation. This would be set up to run automatically on boot.
+Simple boot animation used to show when the board is ready to use.
 """
 
 import time

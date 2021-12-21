@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Animations used on the Unicorn HAT
 """

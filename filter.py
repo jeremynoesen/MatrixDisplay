@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Simple blue light filter for the Unicorn HAT
 """
