@@ -27,4 +27,5 @@ def enable_filter(enabled):
     Enable or disable the blue light filter
     :param enabled: True to enable filter
     """
-    filter.filter_enabled = enabled
+    global filter_enabled
+    filter_enabled = enabled

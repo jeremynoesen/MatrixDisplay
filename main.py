@@ -8,7 +8,6 @@ import unicornhat as unicorn
 import animation
 import boot
 
-
 try:
     # Initialize the Unicorn HAT
     unicorn.set_layout(unicorn.HAT)
@@ -17,8 +16,8 @@ try:
     # Show boot animation
     boot.show_animation()
 
+
+
 except KeyboardInterrupt:
     print("Stopping.")
     animation.fade(100, 0, 1)
-
-

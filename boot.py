@@ -30,4 +30,3 @@ def show_animation():
     # Fade in then out
     animation.fade(50, 100, 0.1)
     animation.fade(100, 0, 1)
-
