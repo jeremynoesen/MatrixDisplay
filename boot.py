@@ -10,10 +10,7 @@ import animation
 import filter
 
 
-def show_boot_animation():
-    # Initialize the Unicorn HAT
-    unicorn.set_layout(unicorn.HAT)
-    unicorn.rotation(270)
+def show_animation():
     unicorn.brightness(0.5)
 
     # Pixels in order of animation

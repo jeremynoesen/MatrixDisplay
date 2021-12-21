@@ -4,27 +4,17 @@
 Draw an image of any size to the Unicorn HAT. Images will be scaled to fit a 1:1 aspect ratio. The scaling algorithm
 will divide the image up into an 8 by 8 grid, evenly among the x and y axes. The average color per grid block will be
 mapped directly to one LED on the matrix. Essentially, this applies a pixelating filter.
-
-Usage: sudo python show_image.py path/to/image
 """
 
-import sys
 import time
 from PIL import Image
 import unicornhat as unicorn
 import animation
+import filter
 
-try:
-    # Configure the Unicorn HAT
-    unicorn.set_layout(unicorn.HAT)
-    unicorn.rotation(270)
 
-    # Load image
-    print(f"Loading image: {str(sys.argv[1])}")
-    input_image = Image.open(str(sys.argv[1]))
-
+def show_image(input_image):
     # Process all frames of image before displaying
-    print("Processing image; this may take a while!")
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
@@ -72,7 +62,6 @@ try:
             frame_durations.append(60)
 
     # Display frames of image on a loop
-    print("Displaying image.")
     current_frame_index = 0
     faded_in = False
     while True:
@@ -98,6 +87,3 @@ try:
         else:
             current_frame_index = 0
 
-except KeyboardInterrupt:
-    print("Stopping.")
-    animation.fade_out(100, 0, 1)
