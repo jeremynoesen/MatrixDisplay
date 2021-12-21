@@ -8,6 +8,7 @@ Usage: sudo python boot.py
 
 import time
 import unicornhat as unicorn
+import animation
 
 # Initialize the Unicorn HAT
 unicorn.set_layout(unicorn.HAT)
@@ -27,14 +28,6 @@ for j in range(len(pixels)):
     unicorn.show()
     time.sleep(0.07 - (j * 0.002))
 
-# Fade in
-for i in range(50, 101):
-    unicorn.brightness(i / 100.0)
-    unicorn.show()
-    time.sleep(0.002)
-
-# Fade out
-for i in range(0, 76):
-    unicorn.brightness(1 - (i / 100.0))
-    unicorn.show()
-    time.sleep(0.01)
+# Fade in then out
+animation.fade_in(50, 100, 0.1)
+animation.fade_out(100, 0, 1)

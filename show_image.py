@@ -12,6 +12,7 @@ import sys
 import time
 from PIL import Image
 import unicornhat as unicorn
+import animation
 
 try:
     # Configure the Unicorn HAT
@@ -86,10 +87,7 @@ try:
         # Fade in if showing for the first time
         if faded_in is False:
             faded_in = True
-            for i in range(25, 101):
-                unicorn.brightness(i / 100.0)
-                unicorn.show()
-                time.sleep(0.002)
+            animation.fade_in(0, 100, 0.2)
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])
@@ -102,9 +100,5 @@ try:
 
 except KeyboardInterrupt:
     print("Stopping.")
+    animation.fade_out(100, 0, 1)
 
-    # Fade image out
-    for i in range(0, 76):
-        unicorn.brightness(1 - (i / 100.0))
-        unicorn.show()
-        time.sleep(0.01)
