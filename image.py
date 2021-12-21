@@ -12,6 +12,10 @@ import filter
 
 
 def show_image(input_image):
+    """
+    Show an image on the Unicorn HAT
+    :param input_image: Image to show
+    """
     # Process all frames of image before displaying
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
@@ -74,7 +78,7 @@ def show_image(input_image):
         # Fade in if showing for the first time
         if faded_in is False:
             faded_in = True
-            animation.fade_in(0, 100, 0.2)
+            animation.fade(0, 100, 0.2)
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])

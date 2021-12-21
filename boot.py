@@ -9,6 +9,9 @@ import filter
 
 
 def show_animation():
+    """
+    Show the boot animation
+    """
     unicorn.brightness(0.5)
 
     # Pixels in order of animation
@@ -25,6 +28,6 @@ def show_animation():
         time.sleep(0.07 - (j * 0.002))
 
     # Fade in then out
-    animation.fade_in(50, 100, 0.1)
-    animation.fade_out(100, 0, 1)
+    animation.fade(50, 100, 0.1)
+    animation.fade(100, 0, 1)
 
