@@ -29,7 +29,7 @@ def set_warmth(warmth):
     :param warmth: 0 to 100 intensity of blue light filter
     """
     global current_warmth
-    current_warmth = warmth
+    current_warmth = min(max(warmth, 0), 100)
 
 
 def set_brightness(brightness):
@@ -38,4 +38,4 @@ def set_brightness(brightness):
     :param brightness: 0 to 100 brightness of display
     """
     global current_brightness
-    current_brightness = brightness / 100.0
+    current_brightness = min(max(brightness, 0), 100) / 100.0
