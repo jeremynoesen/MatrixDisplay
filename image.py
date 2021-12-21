@@ -68,13 +68,15 @@ def show_image(input_image):
     # Display frames of image on a loop
     current_frame_index = 0
     faded_in = False
+    global clear
     while not clear:
         current_frame = processed_frames[current_frame_index]
 
         # Draw image
         for matrix_x in range(8):
             for matrix_y in range(8):
-                filter.set_pixel(matrix_x, matrix_y, current_frame[matrix_x][matrix_y])
+                pixel = current_frame[matrix_x][matrix_y]
+                filter.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
         unicorn.show()
 
         # Fade in if showing for the first time
@@ -93,8 +95,6 @@ def show_image(input_image):
 
     # Fade image out
     animation.fade(100, 0, 1)
-
-    global clear
     clear = False
 
 
