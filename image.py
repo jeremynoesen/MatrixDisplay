@@ -9,14 +9,14 @@ from PIL import Image
 import unicornhat as unicorn
 import animation
 import filter
+import threading
 
-clear = False
+thread = None
 
 
-def show_image(input_image):
+def __show_image(input_image):
     """
-    Show an image on the Unicorn HAT
-    :param input_image: Image to show
+    Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
     """
     # Process all frames of image before displaying
     frame_count = getattr(input_image, "n_frames", 1)
@@ -63,13 +63,14 @@ def show_image(input_image):
         if getattr(input_image, "is_animated", False) is True:
             frame_durations.append(input_image.info['duration'] / 1000.0)
         else:
-            frame_durations.append(60)
+            frame_durations.append(1)
 
     # Display frames of image on a loop
     current_frame_index = 0
     faded_in = False
-    global clear
-    while not clear:
+
+    t = threading.currentThread()
+    while getattr(t, "loop", True):
         current_frame = processed_frames[current_frame_index]
 
         # Draw image
@@ -95,12 +96,20 @@ def show_image(input_image):
 
     # Fade image out
     animation.fade(100, 0, 1)
-    clear = False
+
+
+def show_image(image):
+    """
+    Show an image on the Unicorn HAT
+    :param image: Image to show
+    """
+    global thread
+    thread = threading.Thread(target=__show_image, args=(image,))
+    thread.start()
 
 
 def clear_image():
     """
-    Stop showing the image on the display
+    Clear the image off of the Unicorn HAT
     """
-    global clear
-    clear = True
+    thread.loop = False
