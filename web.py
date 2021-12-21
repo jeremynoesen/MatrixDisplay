@@ -1,7 +1,7 @@
+import time
 from http.server import BaseHTTPRequestHandler
 
 import image
-import filter
 from PIL import Image
 
 
@@ -22,8 +22,7 @@ class Server(BaseHTTPRequestHandler):
             </html>
         """
         self.do_HEAD()
-        if self.path == '/test1':
-            image.show_image(Image.open("/home/pi/Pictures/troll.png"))
-        elif self.path == '/test2':
-            filter.set_warmth(30)
+        if self.path.startswith("/image/"):
+            file = self.path.replace("/image/", "")
+            image.show_image(Image.open(f"/home/pi/Pictures/{file}"))
         self.wfile.write(html.encode("utf-8"))
