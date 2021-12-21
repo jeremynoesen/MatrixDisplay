@@ -19,5 +19,4 @@ try:
 
 
 except KeyboardInterrupt:
-    print("Stopping.")
     animation.fade(100, 0, 1)
