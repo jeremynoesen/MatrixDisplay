@@ -10,6 +10,8 @@ import unicornhat as unicorn
 import animation
 import filter
 
+clear = False
+
 
 def show_image(input_image):
     """
@@ -66,7 +68,7 @@ def show_image(input_image):
     # Display frames of image on a loop
     current_frame_index = 0
     faded_in = False
-    while True:
+    while not clear:
         current_frame = processed_frames[current_frame_index]
 
         # Draw image
@@ -89,3 +91,16 @@ def show_image(input_image):
         else:
             current_frame_index = 0
 
+    # Fade image out
+    animation.fade(100, 0, 1)
+
+    global clear
+    clear = False
+
+
+def clear_image():
+    """
+    Stop showing the image on the display
+    """
+    global clear
+    clear = True
