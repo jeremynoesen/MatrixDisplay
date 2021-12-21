@@ -23,7 +23,7 @@ def set_pixel(x, y, r, g, b):
         unicorn.set_pixel(x, y, r, g, b)
 
 
-def set_filter_enabled(enabled):
+def set_enabled(enabled):
     """
     Enable or disable the blue light filter
     :param enabled: True to enable filter
@@ -32,7 +32,7 @@ def set_filter_enabled(enabled):
     filter_enabled = enabled
 
 
-def set_filter_intensity(intensity):
+def set_intensity(intensity):
     """
     Set filter intensity
     :param intensity: 0 to 100 intensity of filter
