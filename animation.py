@@ -16,12 +16,12 @@ def fade(start, end, duration):
     if end > start:
         sleep_time = duration / float(end - start)
         for i in range(start, end + 1):
-            unicorn.brightness(max(i / 100.0, 0.25))
+            unicorn.brightness(i / 100.0)
             unicorn.show()
             time.sleep(sleep_time)
     elif start > end:
         sleep_time = duration / float(start - end)
         for i in range(end, start + 1):
-            unicorn.brightness(max((100 - i + end) / 100.0, 0.25))
+            unicorn.brightness((start + end - i) / 100.0)
             unicorn.show()
             time.sleep(sleep_time)
