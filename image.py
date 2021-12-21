@@ -104,6 +104,8 @@ def show_image(image):
     :param image: Image to show
     """
     global thread
+    clear_image()
+    time.sleep(1)
     thread = threading.Thread(target=__show_image, args=(image,))
     thread.start()
 
@@ -112,4 +114,5 @@ def clear_image():
     """
     Clear the image off of the Unicorn HAT
     """
-    thread.loop = False
+    if thread is not None:
+        thread.loop = False
