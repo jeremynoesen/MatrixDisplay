@@ -4,8 +4,8 @@ Simple blue light filter for the Unicorn HAT
 
 import unicornhat as unicorn
 
-filter_enabled = False
-filter_intensity = 30
+current_warmth = 0
+current_brightness = 1.0
 
 
 def set_pixel(x, y, r, g, b):
@@ -17,25 +17,25 @@ def set_pixel(x, y, r, g, b):
     :param g: green value
     :param b: blue value
     """
-    if filter_enabled is True:
-        unicorn.set_pixel(x, y, r, max(g - filter_intensity, 0), max(b - (filter_intensity * 3), 0))
-    else:
-        unicorn.set_pixel(x, y, r, g, b)
+    unicorn.set_pixel(x, y,
+                      int(r * current_brightness),
+                      int(max(g - current_warmth, 0) * current_brightness),
+                      int(max(b - (current_warmth * 3), 0) * current_brightness))
 
 
-def set_enabled(enabled):
+def set_warmth(warmth):
     """
-    Enable or disable the blue light filter
-    :param enabled: True to enable filter
+    Set blue light filter amount
+    :param warmth: 0 to 100 intensity of blue light filter
     """
-    global filter_enabled
-    filter_enabled = enabled
+    global current_warmth
+    current_warmth = warmth
 
 
-def set_intensity(intensity):
+def set_brightness(brightness):
     """
-    Set filter intensity
-    :param intensity: 0 to 100 intensity of filter
+    Set software display brightness
+    :param brightness: 0 to 100 brightness of display
     """
-    global filter_intensity
-    filter_intensity = intensity
+    global current_brightness
+    current_brightness = brightness / 100.0
