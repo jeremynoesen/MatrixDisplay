@@ -105,7 +105,7 @@ def show_image(image):
     """
     global thread
     clear_image()
-    time.sleep(1)
+    time.sleep(2)
     thread = threading.Thread(target=__show_image, args=(image,))
     thread.start()
 
