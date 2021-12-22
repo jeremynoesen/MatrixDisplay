@@ -1,32 +1,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Matrix Display</title>
+    <title>Pi Matrix Display</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+        body {
+            font-family: "Nunito", sans-serif;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            margin: 6vh 4vw;
+            font-size: 2vh;
+            line-height: 3.5vh;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
-<body style="margin: 20px 25%">
-<h1>Pi Matrix Display Control Panel</h1>
-<h2>Images:</h2>
-<p>{links_str}</p>
-<h2>Brightness:</h2>
-<div class="brightnesscontainer">
-    <input type="range" min="0" max="100" value="{brightness}" class="brightnessslider" id="brightness">
-</div>
+<body>
+<h1>Pi Matrix Display</h1>
+<br>
+<h2>Images</h2>
+<h3>{links_str}</h3>
+<br>
+<h2>Brightness</h2>
+<input type="range" min="0" max="100" value="{brightness}" id="brightness" style="width: 100%">
 <script>
     let brightness = document.getElementById("brightness");
-    brightness.oninput = function() {
+    brightness.oninput = function () {
         fetch("/brightness/" + this.value)
     }
 </script>
-<h2>Warmth:</h2>
-<div class="warmthcontainer">
-    <input type="range" min="0" max="100" value="{warmth}" class="warmthslider" id="warmth">
-</div>
+<br>
+<br>
+<h2>Warmth</h2>
+<input type="range" min="0" max="100" value="{warmth}" id="warmth" style="width: 100%">
 <script>
     let warmth = document.getElementById("warmth");
-    warmth.oninput = function() {
+    warmth.oninput = function () {
         fetch("/warmth/" + this.value)
     }
 </script>
-<h3><a href="/off">Off</a></h3>
+<br>
+<br>
+<h1><a href="/off">Off</a></h1>
 </body>
 </html>
