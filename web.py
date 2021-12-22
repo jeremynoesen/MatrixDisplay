@@ -18,8 +18,12 @@ class Server(BaseHTTPRequestHandler):
         links = []
         for file in files:
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
+        links_str = str(links).replace("[", "").replace("]", "").replace("'", "")
 
-        html = open("index.html")
+        html = open("index.html").read()\
+            .replace("{links_str}", links_str)\
+            .replace("{brightness}", str(int(filter.current_brightness * 100)))\
+            .replace("{warmth}", str(filter.current_warmth))
         self.do_HEAD()
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
@@ -33,3 +37,4 @@ class Server(BaseHTTPRequestHandler):
         elif self.path == "/off":
             image.clear_image()
         self.wfile.write(html.encode("utf-8"))
+
