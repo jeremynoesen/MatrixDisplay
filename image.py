@@ -14,7 +14,7 @@ import threading
 thread = None
 
 
-def __show_image(input_image):
+def __show(input_image):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
     """
@@ -98,19 +98,19 @@ def __show_image(input_image):
     animation.fade(100, 0, 1)
 
 
-def show_image(image):
+def show(image):
     """
     Show an image on the Unicorn HAT
     :param image: Image to show
     """
     global thread
-    clear_image()
+    clear()
     time.sleep(2)
-    thread = threading.Thread(target=__show_image, args=(image,))
+    thread = threading.Thread(target=__show, args=(image,))
     thread.start()
 
 
-def clear_image():
+def clear():
     """
     Clear the image off of the Unicorn HAT
     """
