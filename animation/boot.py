@@ -4,7 +4,7 @@ Simple boot animation used to show when the board is ready to use.
 
 import time
 import unicornhat as unicorn
-import transition
+from animation import transition
 import filter
 
 
@@ -25,7 +25,7 @@ def show():
         pixel = pixels[i]
         filter.set_pixel(pixel[0], pixel[1], 255, 255, 255)
         unicorn.show()
-        time.sleep(0.07 - (i * 0.002))
+        time.sleep(0.06 - (i * 0.0015))
 
     # Fade in then out
     transition.fade(50, 100, 0.1)

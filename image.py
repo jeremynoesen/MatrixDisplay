@@ -106,8 +106,8 @@ def show(image):
     Show an image on the Unicorn HAT
     :param image: Image to show
     """
-    global imagethread
     clear()
+    global imagethread
     imagethread = threading.Thread(target=__show, args=(image,))
     imagethread.start()
 
@@ -119,4 +119,5 @@ def clear():
     if imagethread is not None:
         transition.fade(100, 0, 1)
         imagethread.loop = False
+        time.sleep(1)
         unicorn.clear()
