@@ -1,4 +1,4 @@
-# PiMatrixDisplay
+# MatrixDisplay
 
 ## About
 This project is a set of Python programs used to display output, like images, onto the Pimoroni Unicorn HAT for Raspberry Pi.
