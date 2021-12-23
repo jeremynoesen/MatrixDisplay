@@ -22,7 +22,7 @@ class Server(BaseHTTPRequestHandler):
 
         html = open("index.html").read()\
             .replace("{links_str}", links_str)\
-            .replace("{brightness}", str(int(filter.current_brightness * 100)))\
+            .replace("{brightness}", str(filter.get_brightness()))\
             .replace("{warmth}", str(filter.current_warmth))
         self.do_HEAD()
         if self.path.startswith("/image/"):
