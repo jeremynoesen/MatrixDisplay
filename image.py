@@ -7,7 +7,7 @@ mapped directly to one LED on the matrix. Essentially, this applies a pixelating
 import time
 from PIL import Image
 import unicornhat as unicorn
-import animation
+from animation import transition
 import filter
 import threading
 
@@ -83,7 +83,7 @@ def __show(input_image):
         # Fade in if showing for the first time
         if faded_in is False:
             faded_in = True
-            animation.fade(0, 100, 0.2)
+            transition.fade(0, 100, 0.2)
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])
@@ -95,7 +95,7 @@ def __show(input_image):
             current_frame_index = 0
 
     # Fade image out
-    animation.fade(100, 0, 1)
+    transition.fade(100, 0, 1)
 
 
 def show(image):
