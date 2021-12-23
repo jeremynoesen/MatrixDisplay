@@ -15,7 +15,10 @@ def __show():
     """
     Show the loading animation
     """
-    unicorn.brightness(1)
+    t = threading.currentThread()
+
+    if getattr(t, "loop", True):
+        unicorn.brightness(1)
 
     # Pixels in order of animation
     pixels = [(7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6), (7, 7),
@@ -24,15 +27,15 @@ def __show():
               (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]
 
     faded_in = False
-    t = threading.currentThread()
     while getattr(t, "loop", True):
 
         # Do pixel animation
         for i in range(len(pixels)):
-            unicorn.clear()
 
             if not getattr(t, "loop", True):
                 break
+            else:
+                unicorn.clear()
 
             for j in range(8):
                 pixel = pixels[(i + j) % len(pixels)]
@@ -66,6 +69,16 @@ def clear():
     """
     if loadingthread is not None:
         transition.fade(100, 0, 0.2)
+        loadingthread.loop = False
+        time.sleep(0.03)
+        unicorn.clear()
+
+
+def cancel():
+    """
+    Clear the loading animation off of the Unicorn HAT without animating
+    """
+    if loadingthread is not None:
         loadingthread.loop = False
         time.sleep(0.03)
         unicorn.clear()
