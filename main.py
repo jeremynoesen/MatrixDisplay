@@ -15,12 +15,12 @@ try:
     unicorn.set_layout(unicorn.HAT)
     unicorn.rotation(270)
 
-    # Show boot animation
-    boot.show_animation()
-
     # Start web control server
     http_server = HTTPServer(("matrixdisplay.local", 8080), Server)
     http_server.serve_forever()
+
+    # Show boot animation
+    boot.show_animation()
 
 except KeyboardInterrupt:
     animation.fade(100, 0, 1)
