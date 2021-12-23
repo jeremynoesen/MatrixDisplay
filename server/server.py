@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import filter
 import image
 import os
+from animation import loading
 from PIL import Image
 
 pictures_dir = "/home/pi/Pictures"

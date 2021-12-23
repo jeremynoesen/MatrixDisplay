@@ -18,8 +18,11 @@ def __show(input_image):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
     """
+    t = threading.currentThread()
+
     # Show loading animation
-    loading.show()
+    if getattr(t, "loop", True):
+        loading.show()
 
     # Process all frames of image before displaying
     frame_count = getattr(input_image, "n_frames", 1)
@@ -69,13 +72,13 @@ def __show(input_image):
             frame_durations.append(1)
 
     # Clear loading animation
-    loading.clear()
+    if getattr(t, "loop", True):
+        loading.clear()
 
     # Display frames of image on a loop
     current_frame_index = 0
     faded_in = False
 
-    t = threading.currentThread()
     while getattr(t, "loop", True):
         current_frame = processed_frames[current_frame_index]
 
@@ -118,6 +121,7 @@ def clear():
     """
     if imagethread is not None:
         transition.fade(100, 0, 1)
+        loading.cancel()
         imagethread.loop = False
         time.sleep(1)
         unicorn.clear()
