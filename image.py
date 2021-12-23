@@ -7,17 +7,20 @@ mapped directly to one LED on the matrix. Essentially, this applies a pixelating
 import time
 from PIL import Image
 import unicornhat as unicorn
-from animation import transition
+from animation import transition, loading
 import filter
 import threading
 
-thread = None
+imagethread = None
 
 
 def __show(input_image):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
     """
+    # Show loading animation
+    loading.show()
+
     # Process all frames of image before displaying
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
@@ -65,6 +68,9 @@ def __show(input_image):
         else:
             frame_durations.append(1)
 
+    # Clear loading animation
+    loading.clear()
+
     # Display frames of image on a loop
     current_frame_index = 0
     faded_in = False
@@ -94,25 +100,23 @@ def __show(input_image):
         else:
             current_frame_index = 0
 
-    # Fade image out
-    transition.fade(100, 0, 1)
-
 
 def show(image):
     """
     Show an image on the Unicorn HAT
     :param image: Image to show
     """
-    global thread
+    global imagethread
     clear()
-    time.sleep(2)
-    thread = threading.Thread(target=__show, args=(image,))
-    thread.start()
+    imagethread = threading.Thread(target=__show, args=(image,))
+    imagethread.start()
 
 
 def clear():
     """
     Clear the image off of the Unicorn HAT
     """
-    if thread is not None:
-        thread.loop = False
+    if imagethread is not None:
+        transition.fade(100, 0, 1)
+        imagethread.loop = False
+        unicorn.clear()
