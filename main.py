@@ -5,22 +5,17 @@ Main file for PiMatrixDisplay operations. This should be set to run on boot.
 """
 
 import unicornhat as unicorn
-import animation
 import boot
 from http.server import HTTPServer
 from web import Server
 
-try:
-    # Initialize the Unicorn HAT
-    unicorn.set_layout(unicorn.HAT)
-    unicorn.rotation(270)
+# Initialize the Unicorn HAT
+unicorn.set_layout(unicorn.HAT)
+unicorn.rotation(270)
 
-    # Show boot animation
-    boot.show_animation()
+# Show boot animation
+boot.show_animation()
 
-    # Start web control server
-    http_server = HTTPServer(("matrixdisplay.local", 8080), Server)
-    http_server.serve_forever()
-
-except KeyboardInterrupt:
-    animation.fade(100, 0, 1)
+# Start web control server
+http_server = HTTPServer(("matrixdisplay.local", 8080), Server)
+http_server.serve_forever()
