@@ -37,7 +37,7 @@ def __show():
 
             for j in range(8):
                 pixel = pixels[(i + j) % len(pixels)]
-                filter.set_pixel(pixel[0], pixel[1], 255, 255, 255)
+                filter.set_pixel(pixel[0], pixel[1], 45 + (j * 30), 45 + (j * 30), 45 + (j * 30))
 
                 # Initial fade in
                 if faded_in is False:
