@@ -2,7 +2,7 @@
 A simple web server and interface used to easily control the Unicorn HAT
 """
 
-from http.server import BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import filter
 import image
@@ -47,7 +47,7 @@ class Server(BaseHTTPRequestHandler):
         # Process requests
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
-            image.show_image(Image.open(f"{pictures_dir}/{file}"))
+            image.show(Image.open(f"{pictures_dir}/{file}"))
         elif self.path.startswith("/brightness/"):
             brightness = int(self.path.replace("/brightness/", ""))
             filter.set_brightness(brightness)
@@ -55,4 +55,12 @@ class Server(BaseHTTPRequestHandler):
             warmth = int(self.path.replace("/warmth/", ""))
             filter.set_warmth(warmth)
         elif self.path == "/off":
-            image.clear_image()
+            image.clear()
+
+
+def start():
+    """
+    Start the web control panel server
+    """
+    http_server = HTTPServer(("matrixdisplay.local", 8080), Server)
+    http_server.serve_forever()

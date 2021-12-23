@@ -8,7 +8,7 @@ import animation
 import filter
 
 
-def show_animation():
+def show():
     """
     Show the boot animation
     """
