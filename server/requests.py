@@ -7,8 +7,9 @@ from http.server import BaseHTTPRequestHandler
 import filter
 import image
 import os
-import config
 from PIL import Image
+
+pictures_dir = "/home/pi/Pictures"
 
 
 class Server(BaseHTTPRequestHandler):
@@ -29,7 +30,7 @@ class Server(BaseHTTPRequestHandler):
         Process requests for displaying for GET requests
         """
         # Get pictures from Pictures folder on Pi
-        files = os.listdir(config.pictures_dir)
+        files = os.listdir(pictures_dir)
         links = []
         for file in files:
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
@@ -46,7 +47,7 @@ class Server(BaseHTTPRequestHandler):
         # Process requests
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
-            image.show_image(Image.open(f"{config.pictures_dir}/{file}"))
+            image.show_image(Image.open(f"{pictures_dir}/{file}"))
         elif self.path.startswith("/brightness/"):
             brightness = int(self.path.replace("/brightness/", ""))
             filter.set_brightness(brightness)
