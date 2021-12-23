@@ -37,7 +37,7 @@ class Server(BaseHTTPRequestHandler):
         links_str = str(links).replace("[", "").replace("]", "").replace("'", "")
 
         # Send the HTML over to create the web page
-        html = open("index.html").read() \
+        html = open("server/index.html").read() \
             .replace("{links_str}", links_str) \
             .replace("{brightness}", str(filter.get_brightness())) \
             .replace("{warmth}", str(filter.current_warmth))
