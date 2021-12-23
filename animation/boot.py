@@ -21,16 +21,15 @@ def show():
               (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]
 
     # Do pixel animation
-    for j in range(len(pixels)):
-        pixel = pixels[j]
+    for i in range(len(pixels)):
+        pixel = pixels[i]
         filter.set_pixel(pixel[0], pixel[1], 255, 255, 255)
         unicorn.show()
-        time.sleep(0.07 - (j * 0.002))
+        time.sleep(0.07 - (i * 0.002))
 
     # Fade in then out
     transition.fade(50, 100, 0.1)
     transition.fade(100, 0, 1)
 
     # Clear screen
-    for pixel in pixels:
-        filter.set_pixel(pixel[0], pixel[1], 0, 0, 0)
+    unicorn.clear()
