@@ -31,9 +31,10 @@ class Server(BaseHTTPRequestHandler):
         # Get pictures from Pictures folder on Pi
         files = os.listdir(pictures_dir)
         links = []
+        files.sort()
         for file in files:
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
-        links_str = str(links).replace("[", "").replace("]", "").replace("'", "")
+        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
 
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
