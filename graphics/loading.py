@@ -40,14 +40,14 @@ def __show():
 
                 # Initial fade in
                 if faded_in is False:
-                    time.sleep(0.03)
+                    time.sleep(0.04)
                     unicorn.show()
             unicorn.show()
 
             faded_in = True
 
             # Wait before next frane
-            time.sleep(0.03)
+            time.sleep(0.04)
 
 
 def show():
@@ -67,7 +67,7 @@ def clear():
     if loading_thread is not None:
         transition.fade(100, 0, 0.2)
         loading_thread.loop = False
-        time.sleep(0.03)
+        time.sleep(0.04)
         unicorn.clear()
 
 

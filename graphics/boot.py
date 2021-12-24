@@ -24,7 +24,7 @@ def show():
         pixel = pixels[i]
         filter.set_pixel(pixel[0], pixel[1], 255, 255, 255)
         unicorn.show()
-        time.sleep(0.06 - (i * 0.0015))
+        time.sleep(0.07 - (i * 0.002))
 
     # Fade in then out
     transition.fade(50, 100, 0.1)
