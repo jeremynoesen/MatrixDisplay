@@ -36,12 +36,12 @@ class Server(BaseHTTPRequestHandler):
         links_str = str(links).replace("[", "").replace("]", "").replace("'", "")
 
         # Send the HTML over to create the web page
-        html = open("server/index.html").read() \
-            .replace("{links_str}", links_str) \
-            .replace("{brightness}", str(filter.get_brightness())) \
-            .replace("{warmth}", str(filter.current_warmth))
-        self.do_HEAD()
-        self.wfile.write(html.encode("utf-8"))
+        with open("./server/index.html") as fd:
+            html = fd.read().replace("{links_str}", links_str) \
+                .replace("{brightness}", str(filter.get_brightness())) \
+                .replace("{warmth}", str(filter.current_warmth))
+            self.do_HEAD()
+            self.wfile.write(html.encode("utf-8"))
 
         # Process requests
         if self.path.startswith("/image/"):
@@ -61,5 +61,5 @@ def start():
     """
     Start the web control panel server
     """
-    http_server = HTTPServer(("matrixdisplay.local", 8080), Server)
+    http_server = HTTPServer(("", 8080), Server)
     http_server.serve_forever()
