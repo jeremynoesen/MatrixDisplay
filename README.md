@@ -1,17 +1,17 @@
 # MatrixDisplay
 
 ## About
-This project is a set of Python programs used to display output, like images, onto the Pimoroni Unicorn HAT for Raspberry Pi.
+MatrixDIsplay is a Python program used to display images on the Pimoroni Unicorn HAT for Raspberry Pi through a web interface.
 
 ## Purpose
 This project exists mainly as a way for me to try a new programming language, as well as to create a project that has both software and hardware aspects in it.
 
 ## Usage
-Instructions for running each individual module will be written in a comment at the top of the respective file.
+On the same Wi-Fi network as the Raspberry Pi, open your browser to `https://yourpihostname.local:8080`. From there, you can control the display output.
 
 ## Requirements
 Software:
-- Python 2 or higher
+- Python 3 or higher
 - The [unicorn-hat](https://github.com/pimoroni/unicorn-hat) library from Pimoroni
 - The [Pillow](https://pypi.org/project/Pillow/) library
 
@@ -23,5 +23,17 @@ Hardware:
 - A micro USB cable for power
 - A Micro SD card
 
+## Installation
+To install, simply clone the repo onto the Raspberry Pi, and set `main.py` to start when the Pi turns on.
+
+## Running
+To run the program, open a terminal and type `sudo python3 /path/to/main.py`. Replace the path to main.py with the proper location to your installation's main.py.
+
+## Configuration
+The only configurable value is the path to the images folder. In `server/server.py` you can set `pictures_dir` to your own images directory.
+
 ## Demonstration
 Demonstrations will be added soon!
+
+## Troubleshooting
+This is also coming soon.
