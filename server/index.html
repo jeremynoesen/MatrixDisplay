@@ -13,23 +13,49 @@
             text-align: center;
             margin: 6vh 4vw;
             font-size: 2vh;
-            line-height: 3.5vh;
+            line-height: 4vh;
         }
 
         a {
             color: white;
             text-decoration: none;
+            transition: 0.2s;
+        }
+
+        a:hover {
+            color: #999999;
+            transition: 0.2s;
+        }
+
+        hr {
+            color: #333333;
+            border-color: #333333;
+            border-style: solid;
+        }
+
+        .slider {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #333333;
+            border-radius: 100vw;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .slider:hover {
+            background-color: #666666;
+            transition: 0.2s;
         }
     </style>
 </head>
 <body>
 <h1>Matrix Display</h1>
-<br>
+<hr>
 <h2>Images</h2>
 <h3>{links_str}</h3>
-<br>
+<hr>
 <h2>Brightness</h2>
-<input type="range" min="0" max="100" value="{brightness}" id="brightness" style="width: 100%">
+<input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
 <script>
     let brightness = document.getElementById("brightness");
     brightness.oninput = function () {
@@ -37,9 +63,9 @@
     }
 </script>
 <br>
-<br>
+<hr>
 <h2>Warmth</h2>
-<input type="range" min="0" max="100" value="{warmth}" id="warmth" style="width: 100%">
+<input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
 <script>
     let warmth = document.getElementById("warmth");
     warmth.oninput = function () {
@@ -47,7 +73,7 @@
     }
 </script>
 <br>
-<br>
+<hr>
 <h1><a href="/off">Off</a></h1>
 </body>
 </html>
