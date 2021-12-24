@@ -5,7 +5,7 @@ Main file for MatrixDisplay operations. This should be set to run on boot.
 """
 
 import unicornhat as unicorn
-from animation import boot
+from graphics import boot
 from server import server
 
 # Initialize the Unicorn HAT

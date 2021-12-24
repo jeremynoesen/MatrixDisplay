@@ -4,8 +4,7 @@ Simple boot animation used to show when the board is ready to use.
 
 import time
 import unicornhat as unicorn
-from animation import transition
-import filter
+from graphics import transition, filter
 
 
 def show():

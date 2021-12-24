@@ -4,20 +4,19 @@ Simple loading animation to show when the device is processing
 
 import time
 import unicornhat as unicorn
-from animation import transition
-import filter
+from graphics import transition, filter
 import threading
 
-loadingthread = None
+loading_thread = None
 
 
 def __show():
     """
     Show the loading animation
     """
-    t = threading.currentThread()
+    thread = threading.currentThread()
 
-    if getattr(t, "loop", True):
+    if getattr(thread, "loop", True):
         unicorn.brightness(1)
 
     # Pixels in order of animation
@@ -25,12 +24,12 @@ def __show():
               (3, 7), (2, 7), (1, 6), (0, 5), (0, 4), (0, 3), (0, 2), (1, 1), (2, 0), (3, 0)]
 
     faded_in = False
-    while getattr(t, "loop", True):
+    while getattr(thread, "loop", True):
 
         # Do pixel animation
         for i in range(len(pixels)):
 
-            if not getattr(t, "loop", True):
+            if not getattr(thread, "loop", True):
                 break
             else:
                 unicorn.clear()
@@ -56,18 +55,18 @@ def show():
     Show the loading animation on the Unicorn HAT
     """
     clear()
-    global loadingthread
-    loadingthread = threading.Thread(target=__show)
-    loadingthread.start()
+    global loading_thread
+    loading_thread = threading.Thread(target=__show)
+    loading_thread.start()
 
 
 def clear():
     """
     Clear the loading animation off of the Unicorn HAT
     """
-    if loadingthread is not None:
+    if loading_thread is not None:
         transition.fade(100, 0, 0.2)
-        loadingthread.loop = False
+        loading_thread.loop = False
         time.sleep(0.03)
         unicorn.clear()
 
@@ -76,7 +75,7 @@ def cancel():
     """
     Clear the loading animation off of the Unicorn HAT without animating
     """
-    if loadingthread is not None:
-        loadingthread.loop = False
+    if loading_thread is not None:
+        loading_thread.loop = False
         time.sleep(0.03)
         unicorn.clear()

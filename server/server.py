@@ -4,10 +4,8 @@ A simple web server and interface used to easily control the Unicorn HAT
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-import filter
-import image
+from graphics import filter, image
 import os
-from animation import loading
 from PIL import Image
 
 pictures_dir = "/home/pi/Pictures"
