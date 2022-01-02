@@ -8,6 +8,7 @@ from graphics import transition, filter
 import threading
 
 loading_thread = None
+loading = False
 
 
 def __show():
@@ -50,32 +51,30 @@ def __show():
             time.sleep(0.04)
 
 
-def show():
+def show(animated):
     """
     Show the loading animation on the Unicorn HAT
+    :param animated: true to show the animated loading icon
     """
-    clear()
-    global loading_thread
-    loading_thread = threading.Thread(target=__show)
-    loading_thread.start()
+    clear(animated)
+    if animated:
+        global loading_thread
+        loading_thread = threading.Thread(target=__show)
+        loading_thread.start()
+    global loading
+    loading = True
 
 
-def clear():
+def clear(animated):
     """
     Clear the loading animation off of the Unicorn HAT
+    :param animated: true to animate clearing the loading animation
     """
     if loading_thread is not None:
-        transition.fade(100, 0, 0.2)
+        if animated:
+            transition.fade(100, 0, 0.2)
         loading_thread.loop = False
         time.sleep(0.04)
         unicorn.clear()
-
-
-def cancel():
-    """
-    Clear the loading animation off of the Unicorn HAT without animating
-    """
-    if loading_thread is not None:
-        loading_thread.loop = False
-        time.sleep(0.04)
-        unicorn.clear()
+    global loading
+    loading = False
