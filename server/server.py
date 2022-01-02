@@ -4,7 +4,7 @@ A simple web server and interface used to easily control the Unicorn HAT
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from graphics import filter, image
+from graphics import filter, image, slideshow
 import os
 from PIL import Image
 
@@ -54,7 +54,10 @@ class Server(BaseHTTPRequestHandler):
         elif self.path.startswith("/warmth/"):
             warmth = int(self.path.replace("/warmth/", ""))
             filter.set_warmth(warmth)
+        elif self.path == "/slideshow":
+            slideshow.show(pictures_dir)
         elif self.path == "/off":
+            slideshow.clear()
             image.clear()
 
 
