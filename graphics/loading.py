@@ -77,5 +77,5 @@ def cancel():
     """
     if loading_thread is not None:
         loading_thread.loop = False
-        time.sleep(0.03)
+        time.sleep(0.04)
         unicorn.clear()
