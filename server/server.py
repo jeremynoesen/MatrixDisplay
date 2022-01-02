@@ -47,7 +47,7 @@ class Server(BaseHTTPRequestHandler):
         # Process requests
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
-            image.show(Image.open(f"{pictures_dir}/{file}"))
+            image.show(Image.open(f"{pictures_dir}/{file}"), True)
         elif self.path.startswith("/brightness/"):
             brightness = int(self.path.replace("/brightness/", ""))
             filter.set_brightness(brightness)

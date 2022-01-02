@@ -13,15 +13,17 @@ import threading
 image_thread = None
 
 
-def __show(input_image):
+def __show(input_image, show_loading):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
+    :param input_image: Image to show
+    :param show_loading: True to show loading animation
     """
     thread = threading.currentThread()
 
     # Show loading animation
     if getattr(thread, "loop", True):
-        loading.show()
+        loading.show(show_loading)
 
     # Process all frames of image before displaying
     frame_count = getattr(input_image, "n_frames", 1)
@@ -72,7 +74,7 @@ def __show(input_image):
 
     # Clear loading animation
     if getattr(thread, "loop", True):
-        loading.clear()
+        loading.clear(show_loading)
 
     # Display frames of image on a loop
     current_frame_index = 0
@@ -103,14 +105,15 @@ def __show(input_image):
             current_frame_index = 0
 
 
-def show(image):
+def show(image, show_loading):
     """
     Show an image on the Unicorn HAT
     :param image: Image to show
+    :param show_loading: True to show loading animation
     """
     clear()
     global image_thread
-    image_thread = threading.Thread(target=__show, args=(image,))
+    image_thread = threading.Thread(target=__show, args=(image,show_loading))
     image_thread.start()
 
 
@@ -120,7 +123,7 @@ def clear():
     """
     if image_thread is not None:
         transition.fade(100, 0, 1)
-        loading.cancel()
+        loading.clear(False)
         image_thread.loop = False
         time.sleep(1)
         unicorn.clear()
