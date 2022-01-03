@@ -5,7 +5,7 @@ Show a slideshow of images on the Unicorn HAT
 import time
 import os
 import unicornhat as unicorn
-from graphics import transition, loading, image
+from graphics import loading, image
 import threading
 
 slideshow_thread = None
