@@ -10,7 +10,6 @@
             background-color: black;
             color: white;
             text-decoration: none;
-            text-align: center;
             margin: 6vh auto;
             padding: 0 4vw;
             font-size: 2vh;
@@ -48,35 +47,59 @@
             background-color: #666666;
             transition: 0.2s;
         }
+
+        h1 {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+
 <h1>Matrix Display</h1>
+
 <hr>
-<h2>Images</h2>
-<h3>{links_str}</h3>
+
+<h2>Modes</h2>
+<div style="width: 95%; margin: auto">
+    <h3>⋅ Image: {links_str}</h3>
+    <h3><a id="slideshowtitle" href="/slideshow">⋅ Slideshow: {duration} sec/image</a></h3>
+    <input type="range" min="5" max="300" value="{duration}" class="slider" id="slideshow" style="width: 100%">
+    <script>
+        let slideshow = document.getElementById("slideshow");
+        let slideshowtitle = document.getElementById("slideshowtitle");
+        slideshow.oninput = function () {
+            fetch("/slideshow/" + this.value)
+            slideshowtitle.textContent = "⋅  Slideshow: " + this.value + " sec/image"
+        }
+    </script>
+    <h3><a href="/off">⋅ Off</a></h3>
+</div>
+
 <hr>
-<h2>Brightness</h2>
-<input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
-<script>
-    let brightness = document.getElementById("brightness");
-    brightness.oninput = function () {
-        fetch("/brightness/" + this.value)
-    }
-</script>
-<br>
-<hr>
-<h2>Warmth</h2>
-<input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
-<script>
-    let warmth = document.getElementById("warmth");
-    warmth.oninput = function () {
-        fetch("/warmth/" + this.value)
-    }
-</script>
-<br>
-<hr>
-<h1><a href="/slideshow">Slideshow</a></h1>
-<h1><a href="/off">Off</a></h1>
+
+<h2>Settings</h2>
+<div style="width: 95%; margin: auto">
+    <h3 id="brightnesstitle">⋅ Brightness: {brightness}%</h3>
+    <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
+    <script>
+        let brightness = document.getElementById("brightness");
+        let brightnesstitle = document.getElementById("brightnesstitle");
+        brightness.oninput = function () {
+            fetch("/brightness/" + this.value)
+            brightnesstitle.textContent = "⋅  Brightness: " + this.value + "%"
+        }
+    </script>
+    <h3 id="warmthtitle">⋅ Warmth: {warmth}%</h3>
+    <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
+    <script>
+        let warmth = document.getElementById("warmth");
+        let warmthtitle = document.getElementById("warmthtitle");
+        warmth.oninput = function () {
+            fetch("/warmth/" + this.value)
+            warmthtitle.textContent = "⋅  Warmth: " + this.value + "%"
+        }
+    </script>
+</div>
+
 </body>
 </html>

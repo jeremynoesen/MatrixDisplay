@@ -40,7 +40,8 @@ class Server(BaseHTTPRequestHandler):
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links_str}", links_str) \
                 .replace("{brightness}", str(filter.get_brightness())) \
-                .replace("{warmth}", str(filter.current_warmth))
+                .replace("{warmth}", str(filter.current_warmth)) \
+                .replace("{duration}", str(slideshow.display_time))
             self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
 
@@ -54,6 +55,9 @@ class Server(BaseHTTPRequestHandler):
         elif self.path.startswith("/warmth/"):
             warmth = int(self.path.replace("/warmth/", ""))
             filter.set_warmth(warmth)
+        elif self.path.startswith("/slideshow/"):
+            display_time = int(self.path.replace("/slideshow/", ""))
+            slideshow.display_time = display_time
         elif self.path == "/slideshow":
             slideshow.show(pictures_dir)
         elif self.path == "/off":
