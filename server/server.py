@@ -61,8 +61,7 @@ class Server(BaseHTTPRequestHandler):
         elif self.path == "/slideshow":
             slideshow.show(pictures_dir)
         elif self.path == "/off":
-            slideshow.clear()
-            image.clear()
+            display.clear()
 
 
 def start():

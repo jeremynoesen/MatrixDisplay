@@ -56,7 +56,7 @@ def show(animated):
     Show the loading animation on the Unicorn HAT
     :param animated: true to show the animated loading icon
     """
-    clear(animated)
+    clear(False)
     if animated:
         global loading_thread
         loading_thread = threading.Thread(target=__show)

@@ -4,8 +4,7 @@ Show a slideshow of images on the Unicorn HAT
 
 import time
 import os
-import unicornhat as unicorn
-from graphics import loading, image
+from graphics import loading, image, display
 import threading
 
 slideshow_thread = None
@@ -45,18 +44,7 @@ def show(pictures_dir):
     Show the slideshow on the Unicorn HAT
     :param pictures_dir: directory where images are stored
     """
-    clear()
+    display.clear()
     global slideshow_thread
     slideshow_thread = threading.Thread(target=__show, args=(pictures_dir,))
     slideshow_thread.start()
-
-
-def clear():
-    """
-    Stop the slideshow
-    """
-    if slideshow_thread is not None:
-        image.clear()
-        slideshow_thread.loop = False
-        time.sleep(1)
-        unicorn.clear()
