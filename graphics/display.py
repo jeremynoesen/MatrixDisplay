@@ -1,8 +1,9 @@
 """
-Simple blue light filter for the Unicorn HAT
+Display actions and effects for the Unicorn HAT
 """
 
 import unicornhat as unicorn
+import time
 
 current_warmth = 0
 current_brightness = 1.0
@@ -10,7 +11,7 @@ current_brightness = 1.0
 
 def set_pixel(x, y, r, g, b):
     """
-    Set the color of a pixel with or without the blue light filter
+    Set the color of a pixel
     :param x: Matrix pixel x coordinate
     :param y: Matrix pixel y coordinate
     :param r: Red value
@@ -55,3 +56,26 @@ def get_brightness():
     :return: Brightness of display 0 to 100
     """
     return int(current_brightness * 100)
+
+
+def fade(start, end, duration):
+    """
+    Fade in or out the Unicorn HAT
+    :param start: Starting brightness 0 to 100
+    :param end: Ending brightness 0 to 100
+    :param duration: Duration of fade in seconds
+    """
+    if end > start:  # Fade in
+        sleep_time = duration / float(end - start)
+        for i in range(start, end + 1):
+            unicorn.brightness(i / 100.0)
+            unicorn.show()
+            time.sleep(sleep_time)
+    elif start > end:  # Fade out
+        sleep_time = duration / float(start - end)
+        for i in range(end, start + 1):
+            unicorn.brightness((start + end - i) / 100.0)
+            unicorn.show()
+            time.sleep(sleep_time)
+
+

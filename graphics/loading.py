@@ -4,7 +4,7 @@ Simple loading animation to show when the device is processing
 
 import time
 import unicornhat as unicorn
-from graphics import transition, filter
+from graphics import display
 import threading
 
 loading_thread = None
@@ -37,7 +37,7 @@ def __show():
 
             for j in range(8):
                 pixel = pixels[(i + j) % len(pixels)]
-                filter.set_pixel(pixel[0], pixel[1], 45 + (j * 30), 45 + (j * 30), 45 + (j * 30))
+                display.set_pixel(pixel[0], pixel[1], 45 + (j * 30), 45 + (j * 30), 45 + (j * 30))
 
                 # Initial fade in
                 if faded_in is False:
@@ -72,7 +72,7 @@ def clear(animated):
     """
     if loading_thread is not None:
         if animated:
-            transition.fade(100, 0, 0.2)
+            display.fade(100, 0, 0.2)
         loading_thread.loop = False
         time.sleep(0.04)
         unicorn.clear()

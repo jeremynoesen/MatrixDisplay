@@ -4,7 +4,7 @@ A simple web server and interface used to easily control the Unicorn HAT
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from graphics import filter, image, slideshow
+from graphics import display, image, slideshow
 import os
 from PIL import Image
 
@@ -39,8 +39,8 @@ class Server(BaseHTTPRequestHandler):
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links_str}", links_str) \
-                .replace("{brightness}", str(filter.get_brightness())) \
-                .replace("{warmth}", str(filter.current_warmth)) \
+                .replace("{brightness}", str(display.get_brightness())) \
+                .replace("{warmth}", str(display.current_warmth)) \
                 .replace("{duration}", str(slideshow.display_time))
             self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
@@ -51,10 +51,10 @@ class Server(BaseHTTPRequestHandler):
             image.show(Image.open(f"{pictures_dir}/{file}"), True)
         elif self.path.startswith("/brightness/"):
             brightness = int(self.path.replace("/brightness/", ""))
-            filter.set_brightness(brightness)
+            display.set_brightness(brightness)
         elif self.path.startswith("/warmth/"):
             warmth = int(self.path.replace("/warmth/", ""))
-            filter.set_warmth(warmth)
+            display.set_warmth(warmth)
         elif self.path.startswith("/slideshow/"):
             display_time = int(self.path.replace("/slideshow/", ""))
             slideshow.display_time = display_time
