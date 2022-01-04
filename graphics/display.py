@@ -4,6 +4,7 @@ Display actions and effects for the Unicorn HAT
 
 import unicornhat as unicorn
 import time
+from graphics import image, slideshow, loading
 
 current_warmth = 0
 current_brightness = 1.0
@@ -78,4 +79,19 @@ def fade(start, end, duration):
             unicorn.show()
             time.sleep(sleep_time)
 
+
+def clear():
+    """
+    Clear the display of the Unicorn HAT
+    """
+    fade(100, 0, 1)
+
+    if image.image_thread is not None:
+        image.image_thread.loop = False
+    if slideshow.slideshow_thread is not None:
+        slideshow.slideshow_thread.loop = False
+    loading.clear(False)
+
+    time.sleep(1)
+    unicorn.clear()
 
