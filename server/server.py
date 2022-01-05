@@ -65,6 +65,7 @@ class Server(BaseHTTPRequestHandler):
         elif self.path == "/off":
             display.clear()
         elif self.path == "/update":
+            display.clear()
             os.system("git pull; sudo reboot")
 
 
