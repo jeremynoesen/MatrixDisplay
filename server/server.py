@@ -64,6 +64,8 @@ class Server(BaseHTTPRequestHandler):
             slideshow.show(pictures_dir)
         elif self.path == "/off":
             display.clear()
+        elif self.path == "/update":
+            os.system("git pull; sudo reboot")
 
 
 def start():
