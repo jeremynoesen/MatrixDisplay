@@ -20,6 +20,7 @@ def __show(pictures_dir):
     thread = threading.currentThread()
     index = 0
     files = os.listdir(pictures_dir)
+    files.sort()
 
     while getattr(thread, "loop", True):
         # Show image
