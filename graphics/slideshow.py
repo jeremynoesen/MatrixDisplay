@@ -39,13 +39,15 @@ def __show(pictures_dir):
         # Show image for set amount of time
         time.sleep(display_time)
 
+        # Clear image
+        image.clear()
+
 
 def show(pictures_dir):
     """
     Show the slideshow on the Unicorn HAT
     :param pictures_dir: directory where images are stored
     """
-    display.clear()
     global slideshow_thread
     slideshow_thread = threading.Thread(target=__show, args=(pictures_dir,))
     slideshow_thread.start()
