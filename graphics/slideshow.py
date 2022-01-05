@@ -4,6 +4,7 @@ Show a slideshow of images on the Unicorn HAT
 
 import time
 import os
+from PIL import Image
 from graphics import loading, image, display
 import threading
 
@@ -22,7 +23,7 @@ def __show(pictures_dir):
 
     while getattr(thread, "loop", True):
         # Show image
-        image.show(files[index], False)
+        image.show(Image.open(f"{pictures_dir}/{files[index]}"), False)
 
         # Get next index
         if index < len(files) - 1:
