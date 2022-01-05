@@ -41,7 +41,8 @@ def __show(pictures_dir):
         time.sleep(display_time)
 
         # Clear image
-        image.clear()
+        if getattr(thread, "loop", True):
+            image.clear()
 
 
 def show(pictures_dir):
