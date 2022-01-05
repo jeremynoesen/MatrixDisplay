@@ -48,6 +48,7 @@ class Server(BaseHTTPRequestHandler):
         # Process requests
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
+            display.clear()
             image.show(Image.open(f"{pictures_dir}/{file}"), True)
         elif self.path.startswith("/brightness/"):
             brightness = int(self.path.replace("/brightness/", ""))
@@ -59,6 +60,7 @@ class Server(BaseHTTPRequestHandler):
             display_time = int(self.path.replace("/slideshow/", ""))
             slideshow.display_time = display_time
         elif self.path == "/slideshow":
+            display.clear()
             slideshow.show(pictures_dir)
         elif self.path == "/off":
             display.clear()
