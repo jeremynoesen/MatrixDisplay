@@ -86,12 +86,11 @@ def clear():
     """
     fade(100, 0, 1)
 
+    loading.clear(False)
     if image.image_thread is not None:
         image.image_thread.loop = False
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
-    loading.clear(False)
 
     time.sleep(1)
     unicorn.clear()
-
