@@ -41,7 +41,8 @@ class Server(BaseHTTPRequestHandler):
             html = fd.read().replace("{links_str}", links_str) \
                 .replace("{brightness}", str(display.get_brightness())) \
                 .replace("{warmth}", str(display.current_warmth)) \
-                .replace("{duration}", str(slideshow.display_time))
+                .replace("{duration}", str(slideshow.display_time)) \
+                .replace("{color}", color.current_color)
             self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
 

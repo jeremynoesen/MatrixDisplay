@@ -72,6 +72,9 @@
             slideshowtitle.textContent = "⋅  Slideshow: " + this.value + " sec/image"
         }
     </script>
+    <h3><a href="javascript:fetch('/color/' + document.getElementById('colorpicker').value.replace('#', ''))">⋅
+        Color:</a></h3>
+    <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <h3><a href="/off">⋅ Off</a></h3>
 </div>
 
