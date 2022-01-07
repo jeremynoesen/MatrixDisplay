@@ -72,13 +72,14 @@ def __show(input_image, show_loading):
         else:
             frame_durations.append(1)
 
-    # Clear loading animation
+    # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):
         loading.clear(show_loading)
+        fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade.start()
 
     # Display frames of image on a loop
     current_frame_index = 0
-    faded_in = False
 
     while getattr(thread, "loop", True):
         current_frame = processed_frames[current_frame_index]
@@ -89,12 +90,6 @@ def __show(input_image, show_loading):
                 pixel = current_frame[matrix_x][matrix_y]
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
         unicorn.show()
-
-        # Fade in if showing for the first time
-        if faded_in is False and getattr(thread, "loop", True):
-            faded_in = True
-            fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-            fade.start()
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])
