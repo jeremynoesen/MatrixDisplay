@@ -11,6 +11,7 @@ from graphics import loading, display
 import threading
 
 image_thread = None
+end_delay = 0
 
 
 def __show(input_image, show_loading):
@@ -67,10 +68,14 @@ def __show(input_image, show_loading):
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
         # Store frame duration
+        global end_delay
         if getattr(input_image, "is_animated", False) is True:
-            frame_durations.append(input_image.info['duration'] / 1000.0)
+            dur = input_image.info['duration'] / 1000.0
+            frame_durations.append(dur)
+            end_delay = max(end_delay, dur)
         else:
-            frame_durations.append(1)
+            frame_durations.append(0.0333)
+            end_delay = 0.0333
 
     # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):
@@ -120,5 +125,5 @@ def clear():
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
-        time.sleep(1)
+        time.sleep(end_delay)
         unicorn.off()
