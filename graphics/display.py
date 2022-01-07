@@ -91,6 +91,8 @@ def clear():
         image.image_thread.loop = False
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
+    if color.color_thread is not None:
+        color.color_thread.loop = False
 
     time.sleep(1)
     unicorn.off()
