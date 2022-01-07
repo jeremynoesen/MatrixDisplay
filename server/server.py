@@ -69,9 +69,10 @@ class Server(BaseHTTPRequestHandler):
             display.clear()
             os.system("git pull; sudo reboot")
         elif self.path.startswith("/color/"):
+            color.current_color = self.path.replace("/color/", "")
+        elif self.path == "/color":
             display.clear()
-            hex_color = self.path.replace("/color/", "")
-            color.show(hex_color)
+            color.show()
 
 
 def start():
