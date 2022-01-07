@@ -84,7 +84,7 @@ def clear():
     """
     Clear the display of the Unicorn HAT
     """
-    fade(100, 0, 1)
+    fade(100, 0, 0.5)
 
     loading.clear(False)
     if image.image_thread is not None:
