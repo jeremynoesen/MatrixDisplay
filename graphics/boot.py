@@ -14,17 +14,17 @@ def show():
     unicorn.brightness(0.5)
 
     # Pixels in order of animation
-    pixels = [(7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6), (7, 7),
-              (6, 7), (5, 7), (4, 7), (3, 7), (2, 7), (1, 7), (0, 7),
-              (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0),
-              (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]
+    pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
+              (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
     # Do pixel animation
     for i in range(len(pixels)):
         pixel = pixels[i]
-        display.set_pixel(pixel[0], pixel[1], 255, 255, 255)
-        unicorn.show()
-        time.sleep(0.07 - (i * 0.002))
+        for j in range(16):
+            x = j * 17
+            display.set_pixel(pixel[0], pixel[1], x, x, x)
+            unicorn.show()
+            time.sleep(0.002)
 
     # Fade in then out
     display.fade(50, 100, 0.1)
