@@ -91,9 +91,10 @@ def __show(input_image, show_loading):
         unicorn.show()
 
         # Fade in if showing for the first time
-        if faded_in is False:
+        if faded_in is False and getattr(thread, "loop", True):
             faded_in = True
-            display.fade(0, 100, 0.2)
+            fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+            fade.start()
 
         # Wait before next frame
         time.sleep(frame_durations[current_frame_index])
