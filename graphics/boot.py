@@ -31,4 +31,4 @@ def show():
     display.fade(100, 0, 1)
 
     # Clear screen
-    unicorn.clear()
+    unicorn.off()

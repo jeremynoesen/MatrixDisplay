@@ -4,7 +4,7 @@ A simple web server and interface used to easily control the Unicorn HAT
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from graphics import display, image, slideshow
+from graphics import display, image, slideshow, color
 import os
 from PIL import Image
 
@@ -58,7 +58,7 @@ class Server(BaseHTTPRequestHandler):
             display.set_warmth(warmth)
         elif self.path.startswith("/slideshow/"):
             display_time = int(self.path.replace("/slideshow/", ""))
-            slideshow.display_time = display_time
+            slideshow.set_display_time(display_time)
         elif self.path == "/slideshow":
             display.clear()
             slideshow.show(pictures_dir)
@@ -67,6 +67,10 @@ class Server(BaseHTTPRequestHandler):
         elif self.path == "/update":
             display.clear()
             os.system("git pull; sudo reboot")
+        elif self.path.startswith("/color/"):
+            display.clear()
+            hex_color = self.path.replace("/color/", "")
+            color.show(hex_color)
 
 
 def start():
