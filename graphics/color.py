@@ -8,19 +8,14 @@ from graphics import display
 from PIL import ImageColor
 import threading
 
-current_color = ""
+current_color = "ffffff"
 color_thread = None
 
 
-def __show(hex_color):
+def __show():
     """
     Show a solid color on the Unicorn HAT
-    :param hex_color: hex color code
     """
-    global current_color
-    current_color = hex_color
-    color = ImageColor.getcolor(f"#{hex_color}", "RGB")
-
     thread = threading.currentThread()
 
     # Fade in
@@ -30,6 +25,7 @@ def __show(hex_color):
 
     # Show color
     while getattr(thread, "loop", True):
+        color = ImageColor.getcolor(f"#{current_color}", "RGB")
         for i in range(8):
             for j in range(8):
                 display.set_pixel(i, j, color[0], color[1], color[2])
@@ -37,11 +33,10 @@ def __show(hex_color):
         time.sleep(1)
 
 
-def show(hex_color):
+def show():
     """
     Show a solid color on the Unicorn HAT
-    :param hex_color: hex color code
     """
     global color_thread
-    color_thread = threading.Thread(target=__show, args=(hex_color,))
+    color_thread = threading.Thread(target=__show)
     color_thread.start()
