@@ -53,3 +53,12 @@ def show(pictures_dir):
     global slideshow_thread
     slideshow_thread = threading.Thread(target=__show, args=(pictures_dir,))
     slideshow_thread.start()
+
+
+def set_display_time(time):
+    """
+    Set the display time for images in the slideshow
+    :param time: time in seconds to display images
+    """
+    global display_time
+    display_time = max(1, time)

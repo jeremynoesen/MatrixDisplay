@@ -21,10 +21,12 @@ def __show():
     pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
               (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
+    # Fade in
     if getattr(thread, "loop", True):
         fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
         fade.start()
 
+    # Do pixel animation
     while getattr(thread, "loop", True):
         for i in range(len(pixels)):
             if not getattr(thread, "loop", True):
@@ -37,6 +39,7 @@ def __show():
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)
 
+            # Show frame
             unicorn.show()
             time.sleep(0.03)
 
@@ -66,7 +69,7 @@ def clear(animated):
             display.fade(100, 0, 0.2)
             loading_thread.loop = False
             time.sleep(0.03)
-            unicorn.clear()
+            unicorn.off()
         else:
             loading_thread.loop = False
     global loading

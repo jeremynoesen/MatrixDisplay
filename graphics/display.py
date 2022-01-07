@@ -4,7 +4,7 @@ Display actions and effects for the Unicorn HAT
 
 import unicornhat as unicorn
 import time
-from graphics import image, slideshow, loading
+from graphics import image, slideshow, loading, color
 
 current_warmth = 0
 current_brightness = 1.0
@@ -93,4 +93,4 @@ def clear():
         slideshow.slideshow_thread.loop = False
 
     time.sleep(1)
-    unicorn.clear()
+    unicorn.off()

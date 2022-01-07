@@ -126,4 +126,4 @@ def clear():
         loading.clear(False)
         image_thread.loop = False
         time.sleep(1)
-        unicorn.clear()
+        unicorn.off()
