@@ -7,7 +7,7 @@ MatrixDisplay is a Python program used to display images on the Pimoroni Unicorn
 This project exists mainly as a way for me to try a new programming language, as well as to create a project that has both software and hardware aspects in it.
 
 ## Usage
-On the same Wi-Fi network as the Raspberry Pi, open your browser to `https://yourpihostname.local:8080`. From there, you can control the display output from a web interface.
+On the same Wi-Fi network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080`. From there, you can control the display output from a web interface.
 
 ## Requirements
 Software:

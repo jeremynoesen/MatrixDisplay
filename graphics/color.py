@@ -1,8 +1,8 @@
 """
 Display a solid color on the Unicorn HAT
 """
-import time
 
+import time
 import unicornhat as unicorn
 from graphics import display
 from PIL import ImageColor
