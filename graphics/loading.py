@@ -17,38 +17,28 @@ def __show():
     """
     thread = threading.currentThread()
 
-    if getattr(thread, "loop", True):
-        unicorn.brightness(1)
-
     # Pixels in order of animation
-    pixels = [(4, 0), (5, 0), (6, 1), (7, 2), (7, 3), (7, 4), (7, 5), (6, 6), (5, 7), (4, 7),
-              (3, 7), (2, 7), (1, 6), (0, 5), (0, 4), (0, 3), (0, 2), (1, 1), (2, 0), (3, 0)]
+    pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
+              (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
-    faded_in = False
+    if getattr(thread, "loop", True):
+        fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade.start()
+
     while getattr(thread, "loop", True):
-
-        # Do pixel animation
         for i in range(len(pixels)):
-
             if not getattr(thread, "loop", True):
                 break
-            else:
-                unicorn.clear()
 
-            for j in range(8):
-                pixel = pixels[(i + j) % len(pixels)]
-                display.set_pixel(pixel[0], pixel[1], 45 + (j * 30), 45 + (j * 30), 45 + (j * 30))
+            for j in range(10):
+                pixel = pixels[(i + j + 1) % len(pixels)]
+                pixel2 = pixels[(i - j + len(pixels)) % len(pixels)]
+                x = 255 - (j * 20)
+                display.set_pixel(pixel[0], pixel[1], x, x, x)
+                display.set_pixel(pixel2[0], pixel2[1], x, x, x)
 
-                # Initial fade in
-                if faded_in is False:
-                    time.sleep(0.04)
-                    unicorn.show()
             unicorn.show()
-
-            faded_in = True
-
-            # Wait before next frane
-            time.sleep(0.04)
+            time.sleep(0.03)
 
 
 def show(animated):
@@ -72,9 +62,12 @@ def clear(animated):
     """
     if loading_thread is not None:
         if animated:
+            time.sleep(0.2)
             display.fade(100, 0, 0.2)
-        loading_thread.loop = False
-        time.sleep(0.04)
-        unicorn.clear()
+            loading_thread.loop = False
+            time.sleep(0.03)
+            unicorn.clear()
+        else:
+            loading_thread.loop = False
     global loading
     loading = False
