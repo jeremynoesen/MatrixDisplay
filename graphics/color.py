@@ -30,7 +30,7 @@ def __show():
             for j in range(8):
                 display.set_pixel(i, j, color[0], color[1], color[2])
         unicorn.show()
-        time.sleep(1)
+        time.sleep(0.0333)
 
 
 def show():
