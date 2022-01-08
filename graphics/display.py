@@ -84,6 +84,7 @@ def clear():
     """
     Clear the display of the Unicorn HAT
     """
+    time.sleep(0.2)
     fade(100, 0, 0.5)
 
     loading.clear(False)
@@ -94,5 +95,5 @@ def clear():
     if color.color_thread is not None:
         color.color_thread.loop = False
 
-    time.sleep(1)
+    time.sleep(max(image.end_delay, 0.0333))
     unicorn.off()

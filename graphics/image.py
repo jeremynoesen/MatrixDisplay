@@ -112,6 +112,8 @@ def show(image, show_loading):
     :param image: Image to show
     :param show_loading: True to show loading animation
     """
+    global end_delay
+    end_delay = 0
     global image_thread
     image_thread = threading.Thread(target=__show, args=(image, show_loading))
     image_thread.start()
@@ -122,6 +124,7 @@ def clear():
     Clear the image off of the Unicorn HAT
     """
     if image_thread is not None:
+        time.sleep(0.2)
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
