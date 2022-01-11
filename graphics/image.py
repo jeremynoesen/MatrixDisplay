@@ -72,7 +72,7 @@ def __show(input_image, show_loading):
         if getattr(input_image, "is_animated", False) is True:
             dur = input_image.info['duration'] / 1000.0
             frame_durations.append(dur)
-            end_delay = max(end_delay, dur)
+            end_delay = max(end_delay, dur)  # todo make this work with 50fps updating
         else:
             frame_durations.append(0.02)
             end_delay = 0.02

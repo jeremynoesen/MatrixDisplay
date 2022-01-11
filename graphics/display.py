@@ -19,10 +19,11 @@ def set_pixel(x, y, r, g, b):
     :param g: green value
     :param b: blue value
     """
+    brightness = ((current_brightness * (1.0 - 0.17)) / 1.0) + 0.17
     unicorn.set_pixel(x, y,
-                      int(r * current_brightness),
-                      int(max(g - current_warmth, 0) * current_brightness),
-                      int(max(b - (current_warmth * 3), 0) * current_brightness))
+                      int(r * brightness),
+                      int(max(g - current_warmth, 0) * brightness),
+                      int(max(b - (current_warmth * 3), 0) * brightness))
 
 
 def set_warmth(warmth):
@@ -66,10 +67,11 @@ def fade(start, end, duration):
     :param end: Ending brightness 0 to 100
     :param duration: Duration of fade in seconds
     """
-    start = max(start, 17)  # 1 below minimum brightness
-    end = max(end, 17)
-    steps = int(duration / 0.02)
+    # Map start and end value to visible range
+    start = int(((start * (100 - 17)) / 100) + 17)
+    end = int(((end * (100 - 17)) / 100) + 17)
 
+    steps = int(duration / 0.02)
     if end > start:  # Fade in
         step_amount = (end - start) / steps
         for i in range(steps + 1):
