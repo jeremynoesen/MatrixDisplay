@@ -20,11 +20,11 @@ def show():
     # Do pixel animation
     for i in range(len(pixels)):
         pixel = pixels[i]
-        for j in range(16):
-            x = j * 17
+        for j in range(3):
+            x = (j * 85) + 85
             display.set_pixel(pixel[0], pixel[1], x, x, x)
             unicorn.show()
-            time.sleep(0.002)
+            time.sleep(0.02)
 
     # Fade in then out
     display.fade(50, 100, 0.1)
