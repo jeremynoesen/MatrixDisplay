@@ -66,18 +66,22 @@ def fade(start, end, duration):
     :param end: Ending brightness 0 to 100
     :param duration: Duration of fade in seconds
     """
+    start = max(start, 17)  # 1 below minimum brightness
+    end = max(end, 17)
+    steps = int(duration / 0.02)
+
     if end > start:  # Fade in
-        sleep_time = duration / float(end - start)
-        for i in range(start, end + 1):
-            unicorn.brightness(i / 100.0)
+        step_amount = (end - start) / steps
+        for i in range(steps + 1):
+            unicorn.brightness((start + (i * step_amount)) / 100.0)
             unicorn.show()
-            time.sleep(sleep_time)
+            time.sleep(0.02)
     elif start > end:  # Fade out
-        sleep_time = duration / float(start - end)
-        for i in range(end, start + 1):
-            unicorn.brightness((start + end - i) / 100.0)
+        step_amount = (start - end) / steps
+        for i in range(steps + 1):
+            unicorn.brightness((start - (i * step_amount)) / 100.0)
             unicorn.show()
-            time.sleep(sleep_time)
+            time.sleep(0.02)
 
 
 def clear():
