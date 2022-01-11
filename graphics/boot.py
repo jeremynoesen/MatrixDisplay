@@ -20,8 +20,8 @@ def show():
     # Do pixel animation
     for i in range(len(pixels)):
         pixel = pixels[i]
-        for j in range(3):
-            x = (j * 85) + 85
+        for j in range(2):
+            x = (j * 127) + 128
             display.set_pixel(pixel[0], pixel[1], x, x, x)
             unicorn.show()
             time.sleep(0.02)
