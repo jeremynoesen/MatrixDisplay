@@ -8,6 +8,7 @@ from graphics import image, slideshow, loading, color
 
 current_warmth = 0
 current_brightness = 1.0
+modified_brightness = 1.0
 
 
 def set_pixel(x, y, r, g, b):
@@ -19,11 +20,10 @@ def set_pixel(x, y, r, g, b):
     :param g: green value
     :param b: blue value
     """
-    brightness = ((current_brightness * (1.0 - 0.17)) / 1.0) + 0.17
     unicorn.set_pixel(x, y,
-                      int(r * brightness),
-                      int(max(g - current_warmth, 0) * brightness),
-                      int(max(b - (current_warmth * 3), 0) * brightness))
+                      int(r * modified_brightness),
+                      int(max(g - current_warmth, 0) * modified_brightness),
+                      int(max(b - (current_warmth * 3), 0) * modified_brightness))
 
 
 def set_warmth(warmth):
@@ -48,8 +48,9 @@ def set_brightness(brightness):
     Set software display brightness
     :param brightness: 0 to 100 brightness of display
     """
-    global current_brightness
+    global current_brightness, modified_brightness
     current_brightness = min(max(brightness, 0), 100) / 100.0
+    modified_brightness = ((current_brightness * (1.0 - 0.17)) / 1.0) + 0.17
 
 
 def get_brightness():
