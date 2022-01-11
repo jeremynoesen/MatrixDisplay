@@ -41,7 +41,7 @@ def __show():
 
             # Show frame
             unicorn.show()
-            time.sleep(0.0333)
+            time.sleep(0.02)
 
 
 def show(animated):
@@ -68,7 +68,7 @@ def clear(animated):
             time.sleep(0.2)
             display.fade(100, 0, 0.2)
             loading_thread.loop = False
-            time.sleep(0.0333)
+            time.sleep(0.02)
             unicorn.off()
         else:
             loading_thread.loop = False
