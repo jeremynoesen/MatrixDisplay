@@ -74,8 +74,8 @@ def __show(input_image, show_loading):
             frame_durations.append(dur)
             end_delay = max(end_delay, dur)
         else:
-            frame_durations.append(0.0333)
-            end_delay = 0.0333
+            frame_durations.append(0.02)
+            end_delay = 0.02
 
     # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):

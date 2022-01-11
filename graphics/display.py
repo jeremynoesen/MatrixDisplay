@@ -95,5 +95,5 @@ def clear():
     if color.color_thread is not None:
         color.color_thread.loop = False
 
-    time.sleep(max(image.end_delay, 0.0333))
+    time.sleep(max(image.end_delay, 0.02))
     unicorn.off()
