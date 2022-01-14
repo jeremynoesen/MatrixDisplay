@@ -17,7 +17,7 @@ unicorn.rotation(270)
 threading.Thread(target=display.start).start()
 
 # Show boot animation
-boot.show()
+threading.Thread(target=boot.show()).start()
 
 # Start control server
-server.start()
+threading.Thread(target=server.start).start()
