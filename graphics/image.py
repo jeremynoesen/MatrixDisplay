@@ -97,11 +97,12 @@ def __show(input_image, show_loading):
         # Increment frame counter
         if getattr(input_image, "is_animated", False) is True:
             timestamp = (timestamp + 0.02) % frame_durations[len(frame_durations) - 1]
-            current_frame_index = 0
-            for duration in frame_durations:
-                if timestamp <= duration:
+            for i in range(3):
+                temp_index = (current_frame_index + i) % (len(frame_durations) - 1)
+                frame_duration = frame_durations[temp_index]
+                if timestamp <= frame_duration:
+                    current_frame_index = temp_index
                     break
-                current_frame_index += 1
 
 
 def show(image, show_loading):
