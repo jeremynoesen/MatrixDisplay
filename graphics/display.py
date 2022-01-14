@@ -77,13 +77,11 @@ def fade(start, end, duration):
         step_amount = (end - start) / steps
         for i in range(steps + 1):
             unicorn.brightness((start + (i * step_amount)) / 100.0)
-            unicorn.show()
             time.sleep(0.02)
     elif start > end:  # Fade out
         step_amount = (start - end) / steps
         for i in range(steps + 1):
             unicorn.brightness((start - (i * step_amount)) / 100.0)
-            unicorn.show()
             time.sleep(0.02)
 
 
@@ -103,4 +101,13 @@ def clear():
         color.color_thread.loop = False
 
     time.sleep(0.02)
-    unicorn.off()
+    unicorn.clear()
+
+
+def start():
+    """
+    Update the display of the Unicorn HAT
+    """
+    while True:
+        unicorn.show()
+        time.sleep(0.02)
