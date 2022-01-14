@@ -37,6 +37,7 @@ def __show(input_image, show_loading):
     offset_y = int((input_image.size[1] % 8) / 2)
 
     # Apply filtering
+    duration_sum = 0
     for i in range(frame_count):
         input_image.seek(i)
 
@@ -67,11 +68,10 @@ def __show(input_image, show_loading):
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
         # Store frame duration
-        dur_sum = 0
         if getattr(input_image, "is_animated", False) is True:
-            dur = input_image.info['duration'] / 1000.0
-            dur_sum += dur
-            frame_durations.append(dur_sum)
+            duration = input_image.info['duration'] / 1000.0
+            duration_sum += duration
+            frame_durations.append(duration_sum)
 
     # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):
@@ -81,7 +81,6 @@ def __show(input_image, show_loading):
 
     # Display frames of image on a loop
     current_frame_index = 0
-
     timestamp = 0
     while getattr(thread, "loop", True):
         current_frame = processed_frames[current_frame_index]
