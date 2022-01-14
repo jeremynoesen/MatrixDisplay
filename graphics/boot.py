@@ -23,7 +23,6 @@ def show():
         for j in range(2):
             x = (j * 127) + 128
             display.set_pixel(pixel[0], pixel[1], x, x, x)
-            unicorn.show()
             time.sleep(0.02)
 
     # Fade in then out
@@ -31,4 +30,4 @@ def show():
     display.fade(100, 0, 1)
 
     # Clear screen
-    unicorn.off()
+    unicorn.clear()

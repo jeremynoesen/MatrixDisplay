@@ -91,7 +91,6 @@ def __show(input_image, show_loading):
             for matrix_y in range(8):
                 pixel = current_frame[matrix_x][matrix_y]
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
-        unicorn.show()
 
         # Wait before next frame
         time.sleep(0.02)
@@ -127,4 +126,4 @@ def clear():
         loading.clear(False)
         image_thread.loop = False
         time.sleep(0.02)
-        unicorn.off()
+        unicorn.clear()
