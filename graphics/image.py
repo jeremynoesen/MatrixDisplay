@@ -11,7 +11,6 @@ from graphics import loading, display
 import threading
 
 image_thread = None
-end_delay = 0
 
 
 def __show(input_image, show_loading):
@@ -68,14 +67,11 @@ def __show(input_image, show_loading):
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
         # Store frame duration
-        global end_delay
+        dur_sum = 0
         if getattr(input_image, "is_animated", False) is True:
             dur = input_image.info['duration'] / 1000.0
-            frame_durations.append(dur)
-            end_delay = max(end_delay, dur)  # todo make this work with 50fps updating
-        else:
-            frame_durations.append(0.02)
-            end_delay = 0.02
+            dur_sum += dur
+            frame_durations.append(dur_sum)
 
     # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):
@@ -86,6 +82,7 @@ def __show(input_image, show_loading):
     # Display frames of image on a loop
     current_frame_index = 0
 
+    timestamp = 0
     while getattr(thread, "loop", True):
         current_frame = processed_frames[current_frame_index]
 
@@ -97,13 +94,16 @@ def __show(input_image, show_loading):
         unicorn.show()
 
         # Wait before next frame
-        time.sleep(frame_durations[current_frame_index])
+        time.sleep(0.02)
 
         # Increment frame counter
-        if current_frame_index < frame_count - 1:
-            current_frame_index += 1
-        else:
+        if getattr(input_image, "is_animated", False) is True:
+            timestamp = (timestamp + 0.02) % frame_durations[len(frame_durations) - 1]
             current_frame_index = 0
+            for duration in frame_durations:
+                if timestamp <= duration:
+                    break
+                current_frame_index += 1
 
 
 def show(image, show_loading):
@@ -112,8 +112,6 @@ def show(image, show_loading):
     :param image: Image to show
     :param show_loading: True to show loading animation
     """
-    global end_delay
-    end_delay = 0
     global image_thread
     image_thread = threading.Thread(target=__show, args=(image, show_loading))
     image_thread.start()
@@ -128,5 +126,5 @@ def clear():
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
-        time.sleep(end_delay)
+        time.sleep(0.02)
         unicorn.off()
