@@ -72,17 +72,20 @@ def fade(start, end, duration):
     start = int(((start * (100 - 17)) / 100) + 17)
     end = int(((end * (100 - 17)) / 100) + 17)
 
-    steps = int(duration / 0.0167)
-    if end > start:  # Fade in
-        step_amount = (end - start) / steps
-        for i in range(steps + 1):
-            unicorn.brightness((start + (i * step_amount)) / 100.0)
-            time.sleep(0.0167)
-    elif start > end:  # Fade out
-        step_amount = (start - end) / steps
-        for i in range(steps + 1):
-            unicorn.brightness((start - (i * step_amount)) / 100.0)
-            time.sleep(0.0167)
+    # Do fading with delta time to ensure the fades last exactly the specified duration
+    delta = 0
+    current = 0
+    while True:
+        start_time = time.time()
+        current += delta
+        if end > start:
+            unicorn.brightness(int(((min(current, duration) * (end - start)) / duration) + start) / 100.0)
+        else:
+            unicorn.brightness(int((((duration - min(current, duration)) * (start - end)) / duration) + end) / 100.0)
+        time.sleep(0.0167)
+        delta = time.time() - start_time
+        if current >= duration:
+            break
 
 
 def clear():
