@@ -83,6 +83,7 @@ def __show(input_image, show_loading):
     current_frame_index = 0
     timestamp = 0
     while getattr(thread, "loop", True):
+        start_time = time.time()
         current_frame = processed_frames[current_frame_index]
 
         # Draw image
@@ -96,8 +97,8 @@ def __show(input_image, show_loading):
 
         # Increment frame counter
         if getattr(input_image, "is_animated", False) is True:
-            timestamp = (timestamp + 0.02)
-            for i in range(3):
+            timestamp = (timestamp + (time.time() - start_time))  # Use delta time to prevent visual slowdown
+            for i in range(frame_count - 1):
                 temp_index = current_frame_index + i
                 if temp_index < frame_count - 1:
                     if timestamp <= frame_durations[temp_index]:
