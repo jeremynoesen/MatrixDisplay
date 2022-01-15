@@ -39,7 +39,7 @@ def __show():
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)
 
-            time.sleep(0.02)
+            time.sleep(0.0167)
 
 
 def show(animated):
@@ -66,7 +66,7 @@ def clear(animated):
             time.sleep(0.2)
             display.fade(100, 0, 0.2)
             loading_thread.loop = False
-            time.sleep(0.02)
+            time.sleep(0.0167)
             unicorn.clear()
         else:
             loading_thread.loop = False

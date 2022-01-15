@@ -93,7 +93,7 @@ def __show(input_image, show_loading):
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
 
         # Wait before next frame
-        time.sleep(0.02)
+        time.sleep(0.0167)
 
         # Increment frame counter
         if getattr(input_image, "is_animated", False) is True:
@@ -131,5 +131,5 @@ def clear():
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
-        time.sleep(0.02)
+        time.sleep(0.0167)
         unicorn.clear()

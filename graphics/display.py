@@ -72,17 +72,17 @@ def fade(start, end, duration):
     start = int(((start * (100 - 17)) / 100) + 17)
     end = int(((end * (100 - 17)) / 100) + 17)
 
-    steps = int(duration / 0.02)
+    steps = int(duration / 0.0167)
     if end > start:  # Fade in
         step_amount = (end - start) / steps
         for i in range(steps + 1):
             unicorn.brightness((start + (i * step_amount)) / 100.0)
-            time.sleep(0.02)
+            time.sleep(0.0167)
     elif start > end:  # Fade out
         step_amount = (start - end) / steps
         for i in range(steps + 1):
             unicorn.brightness((start - (i * step_amount)) / 100.0)
-            time.sleep(0.02)
+            time.sleep(0.0167)
 
 
 def clear():
@@ -100,7 +100,7 @@ def clear():
     if color.color_thread is not None:
         color.color_thread.loop = False
 
-    time.sleep(0.02)
+    time.sleep(0.0167)
     unicorn.clear()
 
 
@@ -110,4 +110,4 @@ def start():
     """
     while True:
         unicorn.show()
-        time.sleep(0.02)
+        time.sleep(0.0167)
