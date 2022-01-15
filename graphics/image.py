@@ -39,6 +39,8 @@ def __show(input_image, show_loading):
     # Apply filtering
     duration_sum = 0
     for i in range(frame_count):
+        if not getattr(thread, "loop", True):
+            break
         input_image.seek(i)
 
         # Draw black background behind image
@@ -47,6 +49,8 @@ def __show(input_image, show_loading):
 
         for matrix_x in range(8):
             for matrix_y in range(8):
+                if not getattr(thread, "loop", True):
+                    break
                 r = 0
                 g = 0
                 b = 0
@@ -54,6 +58,8 @@ def __show(input_image, show_loading):
                 # Sum all RGB values in a block of pixels
                 for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
                     for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
+                        if not getattr(thread, "loop", True):
+                            break
                         pixel = image.getpixel((block_x, block_y))
                         r += int(pixel[0])
                         g += int(pixel[1])
