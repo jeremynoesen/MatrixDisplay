@@ -23,7 +23,7 @@ def show():
         for j in range(2):
             x = (j * 127) + 128
             display.set_pixel(pixel[0], pixel[1], x, x, x)
-            time.sleep(0.02)
+            time.sleep(0.0167)
 
     # Fade in then out
     display.fade(50, 100, 0.1)
