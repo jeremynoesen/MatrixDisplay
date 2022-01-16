@@ -9,6 +9,7 @@ import threading
 
 loading_thread = None
 loading = False
+fade_thread = None
 
 
 def __show():
@@ -23,8 +24,9 @@ def __show():
 
     # Fade in
     if getattr(thread, "loop", True):
-        fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade.start()
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
     # Do pixel animation
     while getattr(thread, "loop", True):
@@ -62,13 +64,12 @@ def clear(animated):
     :param animated: true to animate clearing the loading animation
     """
     if loading_thread is not None:
+        if fade_thread is not None:
+            fade_thread.join()
         if animated:
-            time.sleep(0.2)
             display.fade(100, 0, 0.2)
-            loading_thread.loop = False
-            time.sleep(0.0167)
-            unicorn.clear()
-        else:
-            loading_thread.loop = False
+        loading_thread.loop = False
+        loading_thread.join()
+        unicorn.clear()
     global loading
     loading = False
