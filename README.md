@@ -30,7 +30,9 @@ To install, simply clone the repo onto the Raspberry Pi, and set `main.py` to st
 To run the program, open a terminal and type `sudo python3 /path/to/main.py`. Replace the path to main.py with the proper location to your installation's main.py.
 
 ## Configuration
-The only configurable value is the path to the images folder. In `server/server.py` you can set `pictures_dir` to your own images directory. Everything else is handled through the web interface.
+There are two configurable values located in `config.py`:
+- `pictures_dir`: The location of the directory where images are stored.
+- `cache_dir`: The location of the directory where cached images will be saved.
 
 ## Demonstration
 Demonstrations will be added soon!

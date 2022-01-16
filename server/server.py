@@ -6,9 +6,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from graphics import display, image, slideshow, color
 import os
-from PIL import Image
-
-pictures_dir = "/home/pi/Pictures"
+import config
 
 
 class Server(BaseHTTPRequestHandler):
@@ -29,7 +27,7 @@ class Server(BaseHTTPRequestHandler):
         Process requests for displaying for GET requests
         """
         # Get pictures from Pictures folder on Pi
-        files = os.listdir(pictures_dir)
+        files = os.listdir(config.pictures_dir)
         links = []
         files.sort()
         for file in files:
@@ -50,10 +48,10 @@ class Server(BaseHTTPRequestHandler):
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
             display.clear()
-            image.show(Image.open(f"{pictures_dir}/{file}"), True)
+            image.show(file, True)
         elif self.path == "/slideshow":
             display.clear()
-            slideshow.show(pictures_dir)
+            slideshow.show(config.pictures_dir)
         elif self.path.startswith("/slideshow/"):
             display_time = int(self.path.replace("/slideshow/", ""))
             slideshow.set_display_time(display_time)
