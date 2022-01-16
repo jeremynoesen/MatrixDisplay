@@ -69,8 +69,8 @@ def fade(start, end, duration):
     :param duration: Duration of fade in seconds
     """
     # Map start and end value to visible range
-    start = int(((start * (100 - 17)) / 100) + 17)
-    end = int(((end * (100 - 17)) / 100) + 17)
+    start_visible = int(((start * (100 - 17)) / 100) + 17)
+    end_visible = int(((end * (100 - 17)) / 100) + 17)
 
     # Do fading with delta time to ensure the fades last exactly the specified duration
     delta = 0
@@ -78,10 +78,12 @@ def fade(start, end, duration):
     while True:
         start_time = time.time()
         current += delta
-        if end > start:
-            unicorn.brightness(int(((min(current, duration) * (end - start)) / duration) + start) / 100.0)
+        if end > start_visible:
+            unicorn.brightness(
+                int(((min(current, duration) * (end_visible - start_visible)) / duration) + start_visible) / 100.0)
         else:
-            unicorn.brightness(int((((duration - min(current, duration)) * (start - end)) / duration) + end) / 100.0)
+            unicorn.brightness(int((((duration - min(current, duration)) * (
+                        start_visible - end_visible)) / duration) + end_visible) / 100.0)
         time.sleep(0.0167)
         delta = time.time() - start_time
         if current >= duration:
@@ -92,18 +94,27 @@ def clear():
     """
     Clear the display of the Unicorn HAT
     """
-    time.sleep(0.2)
+    if loading.fade_thread is not None:
+        loading.fade_thread.join()
+    if image.fade_thread is not None:
+        image.fade_thread.join()
+    if color.fade_thread is not None:
+        color.fade_thread.join()
+
     fade(100, 0, 0.5)
 
-    loading.clear(False)
+    if loading.loading_thread is not None:
+        loading.loading_thread.loop = False
+        loading.loading_thread.join()
     if image.image_thread is not None:
         image.image_thread.loop = False
+        image.image_thread.join()
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
     if color.color_thread is not None:
         color.color_thread.loop = False
+        color.color_thread.join()
 
-    time.sleep(0.0167)
     unicorn.clear()
 
 

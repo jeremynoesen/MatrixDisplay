@@ -11,6 +11,7 @@ from graphics import loading, display
 import threading
 
 image_thread = None
+fade_thread = None
 
 
 def __show(input_image, show_loading):
@@ -82,8 +83,9 @@ def __show(input_image, show_loading):
     # Clear loading animation and begin fade in
     if getattr(thread, "loop", True):
         loading.clear(show_loading)
-        fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade.start()
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
     # Display frames of image on a loop
     current_frame_index = 0
@@ -133,9 +135,10 @@ def clear():
     Clear the image off of the Unicorn HAT
     """
     if image_thread is not None:
-        time.sleep(0.2)
+        if fade_thread is not None:
+            fade_thread.join()
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
-        time.sleep(0.0167)
+        image_thread.join()
         unicorn.clear()

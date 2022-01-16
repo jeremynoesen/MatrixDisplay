@@ -3,13 +3,13 @@ Display a solid color on the Unicorn HAT
 """
 
 import time
-import unicornhat as unicorn
 from graphics import display
 from PIL import ImageColor
 import threading
 
 current_color = "ffffff"
 color_thread = None
+fade_thread = None
 
 
 def __show():
@@ -20,8 +20,9 @@ def __show():
 
     # Fade in
     if getattr(thread, "loop", True):
-        fade = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade.start()
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
     # Show color
     while getattr(thread, "loop", True):
