@@ -9,18 +9,20 @@ from PIL import Image
 import unicornhat as unicorn
 from graphics import loading, display
 import threading
+import config
 
 image_thread = None
 fade_thread = None
 
 
-def __show(input_image, show_loading):
+def __show(image_file, show_loading):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
-    :param input_image: Image to show
+    :param image_file: Name of image file to show
     :param show_loading: True to show loading animation
     """
     thread = threading.currentThread()
+    input_image = Image.open(f"{config.pictures_dir}{image_file}")
 
     # Show loading animation
     if getattr(thread, "loop", True):
