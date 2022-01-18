@@ -86,11 +86,12 @@ def __load(image_path, cached):
             break
         input_image.seek(i)
 
-        image = input_image
         if not cached:
             # Draw black background behind image
             background = Image.new("RGBA", input_image.size, (0, 0, 0))
             image = Image.alpha_composite(background, input_image.convert("RGBA"))
+        else:
+            image = input_image.convert("RGB")
 
         for matrix_x in range(8):
             for matrix_y in range(8):
