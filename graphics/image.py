@@ -40,11 +40,6 @@ def __save(image_array, file_name):
                 output_image.putpixel((x, y), current_frame[x][y])
         output_frames.append(output_image)
 
-    # Get frame durations formatted for saving
-    output_durations = []
-    for i in range(1, len(frame_durations)):
-        output_durations[i] = frame_durations[i] - frame_durations[i - 1]
-
     # Get file format
     file_name_parts = file_name.split(".")
     image_format = file_name_parts[len(file_name_parts) - 1].upper()
@@ -52,6 +47,12 @@ def __save(image_array, file_name):
     # Save image file
     output_file = f"{config.cache_dir}{file_name}"
     if frame_count > 1:
+
+        # Get corrected frame durations
+        output_durations = [frame_durations[0]]
+        for i in range(1, len(frame_durations)):
+            output_durations.append(frame_durations[i] - frame_durations[i - 1])
+
         output_frames[0].save(output_file, format=image_format,
                               append_images=output_frames[1:], save_all=True, loop=0, duration=output_durations)
     else:
