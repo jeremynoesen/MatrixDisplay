@@ -49,7 +49,7 @@ def __save(image_array, file_name):
     if frame_count > 1:
 
         # Get corrected frame durations
-        output_durations = [frame_durations[0]]
+        output_durations = [int(frame_durations[0] * 1000)]
         for i in range(1, len(frame_durations)):
             output_durations.append(int((frame_durations[i] - frame_durations[i - 1]) * 1000))
 
