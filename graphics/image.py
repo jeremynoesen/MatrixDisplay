@@ -91,7 +91,7 @@ def __load(image_path, cached):
             background = Image.new("RGBA", input_image.size, (0, 0, 0))
             image = Image.alpha_composite(background, input_image.convert("RGBA"))
         else:
-            image = input_image
+            image = input_image.convert("RGB")
 
         for matrix_x in range(8):
             for matrix_y in range(8):
