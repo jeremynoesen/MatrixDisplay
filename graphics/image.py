@@ -194,9 +194,12 @@ def __show(file_name):
         # Clear loading indicator
         if getattr(thread, "loop", True):
             loading.clear(True)
-            global fade_thread
-            fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-            fade_thread.start()
+
+    # Fade in image
+    if getattr(thread, "loop", True):
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
     # Draw image to display
     __draw(display_image)
