@@ -48,7 +48,7 @@ class Server(BaseHTTPRequestHandler):
         if self.path.startswith("/image/"):
             file = self.path.replace("/image/", "")
             display.clear()
-            image.show(file, True)
+            image.show(file)
         elif self.path == "/slideshow":
             display.clear()
             slideshow.show(config.pictures_dir)

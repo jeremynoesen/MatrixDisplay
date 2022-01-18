@@ -44,16 +44,14 @@ def __show():
             time.sleep(0.0167)
 
 
-def show(animated):
+def show():
     """
     Show the loading animation on the Unicorn HAT
-    :param animated: true to show the animated loading icon
     """
     clear(False)
-    if animated:
-        global loading_thread
-        loading_thread = threading.Thread(target=__show)
-        loading_thread.start()
+    global loading_thread
+    loading_thread = threading.Thread(target=__show)
+    loading_thread.start()
     global loading
     loading = True
 

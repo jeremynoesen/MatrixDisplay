@@ -10,25 +10,60 @@ import unicornhat as unicorn
 from graphics import loading, display
 import threading
 import config
+import os
 
 image_thread = None
 fade_thread = None
 
 
-def __show(image_file, show_loading):
+def __save(image_array, file_name):
     """
-    Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
-    :param image_file: Name of image file to show
-    :param show_loading: True to show loading animation
+    Save a processed image to the cache directory
+    :param image_array: tuple of processed frames and frame durations
+    :param file_name: name of original file
+    """
+    processed_frames = image_array[0]
+    frame_durations = image_array[1]
+    frame_count = len(frame_durations)
+
+    # Load processed frames as images
+    output_frames = []
+    for current_frame in processed_frames:
+        output_image = Image.new(mode="RGB", size=(8, 8))
+
+        for x in range(8):
+            for y in range(8):
+                output_image.putpixel((x, y), current_frame[x][y])
+        output_frames.append(output_image)
+
+    # Get frame durations formatted for saving
+    output_durations = []
+    for i in range(1, len(frame_durations)):
+        output_durations[i] = frame_durations[i] - frame_durations[i - 1]
+
+    # Get file format
+    file_name_parts = file_name.split(".")
+    image_format = file_name_parts[len(file_name_parts) - 1].upper()
+
+    # Save image file
+    output_file = f"{config.cache_dir}{file_name}"
+    if frame_count > 1:
+        output_frames[0].save(output_file, format=image_format,
+                              append_images=output_frames[1:], save_all=True, loop=0, duration=output_durations)
+    else:
+        output_frames[0].save(output_file, format=image_format)
+
+
+def __load(image_path, cached):
+    """
+    Load an image into an array for displaying.
+    :param image_path: full path to image to load
+    :param cached: True to indicate that a cached image is being loaded. This will skip some parts of the processing.
     """
     thread = threading.currentThread()
-    input_image = Image.open(f"{config.pictures_dir}{image_file}")
 
-    # Show loading animation
-    if getattr(thread, "loop", True):
-        loading.show(show_loading)
-
-    # Process all frames of image before displaying
+    # Load image from disk
+    input_image = Image.open(image_path)
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
@@ -46,9 +81,10 @@ def __show(image_file, show_loading):
             break
         input_image.seek(i)
 
-        # Draw black background behind image
-        background = Image.new("RGBA", input_image.size, (0, 0, 0))
-        image = Image.alpha_composite(background, input_image.convert("RGBA"))
+        if not cached:
+            # Draw black background behind image
+            background = Image.new("RGBA", input_image.size, (0, 0, 0))
+            image = Image.alpha_composite(background, input_image.convert("RGBA"))
 
         for matrix_x in range(8):
             for matrix_y in range(8):
@@ -68,28 +104,35 @@ def __show(image_file, show_loading):
                         g += int(pixel[1])
                         b += int(pixel[2])
 
-                # Get average RGB values for block
-                r = int(r / (scale_x * scale_y))
-                g = int(g / (scale_x * scale_y))
-                b = int(b / (scale_x * scale_y))
+                if not cached:
+                    # Get average RGB values for block
+                    r = int(r / (scale_x * scale_y))
+                    g = int(g / (scale_x * scale_y))
+                    b = int(b / (scale_x * scale_y))
 
                 # Store processed pixel
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
         # Store frame duration
-        if getattr(input_image, "is_animated", False) is True:
+        if frame_count > 1:
             duration = input_image.info['duration'] / 1000.0
             duration_sum += duration
             frame_durations.append(duration_sum)
 
-    # Clear loading animation and begin fade in
-    if getattr(thread, "loop", True):
-        loading.clear(show_loading)
-        global fade_thread
-        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade_thread.start()
+    # Return image array and durations
+    return processed_frames, frame_durations
 
-    # Display frames of image on a loop
+
+def __draw(image_array):
+    """
+    draw the image on the Unicorn HAT
+    :param image_array: tuple of the processed frames and the frame durations
+    """
+    thread = threading.currentThread()
+    processed_frames = image_array[0]
+    frame_durations = image_array[1]
+    frame_count = len(frame_durations)
+
     current_frame_index = 0
     timestamp = 0
     while getattr(thread, "loop", True):
@@ -106,7 +149,7 @@ def __show(image_file, show_loading):
         time.sleep(0.0167)
 
         # Increment frame counter
-        if getattr(input_image, "is_animated", False) is True:
+        if frame_count > 1:
             timestamp = (timestamp + (time.time() - start_time))  # Use delta time to prevent visual slowdown
             for i in range(frame_count - 1):
                 temp_index = current_frame_index + i
@@ -121,14 +164,46 @@ def __show(image_file, show_loading):
                         break
 
 
-def show(image, show_loading):
+def __show(file_name):
+    """
+    Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
+    :param file_name: Name of image file to show
+    """
+    thread = threading.currentThread()
+
+    if os.path.exists(f"{config.cache_dir}{file_name}"):
+        # Get cached image
+        display_image = __load(f"{config.cache_dir}{file_name}", True)
+    else:
+        # Start loading indicator
+        if getattr(thread, "loop", True):
+            loading.show()
+
+        # Get and process image
+        display_image = __load(f"{config.pictures_dir}{file_name}", False)
+
+        # Save image to cached folder
+        if getattr(thread, "loop", True):
+            __save(display_image, file_name)
+
+        # Clear loading indicator
+        if getattr(thread, "loop", True):
+            loading.clear(True)
+            global fade_thread
+            fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+            fade_thread.start()
+
+    # Draw image to display
+    __draw(display_image)
+
+
+def show(file_name):
     """
     Show an image on the Unicorn HAT
-    :param image: Image to show
-    :param show_loading: True to show loading animation
+    :param file_name: Name of image to show
     """
     global image_thread
-    image_thread = threading.Thread(target=__show, args=(image, show_loading))
+    image_thread = threading.Thread(target=__show, args=(file_name,))
     image_thread.start()
 
 
