@@ -33,7 +33,7 @@ def __save(image_array, file_name):
     # Load processed frames as images
     output_frames = []
     for current_frame in processed_frames:
-        output_image = Image.new(mode="RGB", size=(8, 8))
+        output_image = Image.new(mode="RGBA", size=(8, 8))
 
         for x in range(8):
             for y in range(8):
@@ -51,9 +51,9 @@ def __save(image_array, file_name):
         # Get corrected frame durations
         output_durations = [int(frame_durations[0] * 1000)]
         for i in range(1, len(frame_durations)):
-            output_durations.append(int((frame_durations[i] - frame_durations[i - 1]) * 1000))
+            output_durations.append(int(frame_durations[i] * 1000.0) - int(frame_durations[i - 1] * 1000.0))
 
-        output_frames[0].save(output_file, format=image_format,
+        output_frames[0].save(output_file, format=image_format, optimize=False,
                               append_images=output_frames[1:], save_all=True, loop=0, duration=output_durations)
     else:
         output_frames[0].save(output_file, format=image_format)
@@ -91,7 +91,7 @@ def __load(image_path, cached):
             background = Image.new("RGBA", input_image.size, (0, 0, 0))
             image = Image.alpha_composite(background, input_image.convert("RGBA"))
         else:
-            image = input_image.convert("RGB")
+            image = input_image.convert("RGBA")
 
         for matrix_x in range(8):
             for matrix_y in range(8):
