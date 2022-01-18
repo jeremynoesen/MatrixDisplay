@@ -33,7 +33,7 @@ def __save(image_array, file_name):
     # Load processed frames as images
     output_frames = []
     for current_frame in processed_frames:
-        output_image = Image.new(mode="RGBA", size=(8, 8))
+        output_image = Image.new(mode="P", size=(8, 8))
 
         for x in range(8):
             for y in range(8):
@@ -49,7 +49,7 @@ def __save(image_array, file_name):
     if frame_count > 1:
 
         # Get corrected frame durations
-        output_durations = [int(frame_durations[0] * 1000)]
+        output_durations = [int(frame_durations[0] * 1000.0)]
         for i in range(1, len(frame_durations)):
             output_durations.append(int(frame_durations[i] * 1000.0) - int(frame_durations[i - 1] * 1000.0))
 
@@ -125,6 +125,8 @@ def __load(image_path, cached):
             duration = input_image.info['duration'] / 1000.0
             duration_sum += duration
             frame_durations.append(duration_sum)
+
+        image.seek(0)
 
     # Return image array and durations
     return processed_frames, frame_durations
