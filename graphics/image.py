@@ -16,7 +16,7 @@ image_thread = None
 fade_thread = None
 
 
-def __save(image_array, file_name):
+def __save(image_array, file_name):  # todo fix artifacting for saved gifs
     """
     Save a processed image to the cache directory
     :param image_array: tuple of processed frames and frame durations
@@ -53,7 +53,7 @@ def __save(image_array, file_name):
         for i in range(1, len(frame_durations)):
             output_durations.append(int(frame_durations[i] * 1000.0) - int(frame_durations[i - 1] * 1000.0))
 
-        output_frames[0].save(output_file, format=image_format, optimize=False,
+        output_frames[0].save(output_file, format=image_format,
                               append_images=output_frames[1:], save_all=True, loop=0, duration=output_durations)
     else:
         output_frames[0].save(output_file, format=image_format)
@@ -125,8 +125,6 @@ def __load(image_path, cached):
             duration = input_image.info['duration'] / 1000.0
             duration_sum += duration
             frame_durations.append(duration_sum)
-
-        image.seek(0)
 
     # Return image array and durations
     return processed_frames, frame_durations
