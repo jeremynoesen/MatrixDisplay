@@ -26,6 +26,10 @@ def __save(image_array, file_name):
     frame_durations = image_array[1]
     frame_count = len(frame_durations)
 
+    # Create cache dir if it does not exist
+    if not os.path.exists(config.cache_dir):
+        os.mkdir(config.cache_dir)
+
     # Load processed frames as images
     output_frames = []
     for current_frame in processed_frames:
@@ -81,6 +85,7 @@ def __load(image_path, cached):
             break
         input_image.seek(i)
 
+        image = input_image
         if not cached:
             # Draw black background behind image
             background = Image.new("RGBA", input_image.size, (0, 0, 0))
