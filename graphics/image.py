@@ -30,19 +30,19 @@ def __save(image_array, file_name):  # todo fix artifacting for saved gifs
     if not os.path.exists(config.cache_dir):
         os.makedirs(config.cache_dir)
 
+    # Get file format
+    file_name_parts = file_name.split(".")
+    image_format = file_name_parts[len(file_name_parts) - 1].upper()
+
     # Load processed frames as images
     output_frames = []
     for current_frame in processed_frames:
-        output_image = Image.new(mode="P", size=(8, 8))
+        output_image = Image.new(mode="RGB", size=(8, 8))
 
         for x in range(8):
             for y in range(8):
                 output_image.putpixel((x, y), current_frame[x][y])
         output_frames.append(output_image)
-
-    # Get file format
-    file_name_parts = file_name.split(".")
-    image_format = file_name_parts[len(file_name_parts) - 1].upper()
 
     # Save image file
     output_file = f"{config.cache_dir}{file_name}"
@@ -144,7 +144,7 @@ def __load_processed(image_path):
         if not getattr(thread, "loop", True):
             break
         input_image.seek(i)
-        image = input_image.convert("RGBA")
+        image = input_image.convert("RGB")
 
         for matrix_x in range(8):
             for matrix_y in range(8):
