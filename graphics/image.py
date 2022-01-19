@@ -204,21 +204,22 @@ def __draw(image_array):
                         break
 
 
-def __show(file_name):
+def __show(file_name, show_loading):
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
     :param file_name: Name of image file to show
+    :param show_loading: whether to show the loading icon or not
     """
     thread = threading.currentThread()
+
+    # Start loading indicator
+    if getattr(thread, "loop", True) and show_loading:
+        loading.show()
 
     if os.path.exists(f"{config.cache_dir}{file_name}"):
         # Get cached image
         display_image = __load_processed(f"{config.cache_dir}{file_name}")
     else:
-        # Start loading indicator
-        if getattr(thread, "loop", True):
-            loading.show()
-
         # Get and process image
         display_image = __load_unprocessed(f"{config.pictures_dir}{file_name}")
 
@@ -226,9 +227,9 @@ def __show(file_name):
         if getattr(thread, "loop", True):
             __save(display_image, file_name)
 
-        # Clear loading indicator
-        if getattr(thread, "loop", True):
-            loading.clear(True)
+    # Clear loading indicator
+    if getattr(thread, "loop", True) and show_loading:
+        loading.clear(True)
 
     # Fade in image
     if getattr(thread, "loop", True):
@@ -240,13 +241,14 @@ def __show(file_name):
     __draw(display_image)
 
 
-def show(file_name):
+def show(file_name, show_loading):
     """
     Show an image on the Unicorn HAT
     :param file_name: Name of image to show
+    :param show_loading: whether to show the loading icon or not
     """
     global image_thread
-    image_thread = threading.Thread(target=__show, args=(file_name,))
+    image_thread = threading.Thread(target=__show, args=(file_name, show_loading))
     image_thread.start()
 
 
