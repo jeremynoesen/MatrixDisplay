@@ -28,7 +28,7 @@ def __save(image_array, file_name):  # todo fix artifacting for saved gifs
 
     # Create cache dir if it does not exist
     if not os.path.exists(config.cache_dir):
-        os.mkdir(config.cache_dir)
+        os.makedirs(config.cache_dir)
 
     # Load processed frames as images
     output_frames = []
@@ -59,11 +59,10 @@ def __save(image_array, file_name):  # todo fix artifacting for saved gifs
         output_frames[0].save(output_file, format=image_format)
 
 
-def __load(image_path, cached):
+def __load_unprocessed(image_path):
     """
-    Load an image into an array for displaying.
+    Load an image and scale it down into an array for displaying.
     :param image_path: full path to image to load
-    :param cached: True to indicate that a cached image is being loaded. This will skip some parts of the processing.
     """
     thread = threading.currentThread()
 
@@ -86,12 +85,9 @@ def __load(image_path, cached):
             break
         input_image.seek(i)
 
-        if not cached:
-            # Draw black background behind image
-            background = Image.new("RGBA", input_image.size, (0, 0, 0))
-            image = Image.alpha_composite(background, input_image.convert("RGBA"))
-        else:
-            image = input_image.convert("RGBA")
+        # Draw black background behind image
+        background = Image.new("RGBA", input_image.size, (0, 0, 0))
+        image = Image.alpha_composite(background, input_image.convert("RGBA"))
 
         for matrix_x in range(8):
             for matrix_y in range(8):
@@ -111,14 +107,51 @@ def __load(image_path, cached):
                         g += int(pixel[1])
                         b += int(pixel[2])
 
-                if not cached:
-                    # Get average RGB values for block
-                    r = int(r / (scale_x * scale_y))
-                    g = int(g / (scale_x * scale_y))
-                    b = int(b / (scale_x * scale_y))
+                # Get average RGB values for block
+                r = int(r / (scale_x * scale_y))
+                g = int(g / (scale_x * scale_y))
+                b = int(b / (scale_x * scale_y))
 
                 # Store processed pixel
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)
+
+        # Store frame duration
+        if frame_count > 1:
+            duration = input_image.info['duration'] / 1000.0
+            duration_sum += duration
+            frame_durations.append(duration_sum)
+
+    # Return image array and durations
+    return processed_frames, frame_durations
+
+
+def __load_processed(image_path):
+    """
+    Load an image into an array for displaying. No scaling will be done.
+    :param image_path: full path to image to load
+    """
+    thread = threading.currentThread()
+
+    # Load image from disk
+    input_image = Image.open(image_path)
+    frame_count = getattr(input_image, "n_frames", 1)
+    processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
+    frame_durations = []
+
+    # Load image to array
+    duration_sum = 0
+    for i in range(frame_count):
+        if not getattr(thread, "loop", True):
+            break
+        input_image.seek(i)
+        image = input_image.convert("RGBA")
+
+        for matrix_x in range(8):
+            for matrix_y in range(8):
+                if not getattr(thread, "loop", True):
+                    break
+                pixel = image.getpixel((matrix_x, matrix_y))
+                processed_frames[i][matrix_x][matrix_y] = (int(pixel[0]), int(pixel[1]), int(pixel[2]))
 
         # Store frame duration
         if frame_count > 1:
@@ -180,14 +213,14 @@ def __show(file_name):
 
     if os.path.exists(f"{config.cache_dir}{file_name}"):
         # Get cached image
-        display_image = __load(f"{config.cache_dir}{file_name}", True)
+        display_image = __load_processed(f"{config.cache_dir}{file_name}")
     else:
         # Start loading indicator
         if getattr(thread, "loop", True):
             loading.show()
 
         # Get and process image
-        display_image = __load(f"{config.pictures_dir}{file_name}", False)
+        display_image = __load_unprocessed(f"{config.pictures_dir}{file_name}")
 
         # Save image to cached folder
         if getattr(thread, "loop", True):
