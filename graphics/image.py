@@ -86,9 +86,8 @@ def __load_unprocessed(image_path):
         input_image.seek(i)
 
         # Draw black background behind image
-        input_image.load()
-        background = Image.new("RGB", input_image.size, (0, 0, 0))
-        background.paste(input_image, mask=input_image.split()[3])
+        background = Image.new("RGBA", input_image.size, (0, 0, 0))
+        image = Image.alpha_composite(background, input_image.convert("RGBA"))
 
         for matrix_x in range(8):
             for matrix_y in range(8):
@@ -103,7 +102,7 @@ def __load_unprocessed(image_path):
                     for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
                         if not getattr(thread, "loop", True):
                             break
-                        pixel = background.getpixel((block_x, block_y))
+                        pixel = image.getpixel((block_x, block_y))
                         r += int(pixel[0])
                         g += int(pixel[1])
                         b += int(pixel[2])
@@ -122,8 +121,8 @@ def __load_unprocessed(image_path):
             duration_sum += duration
             frame_durations.append(duration_sum)
 
-        # Close image
-        input_image.close()
+    # Close image
+    input_image.close()
 
     # Return image array and durations
     return processed_frames, frame_durations
@@ -163,8 +162,8 @@ def __load_processed(image_path):
             duration_sum += duration
             frame_durations.append(duration_sum)
 
-        # Close image
-        input_image.close()
+    # Close image
+    input_image.close()
 
     # Return image array and durations
     return processed_frames, frame_durations
