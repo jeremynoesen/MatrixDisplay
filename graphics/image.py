@@ -84,10 +84,7 @@ def __load_unprocessed(image_path):
         if not getattr(thread, "loop", True):
             break
         input_image.seek(i)
-
-        # Draw black background behind image
-        background = Image.new("RGBA", input_image.size, (0, 0, 0))
-        image = Image.alpha_composite(background, input_image.convert("RGBA"))
+        image = input_image.convert("RGBA")
 
         for matrix_x in range(8):
             for matrix_y in range(8):
@@ -103,9 +100,10 @@ def __load_unprocessed(image_path):
                         if not getattr(thread, "loop", True):
                             break
                         pixel = image.getpixel((block_x, block_y))
-                        r += int(pixel[0])
-                        g += int(pixel[1])
-                        b += int(pixel[2])
+                        a = pixel[3] / 255.0
+                        r += int(pixel[0] * a)
+                        g += int(pixel[1] * a)
+                        b += int(pixel[2] * a)
 
                 # Get average RGB values for block
                 r = int(r / (scale_x * scale_y))
