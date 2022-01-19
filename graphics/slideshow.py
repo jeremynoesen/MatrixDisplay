@@ -23,7 +23,7 @@ def __show(pictures_dir):
 
     while getattr(thread, "loop", True):
         # Show image
-        image.show(files[index])
+        image.show(files[index], False)
 
         # Get next index
         if index < len(files) - 1:
