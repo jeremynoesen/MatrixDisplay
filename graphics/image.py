@@ -37,7 +37,7 @@ def __save(image_array, file_name):  # todo fix artifacting for saved gifs
     # Load processed frames as images
     output_frames = []
     for current_frame in processed_frames:
-        output_image = Image.new(mode="RGB", size=(8, 8))
+        output_image = Image.new(mode="RGBA", size=(8, 8))
 
         for x in range(8):
             for y in range(8):
@@ -59,10 +59,11 @@ def __save(image_array, file_name):  # todo fix artifacting for saved gifs
         output_frames[0].save(output_file, format=image_format)
 
 
-def __load_unprocessed(image_path):
+def __load(image_path, process):
     """
     Load an image and scale it down into an array for displaying.
     :param image_path: full path to image to load
+    :param process: true to process the image to become a 8x8 image
     """
     thread = threading.currentThread()
 
@@ -72,13 +73,14 @@ def __load_unprocessed(image_path):
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
 
-    # Get values needed for filtering
-    scale_x = int(input_image.size[0] / 8)
-    scale_y = int(input_image.size[1] / 8)
-    offset_x = int((input_image.size[0] % 8) / 2)
-    offset_y = int((input_image.size[1] % 8) / 2)
+    if process:
+        # Get values needed for filtering
+        scale_x = int(input_image.size[0] / 8)
+        scale_y = int(input_image.size[1] / 8)
+        offset_x = int((input_image.size[0] % 8) / 2)
+        offset_y = int((input_image.size[1] % 8) / 2)
 
-    # Apply filtering
+    # Load image
     duration_sum = 0
     for i in range(frame_count):
         if not getattr(thread, "loop", True):
@@ -86,73 +88,43 @@ def __load_unprocessed(image_path):
         input_image.seek(i)
         image = input_image.convert("RGBA")
 
-        for matrix_x in range(8):
-            for matrix_y in range(8):
-                if not getattr(thread, "loop", True):
-                    break
-                r = 0
-                g = 0
-                b = 0
+        # Process frames
+        if process:
+            for matrix_x in range(8):
+                for matrix_y in range(8):
+                    if not getattr(thread, "loop", True):
+                        break
+                    r = 0
+                    g = 0
+                    b = 0
 
-                # Sum all RGB values in a block of pixels
-                for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
-                    for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
-                        if not getattr(thread, "loop", True):
-                            break
-                        pixel = image.getpixel((block_x, block_y))
-                        a = pixel[3] / 255.0
-                        r += int(pixel[0] * a)
-                        g += int(pixel[1] * a)
-                        b += int(pixel[2] * a)
+                    # Sum all RGB values in a block of pixels
+                    for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
+                        for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
+                            if not getattr(thread, "loop", True):
+                                break
+                            pixel = image.getpixel((block_x, block_y))
+                            a = pixel[3] / 255.0
+                            r += int(pixel[0] * a)
+                            g += int(pixel[1] * a)
+                            b += int(pixel[2] * a)
 
-                # Get average RGB values for block
-                r = int(r / (scale_x * scale_y))
-                g = int(g / (scale_x * scale_y))
-                b = int(b / (scale_x * scale_y))
+                    # Get average RGB values for block
+                    r = int(r / (scale_x * scale_y))
+                    g = int(g / (scale_x * scale_y))
+                    b = int(b / (scale_x * scale_y))
 
-                # Store processed pixel
-                processed_frames[i][matrix_x][matrix_y] = (r, g, b)
+                    # Store processed pixel
+                    processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
-        # Store frame duration
-        if frame_count > 1:
-            duration = input_image.info['duration'] / 1000.0
-            duration_sum += duration
-            frame_durations.append(duration_sum)
-
-    # Close image
-    input_image.close()
-
-    # Return image array and durations
-    return processed_frames, frame_durations
-
-
-def __load_processed(image_path):
-    """
-    Load an image into an array for displaying. No scaling will be done.
-    :param image_path: full path to image to load
-    """
-    thread = threading.currentThread()
-
-    # Load image from disk
-    input_image = Image.open(image_path)
-    frame_count = getattr(input_image, "n_frames", 1)
-    processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
-    frame_durations = []
-
-    # Load image to array
-    duration_sum = 0
-    for i in range(frame_count):
-        if not getattr(thread, "loop", True):
-            break
-        input_image.seek(i)
-        image = input_image.convert("RGB")
-
-        for matrix_x in range(8):
-            for matrix_y in range(8):
-                if not getattr(thread, "loop", True):
-                    break
-                pixel = image.getpixel((matrix_x, matrix_y))
-                processed_frames[i][matrix_x][matrix_y] = (int(pixel[0]), int(pixel[1]), int(pixel[2]))
+        # Load frames directly
+        else:
+            for matrix_x in range(8):
+                for matrix_y in range(8):
+                    if not getattr(thread, "loop", True):
+                        break
+                    pixel = image.getpixel((matrix_x, matrix_y))
+                    processed_frames[i][matrix_x][matrix_y] = (int(pixel[0]), int(pixel[1]), int(pixel[2]))
 
         # Store frame duration
         if frame_count > 1:
@@ -222,10 +194,10 @@ def __show(file_name, show_loading):
 
     if os.path.exists(f"{config.cache_dir}{file_name}"):
         # Get cached image
-        display_image = __load_processed(f"{config.cache_dir}{file_name}")
+        display_image = __load(f"{config.cache_dir}{file_name}", False)
     else:
         # Get and process image
-        display_image = __load_unprocessed(f"{config.pictures_dir}{file_name}")
+        display_image = __load(f"{config.pictures_dir}{file_name}", True)
 
         # Save image to cached folder
         if getattr(thread, "loop", True):
