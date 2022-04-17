@@ -24,10 +24,14 @@ Hardware:
 - A Micro SD card
 
 ## Installation
-To install, simply clone the repo onto the Raspberry Pi, and set `main.py` to start when the Pi turns on. An installation script will be coming soon!
+1. Clone or download this repository onto the Raspberry Pi.
+2. Set `main.py` to start when the Pi turns on.
+
+An installation script will be coming soon!
 
 ## Running
-To run the program, open a terminal and type `sudo python3 /path/to/main.py`. Replace the path to main.py with the proper location to your installation's main.py.
+1. Open a terminal.
+2. Run `sudo python3 /path/to/main.py`.
 
 ## Configuration
 There are two configurable values located in `config.py`:

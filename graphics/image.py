@@ -16,7 +16,7 @@ image_thread = None
 fade_thread = None
 
 
-def __save(image_array, file_name):  # todo fix artifacting for saved gifs
+def __save(image_array, file_name):
     """
     Save a processed image to the cache directory
     :param image_array: tuple of processed frames and frame durations
