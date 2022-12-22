@@ -11,55 +11,13 @@ from graphics import loading, display
 import threading
 import config
 import os
+import pickle
 
 image_thread = None
 fade_thread = None
 
 
-def __save(image_array, file_name):
-    """
-    Save a processed image to the cache directory
-    :param image_array: tuple of processed frames and frame durations
-    :param file_name: name of original file
-    """
-    processed_frames = image_array[0]
-    frame_durations = image_array[1]
-    frame_count = len(frame_durations)
-
-    # Create cache dir if it does not exist
-    if not os.path.exists(config.cache_dir):
-        os.makedirs(config.cache_dir)
-
-    # Get file format
-    file_name_parts = file_name.split(".")
-    image_format = file_name_parts[len(file_name_parts) - 1].upper()
-
-    # Load processed frames as images
-    output_frames = []
-    for current_frame in processed_frames:
-        output_image = Image.new(mode="RGBA", size=(8, 8))
-
-        for x in range(8):
-            for y in range(8):
-                output_image.putpixel((x, y), current_frame[x][y])
-        output_frames.append(output_image)
-
-    # Save image file
-    output_file = f"{config.cache_dir}{file_name}"
-    if frame_count > 1:
-
-        # Get corrected frame durations
-        output_durations = [int(frame_durations[0] * 1000.0)]
-        for i in range(1, len(frame_durations)):
-            output_durations.append(int(frame_durations[i] * 1000.0) - int(frame_durations[i - 1] * 1000.0))
-
-        output_frames[0].save(output_file, format=image_format,
-                              append_images=output_frames[1:], save_all=True, loop=0, duration=output_durations)
-    else:
-        output_frames[0].save(output_file, format=image_format)
-
-
-def __load(image_path, process):
+def __process(image_path):
     """
     Load an image and scale it down into an array for displaying.
     :param image_path: full path to image to load
@@ -73,12 +31,11 @@ def __load(image_path, process):
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
 
-    if process:
-        # Get values needed for filtering
-        scale_x = int(input_image.size[0] / 8)
-        scale_y = int(input_image.size[1] / 8)
-        offset_x = int((input_image.size[0] % 8) / 2)
-        offset_y = int((input_image.size[1] % 8) / 2)
+    # Get values needed for filtering
+    scale_x = int(input_image.size[0] / 8)
+    scale_y = int(input_image.size[1] / 8)
+    offset_x = int((input_image.size[0] % 8) / 2)
+    offset_y = int((input_image.size[1] % 8) / 2)
 
     # Load image
     duration_sum = 0
@@ -89,42 +46,32 @@ def __load(image_path, process):
         image = input_image.convert("RGBA")
 
         # Process frames
-        if process:
-            for matrix_x in range(8):
-                for matrix_y in range(8):
-                    if not getattr(thread, "loop", True):
-                        break
-                    r = 0
-                    g = 0
-                    b = 0
+        for matrix_x in range(8):
+            for matrix_y in range(8):
+                if not getattr(thread, "loop", True):
+                    break
+                r = 0
+                g = 0
+                b = 0
 
-                    # Sum all RGB values in a block of pixels
-                    for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
-                        for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
-                            if not getattr(thread, "loop", True):
-                                break
-                            pixel = image.getpixel((block_x, block_y))
-                            a = pixel[3] / 255.0
-                            r += int(pixel[0] * a)
-                            g += int(pixel[1] * a)
-                            b += int(pixel[2] * a)
+                # Sum all RGB values in a block of pixels
+                for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
+                    for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
+                        if not getattr(thread, "loop", True):
+                            break
+                        pixel = image.getpixel((block_x, block_y))
+                        a = pixel[3] / 255.0
+                        r += int(pixel[0] * a)
+                        g += int(pixel[1] * a)
+                        b += int(pixel[2] * a)
 
-                    # Get average RGB values for block
-                    r = int(r / (scale_x * scale_y))
-                    g = int(g / (scale_x * scale_y))
-                    b = int(b / (scale_x * scale_y))
+                # Get average RGB values for block
+                r = int(r / (scale_x * scale_y))
+                g = int(g / (scale_x * scale_y))
+                b = int(b / (scale_x * scale_y))
 
-                    # Store processed pixel
-                    processed_frames[i][matrix_x][matrix_y] = (r, g, b)
-
-        # Load frames directly
-        else:
-            for matrix_x in range(8):
-                for matrix_y in range(8):
-                    if not getattr(thread, "loop", True):
-                        break
-                    pixel = image.getpixel((matrix_x, matrix_y))
-                    processed_frames[i][matrix_x][matrix_y] = (int(pixel[0]), int(pixel[1]), int(pixel[2]))
+                # Store processed pixel
+                processed_frames[i][matrix_x][matrix_y] = (r, g, b)
 
         # Store frame duration
         if frame_count > 1:
@@ -192,16 +139,23 @@ def __show(file_name, show_loading):
     if getattr(thread, "loop", True) and show_loading:
         loading.show()
 
-    if os.path.exists(f"{config.cache_dir}{file_name}"):
+    if os.path.exists(f"{config.cache_dir}{file_name}.pickle"):
         # Get cached image
-        display_image = __load(f"{config.cache_dir}{file_name}", False)
+        with open(f"{config.cache_dir}{file_name}.pickle", 'rb') as f:
+            display_image = pickle.load(f)
     else:
         # Get and process image
-        display_image = __load(f"{config.pictures_dir}{file_name}", True)
+        display_image = __process(f"{config.pictures_dir}{file_name}")
 
         # Save image to cached folder
         if getattr(thread, "loop", True):
-            __save(display_image, file_name)
+            # Create cache dir if it does not exist
+            if not os.path.exists(config.cache_dir):
+                os.makedirs(config.cache_dir)
+
+            # Save serialized version of processed image as pickle file
+            with open(f"{config.cache_dir}{file_name}.pickle", 'wb') as f:
+                pickle.dump(display_image, f)
 
     # Clear loading indicator
     if getattr(thread, "loop", True) and show_loading:
