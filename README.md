@@ -27,8 +27,6 @@ Hardware:
 1. Clone or download this repository onto the Raspberry Pi.
 2. Set `main.py` to start when the Pi turns on.
 
-An installation script will be coming soon!
-
 ## Running
 1. Open a terminal.
 2. Run `sudo python3 /path/to/main.py`.
