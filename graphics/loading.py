@@ -16,7 +16,7 @@ def __show():
     """
     Show the loading animation
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
 
     # Pixels in order of animation
     pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),

@@ -21,9 +21,8 @@ def __process(image_path):
     """
     Load an image and scale it down into an array for displaying.
     :param image_path: full path to image to load
-    :param process: true to process the image to become a 8x8 image
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
 
     # Load image from disk
     input_image = Image.open(image_path)
@@ -91,7 +90,7 @@ def __draw(image_array):
     draw the image on the Unicorn HAT
     :param image_array: tuple of the processed frames and the frame durations
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
     processed_frames = image_array[0]
     frame_durations = image_array[1]
     frame_count = len(frame_durations)
@@ -133,7 +132,7 @@ def __show(file_name, show_loading):
     :param file_name: Name of image file to show
     :param show_loading: whether to show the loading icon or not
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
 
     # Start loading indicator
     if getattr(thread, "loop", True) and show_loading:

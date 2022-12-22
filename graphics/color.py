@@ -16,7 +16,7 @@ def __show():
     """
     Show a solid color on the Unicorn HAT
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
 
     # Fade in
     if getattr(thread, "loop", True):

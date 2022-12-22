@@ -16,7 +16,7 @@ def __show(pictures_dir):
     Show the slideshow on the Unicorn HAT
     :param pictures_dir: directory where images are stored
     """
-    thread = threading.currentThread()
+    thread = threading.current_thread()
     index = 0
     files = os.listdir(pictures_dir)
     files.sort()
