@@ -39,24 +39,24 @@ def __process(image_path):
     # Load image
     duration_sum = 0
     for i in range(frame_count):
-        if not getattr(thread, "loop", True):
+    	if not getattr(thread, "loop", True):
             break
         input_image.seek(i)
         image = input_image.convert("RGBA")
 		
-		# Prefix sum for faster submatrix sum
-		# presum_array[x][y] = (int(r*a), int(g*a), int(b*a), a)
-		presum_array = [[image.getpixel((x, y)) for y in range(input_image.size[1])] for x in range(input_image.size[0])]
-		for x in range(input_image.size[0]):
-			row_sum = 0
-			for y in range(input_image.size[1]):
-				presum_array[x][y][3] /= 255
-				for i in range(3):
-					presum_array[x][y][i] = int(presum_array[x][y][i] * presum_array[x][y][3])
-				row_sum += presum_array[x][y]
-				presum_array[x][y] = row_sum
-				if x > 0:
-					presum_array[x][y] += presum_array[x-1][y]
+	# Prefix sum for faster submatrix sum
+	# presum_array[x][y] = (int(r*a), int(g*a), int(b*a), a)
+	presum_array = [[image.getpixel((x, y)) for y in range(input_image.size[1])] for x in range(input_image.size[0])]
+	for x in range(input_image.size[0]):
+	    row_sum = 0
+	    for y in range(input_image.size[1]):
+	        presum_array[x][y][3] /= 255
+		for i in range(3):
+		    presum_array[x][y][i] = int(presum_array[x][y][i] * presum_array[x][y][3])
+		row_sum += presum_array[x][y]
+		presum_array[x][y] = row_sum
+		if x > 0:
+		    presum_array[x][y] += presum_array[x-1][y]
 
         # Process frames
         for matrix_x in range(8):
@@ -67,19 +67,19 @@ def __process(image_path):
                 g = 0
                 b = 0
 				
-				start_x = (matrix_x * scale_x) + offset_x
-				start_y = (matrix_y * scale_y) + offset_y
-				end_x = start_x + scale_x - 1
-				end_y = start_y + scale_y - 1
+		start_x = (matrix_x * scale_x) + offset_x
+		start_y = (matrix_y * scale_y) + offset_y
+		end_x = start_x + scale_x - 1
+		end_y = start_y + scale_y - 1
 
                 # Sum all RGB values in a block of pixels
-				(r, g, b, a) = presum_array[end_x][end_y]
-				if start_x > 0:
-					(r, g, b, a) -= presum_array[start_x-1][end_y]
-				if start_y > 0:
-					(r, g, b, a) -= presum_array[end_x][start_y-1]
-				if start_x > 0 and start_y > 0:
-					(r, g, b, a) += presum_array[start_x-1][start_y-1]
+		(r, g, b, a) = presum_array[end_x][end_y]
+		if start_x > 0:
+		    (r, g, b, a) -= presum_array[start_x-1][end_y]
+		if start_y > 0:
+		    (r, g, b, a) -= presum_array[end_x][start_y-1]
+		if start_x > 0 and start_y > 0:
+		    (r, g, b, a) += presum_array[start_x-1][start_y-1]
                 
                 # Get average RGB values for block
                 r = int(r / (scale_x * scale_y))
