@@ -84,7 +84,7 @@ def fade(start, end, duration):
         else:
             unicorn.brightness(int((((duration - min(current, duration)) * (
                         start_visible - end_visible)) / duration) + end_visible) / 100.0)
-        time.sleep(0.0167)
+        time.sleep(0.0333)
         delta = time.time() - start_time
         if current >= duration:
             break
@@ -124,4 +124,4 @@ def start():
     """
     while True:
         unicorn.show()
-        time.sleep(0.0167)
+        time.sleep(0.0333)

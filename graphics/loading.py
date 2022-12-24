@@ -41,7 +41,7 @@ def __show():
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)
 
-            time.sleep(0.0167)
+            time.sleep(0.0333)
 
 
 def show():

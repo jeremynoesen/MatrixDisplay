@@ -108,7 +108,7 @@ def __draw(image_array):
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
 
         # Wait before next frame
-        time.sleep(0.0167)
+        time.sleep(0.0333)
 
         # Increment frame counter
         if frame_count > 1:
