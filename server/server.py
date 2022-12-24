@@ -68,9 +68,6 @@ class Server(BaseHTTPRequestHandler):
         elif self.path.startswith("/warmth/"):
             warmth = int(self.path.replace("/warmth/", ""))
             display.set_warmth(warmth)
-        elif self.path == "/update":
-            display.clear()
-            os.system("git pull; sudo reboot")
 
 
 def start():
