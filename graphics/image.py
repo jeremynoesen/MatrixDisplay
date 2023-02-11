@@ -135,8 +135,8 @@ def __show(file_name, show_loading):
     thread = threading.current_thread()
 
     # Start loading indicator
-    if getattr(thread, "loop", True) and show_loading:
-        loading.show()
+    if getattr(thread, "loop", True):
+        loading.show(show_loading)
 
     if os.path.exists(f"{config.cache_dir}{file_name}.pickle"):
         # Get cached image
@@ -157,8 +157,8 @@ def __show(file_name, show_loading):
                 pickle.dump(display_image, f)
 
     # Clear loading indicator
-    if getattr(thread, "loop", True) and show_loading:
-        loading.clear(True)
+    if getattr(thread, "loop", True):
+        loading.clear(show_loading)
 
     # Fade in image
     if getattr(thread, "loop", True):
