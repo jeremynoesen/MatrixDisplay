@@ -32,9 +32,9 @@ def __show(pictures_dir):
             index = 0
 
         # Wait for image to load
-        time.sleep(0.2)
+        time.sleep(0.5)
         while loading.loading:
-            time.sleep(0.2)
+            time.sleep(0.5)
 
         # Show image for set amount of time
         time.sleep(display_time)
