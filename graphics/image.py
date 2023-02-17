@@ -3,7 +3,7 @@ Draw an image of any size to the Unicorn HAT. Images will be scaled to fit a 1:1
 will divide the image up into an 8 by 8 grid, evenly among the x and y axes. The average color per grid block will be
 mapped directly to one LED on the matrix. Essentially, this applies a pixelating filter.
 """
-
+import math
 import time
 from PIL import Image
 import unicornhat as unicorn
@@ -32,10 +32,10 @@ def __process(image_path):
     frame_durations = []
 
     # Get values needed for filtering
-    scale_x = int(input_image.size[0] / 8)
-    scale_y = int(input_image.size[1] / 8)
-    offset_x = int((input_image.size[0] % 8) / 2)
-    offset_y = int((input_image.size[1] % 8) / 2)
+    scale_x = math.floor(input_image.size[0] / 8)
+    scale_y = math.floor(input_image.size[1] / 8)
+    offset_x = round((input_image.size[0] % 8) / 2)
+    offset_y = round((input_image.size[1] % 8) / 2)
 
     # Load image
     duration_sum = 0
@@ -61,14 +61,14 @@ def __process(image_path):
                             break
                         pixel = image.getpixel((block_x, block_y))
                         a = pixel[3] / 255.0
-                        r += int(pixel[0] * a)
-                        g += int(pixel[1] * a)
-                        b += int(pixel[2] * a)
+                        r += pixel[0] * a
+                        g += pixel[1] * a
+                        b += pixel[2] * a
 
                 # Get average RGB values for block
-                r = int(r / (scale_x * scale_y))
-                g = int(g / (scale_x * scale_y))
-                b = int(b / (scale_x * scale_y))
+                r = round(r / (scale_x * scale_y))
+                g = round(g / (scale_x * scale_y))
+                b = round(b / (scale_x * scale_y))
 
                 # Store processed pixel
                 processed_frames[i][matrix_x][matrix_y] = (r, g, b)

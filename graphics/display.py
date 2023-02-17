@@ -10,7 +10,7 @@ unicorn.set_layout(unicorn.HAT)
 unicorn.rotation(270)
 
 current_warmth = 0
-current_brightness = 1.0
+current_brightness = 100
 modified_brightness = 1.0
 
 
@@ -24,9 +24,9 @@ def set_pixel(x, y, r, g, b):
     :param b: blue value
     """
     unicorn.set_pixel(x, y,
-                      int(r * modified_brightness),
-                      int(max(g - (current_warmth * 0.5), 0) * modified_brightness),
-                      int(max(b - (current_warmth * 1.5), 0) * modified_brightness))
+                      round(r * modified_brightness),
+                      round(max(g - (current_warmth * 0.5), 0) * modified_brightness),
+                      round(max(b - (current_warmth * 1.5), 0) * modified_brightness))
 
 
 def set_warmth(warmth):
@@ -35,7 +35,7 @@ def set_warmth(warmth):
     :param warmth: 0 to 100 intensity of blue light filter
     """
     global current_warmth
-    current_warmth = min(max(warmth, 0), 100)
+    current_warmth = round(min(max(warmth, 0), 100))
 
 
 def get_warmth():
@@ -52,8 +52,8 @@ def set_brightness(brightness):
     :param brightness: 0 to 100 brightness of display
     """
     global current_brightness, modified_brightness
-    current_brightness = min(max(brightness, 0), 100) / 100.0
-    modified_brightness = ((current_brightness * (1.0 - 0.17)) / 1.0) + 0.17
+    current_brightness = round(min(max(brightness, 0), 100))
+    modified_brightness = (((current_brightness * (100 - 17)) / 100) + 17) / 100
 
 
 def get_brightness():
@@ -61,7 +61,7 @@ def get_brightness():
     Get the software display brightness
     :return: Brightness of display 0 to 100
     """
-    return int(current_brightness * 100)
+    return current_brightness
 
 
 def fade(start, end, duration):
@@ -72,8 +72,8 @@ def fade(start, end, duration):
     :param duration: Duration of fade in seconds
     """
     # Map start and end value to visible range
-    start_visible = int(((start * (100 - 17)) / 100) + 17)
-    end_visible = int(((end * (100 - 17)) / 100) + 17)
+    start_visible = ((start * (100 - 17)) / 100) + 17
+    end_visible = ((end * (100 - 17)) / 100) + 17
 
     # Do fading with delta time to ensure the fades last exactly the specified duration
     delta = 0
@@ -83,10 +83,10 @@ def fade(start, end, duration):
         current += delta
         if end > start_visible:
             unicorn.brightness(
-                int(((min(current, duration) * (end_visible - start_visible)) / duration) + start_visible) / 100.0)
+                (((min(current, duration) * (end_visible - start_visible)) / duration) + start_visible) / 100)
         else:
-            unicorn.brightness(int((((duration - min(current, duration)) * (
-                        start_visible - end_visible)) / duration) + end_visible) / 100.0)
+            unicorn.brightness(((((duration - min(current, duration)) * (
+                        start_visible - end_visible)) / duration) + end_visible) / 100)
         time.sleep(0.0333)
         delta = time.time() - start_time
         if current >= duration:
