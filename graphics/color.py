@@ -33,6 +33,7 @@ def __show():
                     display.set_pixel(i, j, color[0], color[1], color[2])
             time.sleep(0.0333)
         except ValueError:
+            display.clear()
             return
 
 

@@ -163,7 +163,7 @@ def __show(file_name, show_loading):
             with open(f"{config.cache_dir}{file_name}.pickle", 'wb') as f:
                 pickle.dump(display_image, f)
     else:
-        clear()
+        display.clear()
         return
 
     # Clear loading indicator

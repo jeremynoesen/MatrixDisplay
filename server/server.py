@@ -57,6 +57,7 @@ class Server(BaseHTTPRequestHandler):
                 slideshow.set_display_time(display_time)
                 slideshow.show(config.pictures_dir)
             except ValueError:
+                display.clear()
                 return
         elif self.path.startswith("/color/"):
             display.clear()
@@ -69,12 +70,14 @@ class Server(BaseHTTPRequestHandler):
                 brightness = int(self.path.replace("/brightness/", ""))
                 display.set_brightness(brightness)
             except ValueError:
+                display.clear()
                 return
         elif self.path.startswith("/warmth/"):
             try:
                 warmth = int(self.path.replace("/warmth/", ""))
                 display.set_warmth(warmth)
             except ValueError:
+                display.clear()
                 return
 
 

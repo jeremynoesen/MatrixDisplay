@@ -6,6 +6,9 @@ import unicornhat as unicorn
 import time
 from graphics import image, slideshow, loading, color
 
+unicorn.set_layout(unicorn.HAT)
+unicorn.rotation(270)
+
 current_warmth = 0
 current_brightness = 1.0
 modified_brightness = 1.0
