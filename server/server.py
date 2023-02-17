@@ -46,20 +46,18 @@ class Server(BaseHTTPRequestHandler):
 
         # Process requests
         if self.path.startswith("/image/"):
+            display.clear()
             file = self.path.replace("/image/", "")
-            display.clear()
             image.show(file, True)
-        elif self.path == "/slideshow":
-            display.clear()
-            slideshow.show(config.pictures_dir)
         elif self.path.startswith("/slideshow/"):
+            display.clear()
             display_time = int(self.path.replace("/slideshow/", ""))
             slideshow.set_display_time(display_time)
-        elif self.path == "/color":
-            display.clear()
-            color.show()
+            slideshow.show(config.pictures_dir)
         elif self.path.startswith("/color/"):
+            display.clear()
             color.current_color = self.path.replace("/color/", "")
+            color.show()
         elif self.path == "/off":
             display.clear()
         elif self.path.startswith("/brightness/"):
