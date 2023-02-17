@@ -139,15 +139,14 @@ def __show(file_name, show_loading):
     if getattr(thread, "loop", True):
         loading.show(show_loading)
 
+    global current_image
     if os.path.exists(f"{config.cache_dir}{file_name}.pickle"):
-        global current_image
         current_image = file_name
 
         # Get cached image
         with open(f"{config.cache_dir}{file_name}.pickle", 'rb') as f:
             display_image = pickle.load(f)
     elif os.path.exists(f"{config.cache_dir}{file_name}"):
-        global current_image
         current_image = file_name
 
         # Get and process image
