@@ -146,7 +146,7 @@ def __show(file_name, show_loading):
         # Get cached image
         with open(f"{config.cache_dir}{file_name}.pickle", 'rb') as f:
             display_image = pickle.load(f)
-    elif os.path.exists(f"{config.cache_dir}{file_name}"):
+    elif os.path.exists(f"{config.pictures_dir}{file_name}"):
         current_image = file_name
 
         # Get and process image
