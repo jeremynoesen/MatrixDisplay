@@ -6,6 +6,7 @@ import time
 import os
 from graphics import loading, image
 import threading
+import random
 
 slideshow_thread = None
 display_time = 30
@@ -19,7 +20,7 @@ def __show(pictures_dir):
     thread = threading.current_thread()
     index = 0
     files = os.listdir(pictures_dir)
-    files.sort()
+    random.shuffle(files)
 
     while getattr(thread, "loop", True):
         # Show image
