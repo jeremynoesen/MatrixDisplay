@@ -26,11 +26,14 @@ def __show():
 
     # Show color
     while getattr(thread, "loop", True):
-        color = ImageColor.getcolor(f"#{current_color}", "RGB")
-        for i in range(8):
-            for j in range(8):
-                display.set_pixel(i, j, color[0], color[1], color[2])
-        time.sleep(0.0333)
+        try:
+            color = ImageColor.getcolor(f"#{current_color}", "RGB")
+            for i in range(8):
+                for j in range(8):
+                    display.set_pixel(i, j, color[0], color[1], color[2])
+            time.sleep(0.0333)
+        except ValueError:
+            return
 
 
 def show():

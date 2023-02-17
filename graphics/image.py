@@ -15,6 +15,7 @@ import pickle
 
 image_thread = None
 fade_thread = None
+current_image = None
 
 
 def __process(image_path):
@@ -139,10 +140,16 @@ def __show(file_name, show_loading):
         loading.show(show_loading)
 
     if os.path.exists(f"{config.cache_dir}{file_name}.pickle"):
+        global current_image
+        current_image = file_name
+
         # Get cached image
         with open(f"{config.cache_dir}{file_name}.pickle", 'rb') as f:
             display_image = pickle.load(f)
-    else:
+    elif os.path.exists(f"{config.cache_dir}{file_name}"):
+        global current_image
+        current_image = file_name
+
         # Get and process image
         display_image = __process(f"{config.pictures_dir}{file_name}")
 
@@ -155,6 +162,9 @@ def __show(file_name, show_loading):
             # Save serialized version of processed image as pickle file
             with open(f"{config.cache_dir}{file_name}.pickle", 'wb') as f:
                 pickle.dump(display_image, f)
+    else:
+        clear()
+        return
 
     # Clear loading indicator
     if getattr(thread, "loop", True):

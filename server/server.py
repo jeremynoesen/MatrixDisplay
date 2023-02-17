@@ -37,6 +37,7 @@ class Server(BaseHTTPRequestHandler):
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links_str}", links_str) \
+                .replace("{image}", str(image.current_image)) \
                 .replace("{duration}", str(slideshow.display_time)) \
                 .replace("{color}", color.current_color) \
                 .replace("{brightness}", str(display.get_brightness())) \
@@ -50,10 +51,13 @@ class Server(BaseHTTPRequestHandler):
             file = self.path.replace("/image/", "")
             image.show(file, True)
         elif self.path.startswith("/slideshow/"):
-            display.clear()
-            display_time = int(self.path.replace("/slideshow/", ""))
-            slideshow.set_display_time(display_time)
-            slideshow.show(config.pictures_dir)
+            try:
+                display.clear()
+                display_time = int(self.path.replace("/slideshow/", ""))
+                slideshow.set_display_time(display_time)
+                slideshow.show(config.pictures_dir)
+            except ValueError:
+                return
         elif self.path.startswith("/color/"):
             display.clear()
             color.current_color = self.path.replace("/color/", "")
@@ -61,11 +65,17 @@ class Server(BaseHTTPRequestHandler):
         elif self.path == "/off":
             display.clear()
         elif self.path.startswith("/brightness/"):
-            brightness = int(self.path.replace("/brightness/", ""))
-            display.set_brightness(brightness)
+            try:
+                brightness = int(self.path.replace("/brightness/", ""))
+                display.set_brightness(brightness)
+            except ValueError:
+                return
         elif self.path.startswith("/warmth/"):
-            warmth = int(self.path.replace("/warmth/", ""))
-            display.set_warmth(warmth)
+            try:
+                warmth = int(self.path.replace("/warmth/", ""))
+                display.set_warmth(warmth)
+            except ValueError:
+                return
 
 
 def start():
