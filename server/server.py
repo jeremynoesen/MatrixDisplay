@@ -34,7 +34,7 @@ class Server(BaseHTTPRequestHandler):
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
 
-# ⋅ >
+# - >
 
         # Send the HTML over to create the web page
         time.sleep(0.5)
@@ -88,10 +88,10 @@ class Server(BaseHTTPRequestHandler):
                 .replace("{color}", color.current_color) \
                 .replace("{brightness}", str(display.get_brightness())) \
                 .replace("{warmth}", str(display.current_warmth)) \
-                .replace("{imagemode}", "⋅") \
-                .replace("{slideshowmode}", "⋅") \
-                .replace("{colormode}", "⋅") \
-               .replace("{offmode}", "⋅")
+                .replace("{imagemode}", "-") \
+                .replace("{slideshowmode}", "-") \
+                .replace("{colormode}", "-") \
+               .replace("{offmode}", "-")
             self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
 
