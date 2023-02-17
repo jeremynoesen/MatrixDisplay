@@ -61,29 +61,31 @@
 
 <h2>Modes</h2>
 <div style="width: 95%; margin: auto">
-    <h3>⋅ Image: {image}</h3>
+    <h3 id="imagetitle">{imagemode} Image: {image}</h3>
     <h4>{links_str}</h4>
-    <h3 id="slideshowtitle">⋅ Slideshow: {duration} seconds per image</h3>
+    <h3 id="slideshowtitle">{slideshowmode} Slideshow: {duration} seconds per image</h3>
     <input type="number" value="{duration}" id="slideshow" style="width: 100%">
     <script>
-        let slideshow = document.getElementById("slideshow");
-        let slideshowtitle = document.getElementById("slideshowtitle");
-        slideshow.oninput = function () {
+        document.getElementById("slideshow").oninput = function () {
             fetch("/slideshow/" + this.value)
-            slideshowtitle.textContent = "⋅ Slideshow: " + this.value + " seconds per image"
+            document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image"
+            document.getElementById("imagetitle").textContent = document.getElementById("imagetitle").textContent.replace(">", "⋅")
+            document.getElementById("colortitle").textContent = document.getElementById("colortitle").textContent.replace(">", "⋅")
+            document.getElementById("offtitle").textContent = document.getElementById("offtitle").textContent.replace(">", "⋅")
         }
     </script>
-    <h3 id="colortitle">⋅ Color: #{color}</h3>
+    <h3 id="colortitle">{colormode} Color: #{color}</h3>
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
-        let colorpicker = document.getElementById("colorpicker");
-        let colortitle = document.getElementById("colortitle");
-        colorpicker.oninput = function () {
+        document.getElementById("colorpicker").oninput = function () {
             fetch("/color/" + this.value.replace("#", ""))
-            colortitle.textContent = "⋅ Color: #" + this.value
+            document.getElementById("colortitle").textContent = "> Color: #" + this.value
+            document.getElementById("imagetitle").textContent = document.getElementById("imagetitle").textContent.replace(">", "⋅")
+            document.getElementById("slideshowtitle").textContent = document.getElementById("slideshowtitle").textContent.replace(">", "⋅")
+            document.getElementById("offtitle").textContent = document.getElementById("offtitle").textContent.replace(">", "⋅")
         }
     </script>
-    <h3><a href="/off">⋅ Off</a></h3>
+    <h3><a id="offtitle" href="/off">{offmode} Off</a></h3>
 </div>
 
 <hr>
@@ -93,21 +95,17 @@
     <h3 id="brightnesstitle">⋅ Brightness: {brightness}%</h3>
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
-        let brightness = document.getElementById("brightness");
-        let brightnesstitle = document.getElementById("brightnesstitle");
-        brightness.oninput = function () {
+        document.getElementById("brightness").oninput = function () {
             fetch("/brightness/" + this.value)
-            brightnesstitle.textContent = "⋅ Brightness: " + this.value + "%"
+            document.getElementById("brightnesstitle").textContent = "⋅ Brightness: " + this.value + "%"
         }
     </script>
     <h3 id="warmthtitle">⋅ Warmth: {warmth}%</h3>
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
-        let warmth = document.getElementById("warmth");
-        let warmthtitle = document.getElementById("warmthtitle");
-        warmth.oninput = function () {
+        document.getElementById("warmth").oninput = function () {
             fetch("/warmth/" + this.value)
-            warmthtitle.textContent = "⋅ Warmth: " + this.value + "%"
+            document.getElementById("warmthtitle").textContent = "⋅ Warmth: " + this.value + "%"
         }
     </script>
 </div>
