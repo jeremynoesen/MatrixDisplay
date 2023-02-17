@@ -4,7 +4,7 @@ A simple web server and interface used to easily control the Unicorn HAT
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from graphics import display, image, slideshow, color, loading
+from graphics import display, image, slideshow, color
 import os
 import config
 
@@ -69,11 +69,8 @@ class Server(BaseHTTPRequestHandler):
                 display.clear()
                 return
 
-        # Wait for mode to load
-        while not loading.loading:
-            time.sleep(0.5)
-
         # Send the HTML over to create the web page
+        time.sleep(0.5)
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links_str}", links_str) \
                 .replace("{image}", str(image.current_image)) \
