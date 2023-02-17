@@ -22,8 +22,8 @@ def set_pixel(x, y, r, g, b):
     """
     unicorn.set_pixel(x, y,
                       int(r * modified_brightness),
-                      int(max(g - current_warmth, 0) * modified_brightness),
-                      int(max(b - (current_warmth * 2), 0) * modified_brightness))
+                      int(max(g - (current_warmth * 0.5), 0) * modified_brightness),
+                      int(max(b - (current_warmth * 1.5), 0) * modified_brightness))
 
 
 def set_warmth(warmth):
