@@ -1,7 +1,7 @@
 """
 A simple web server and interface used to easily control the Unicorn HAT
 """
-
+import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from graphics import display, image, slideshow, color
@@ -33,17 +33,6 @@ class Server(BaseHTTPRequestHandler):
         for file in files:
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
-
-        # Send the HTML over to create the web page
-        with open("./server/index.html") as fd:
-            html = fd.read().replace("{links_str}", links_str) \
-                .replace("{image}", str(image.current_image)) \
-                .replace("{duration}", str(slideshow.display_time)) \
-                .replace("{color}", color.current_color) \
-                .replace("{brightness}", str(display.get_brightness())) \
-                .replace("{warmth}", str(display.current_warmth))
-            self.do_HEAD()
-            self.wfile.write(html.encode("utf-8"))
 
         # Process requests
         if self.path.startswith("/image/"):
@@ -79,6 +68,18 @@ class Server(BaseHTTPRequestHandler):
             except ValueError:
                 display.clear()
                 return
+
+        # Send the HTML over to create the web page
+        time.sleep(1)
+        with open("./server/index.html") as fd:
+            html = fd.read().replace("{links_str}", links_str) \
+                .replace("{image}", str(image.current_image)) \
+                .replace("{duration}", str(slideshow.display_time)) \
+                .replace("{color}", color.current_color) \
+                .replace("{brightness}", str(display.get_brightness())) \
+                .replace("{warmth}", str(display.current_warmth))
+            self.do_HEAD()
+            self.wfile.write(html.encode("utf-8"))
 
 
 def start():
