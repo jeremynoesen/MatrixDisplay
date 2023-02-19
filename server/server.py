@@ -26,12 +26,55 @@ class Server(BaseHTTPRequestHandler):
 
     def do_GET(self):
         """
-        Process requests for displaying for GET requests
+        Process GET requests, which includes sending the web panel
         """
+
+        # Process the api call
+        self.do_POST()
 
         global current_mode
 
-        # Process requests
+        # Get pictures from Pictures folder on Pi
+        files = os.listdir(config.pictures_dir)
+        links = []
+        files.sort()
+        for file in files:
+            links.append(f"<a href=\"/image/{file}\">{file}</a>")
+        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
+
+        # Send the HTML over to create the web page
+        time.sleep(0.5)
+        with open("./server/index.html") as fd:
+            html = fd.read().replace("{links_str}", links_str) \
+                .replace("{image}", str(image.current_image)) \
+                .replace("{duration}", str(slideshow.display_time)) \
+                .replace("{color}", color.current_color) \
+                .replace("{brightness}", str(display.get_brightness())) \
+                .replace("{warmth}", str(display.current_warmth)) \
+
+            if current_mode == "image":
+                html = html.replace("{imagemode}", ">")
+            elif current_mode == "slideshow":
+                html = html.replace("{slideshowmode}", ">")
+            elif current_mode == "color":
+                html = html.replace("{colormode}", ">")
+            elif current_mode == "off":
+                html = html.replace("{offmode}", ">")
+
+            html = html.replace("{imagemode}", "-") \
+                .replace("{slideshowmode}", "-") \
+                .replace("{colormode}", "-") \
+                .replace("{offmode}", "-")
+            self.do_HEAD()
+            self.wfile.write(html.encode("utf-8"))
+
+
+    def do_POST(self):
+        """
+        Process POST requests, which only updates the display
+        """
+        global current_mode
+
         if self.path.startswith("/image/"):
             display.clear()
             file = self.path.replace("/image/", "")
@@ -69,41 +112,6 @@ class Server(BaseHTTPRequestHandler):
             except ValueError:
                 display.clear()
                 return
-
-        # Get pictures from Pictures folder on Pi
-        files = os.listdir(config.pictures_dir)
-        links = []
-        files.sort()
-        for file in files:
-            links.append(f"<a href=\"/image/{file}\">{file}</a>")
-        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
-
-        # Send the HTML over to create the web page
-        time.sleep(0.5)
-        with open("./server/index.html") as fd:
-            html = fd.read().replace("{links_str}", links_str) \
-                .replace("{image}", str(image.current_image)) \
-                .replace("{duration}", str(slideshow.display_time)) \
-                .replace("{color}", color.current_color) \
-                .replace("{brightness}", str(display.get_brightness())) \
-                .replace("{warmth}", str(display.current_warmth)) \
-
-            if current_mode == "image":
-                html = html.replace("{imagemode}", ">")
-            elif current_mode == "slideshow":
-                html = html.replace("{slideshowmode}", ">")
-            elif current_mode == "color":
-                html = html.replace("{colormode}", ">")
-            elif current_mode == "off":
-                html = html.replace("{offmode}", ">")
-
-            html = html.replace("{imagemode}", "-") \
-                .replace("{slideshowmode}", "-") \
-                .replace("{colormode}", "-") \
-                .replace("{offmode}", "-")
-            self.do_HEAD()
-            self.wfile.write(html.encode("utf-8"))
-
 
 def start():
     """
