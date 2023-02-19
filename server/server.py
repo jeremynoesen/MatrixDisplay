@@ -14,6 +14,8 @@ class Server(BaseHTTPRequestHandler):
     Simple web server to control the Unicorn HAT
     """
 
+    current_mode = None
+
     def do_HEAD(self):
         """
         Response headers
@@ -34,64 +36,68 @@ class Server(BaseHTTPRequestHandler):
             links.append(f"<a href=\"/image/{file}\">{file}</a>")
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
 
-# - >
+        # Process requests
+        if self.path.startswith("/image/"):
+            display.clear()
+            file = self.path.replace("/image/", "")
+            image.show(file, True)
+            self.current_mode = "image"
+        elif self.path.startswith("/slideshow/"):
+            try:
+                display.clear()
+                display_time = int(self.path.replace("/slideshow/", ""))
+                slideshow.set_display_time(display_time)
+                slideshow.show(config.pictures_dir)
+                self.current_mode = "slideshow"
+            except ValueError:
+                display.clear()
+                return
+        elif self.path.startswith("/color/"):
+            display.clear()
+            color.current_color = self.path.replace("/color/", "")
+            color.show()
+            self.current_mode = "color"
+        elif self.path == "/off":
+            display.clear()
+            self.current_mode = "off"
+        elif self.path.startswith("/brightness/"):
+            try:
+                brightness = int(self.path.replace("/brightness/", ""))
+                display.set_brightness(brightness)
+            except ValueError:
+                display.clear()
+                return
+        elif self.path.startswith("/warmth/"):
+            try:
+                warmth = int(self.path.replace("/warmth/", ""))
+                display.set_warmth(warmth)
+            except ValueError:
+                display.clear()
+                return
 
         # Send the HTML over to create the web page
         time.sleep(0.5)
         with open("./server/index.html") as fd:
-            html = fd.read()
-
-            # Process requests
-            if self.path.startswith("/image/"):
-                display.clear()
-                file = self.path.replace("/image/", "")
-                image.show(file, True)
-                html = html.replace("{imagemode}", ">")
-            elif self.path.startswith("/slideshow/"):
-                try:
-                    display.clear()
-                    display_time = int(self.path.replace("/slideshow/", ""))
-                    slideshow.set_display_time(display_time)
-                    slideshow.show(config.pictures_dir)
-                    html = html.replace("{slideshowmode}", ">")
-                except ValueError:
-                    display.clear()
-                    return
-            elif self.path.startswith("/color/"):
-                display.clear()
-                color.current_color = self.path.replace("/color/", "")
-                color.show()
-                html = html.replace("{colormode}", ">")
-            elif self.path == "/off":
-                display.clear()
-                html = html.replace("{offmode}", ">")
-            elif self.path.startswith("/brightness/"):
-                try:
-                    brightness = int(self.path.replace("/brightness/", ""))
-                    display.set_brightness(brightness)
-                except ValueError:
-                    display.clear()
-                    return
-            elif self.path.startswith("/warmth/"):
-                try:
-                    warmth = int(self.path.replace("/warmth/", ""))
-                    display.set_warmth(warmth)
-                except ValueError:
-                    display.clear()
-                    return
-
-            # Send the HTML over to create the web page
-            time.sleep(0.5)
-            html = html.replace("{links_str}", links_str) \
+            html = fd.read().replace("{links_str}", links_str) \
                 .replace("{image}", str(image.current_image)) \
                 .replace("{duration}", str(slideshow.display_time)) \
                 .replace("{color}", color.current_color) \
                 .replace("{brightness}", str(display.get_brightness())) \
                 .replace("{warmth}", str(display.current_warmth)) \
-                .replace("{imagemode}", "-") \
+
+            if self.current_mode is "image":
+                html = html.replace("{imagemode}", ">")
+            elif self.current_mode is "slideshow":
+                html = html.replace("{slideshowmode}", ">")
+            elif self.current_mode is "color":
+                html = html.replace("{colormode}", ">")
+            elif self.current_mode is "off":
+                html = html.replace("{offmode}", ">")
+
+            html = html.replace("{imagemode}", "-") \
                 .replace("{slideshowmode}", "-") \
                 .replace("{colormode}", "-") \
-               .replace("{offmode}", "-")
+                .replace("{offmode}", "-")
             self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
 
