@@ -65,7 +65,6 @@ class Server(BaseHTTPRequestHandler):
                 .replace("{slideshowmode}", "-") \
                 .replace("{colormode}", "-") \
                 .replace("{offmode}", "-")
-            self.do_HEAD()
             self.wfile.write(html.encode("utf-8"))
 
 
