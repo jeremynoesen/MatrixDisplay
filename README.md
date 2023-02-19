@@ -38,6 +38,17 @@ There are two configurable values located in `config.py`:
 - `pictures_dir`: The location of the directory where images are stored.
 - `cache_dir`: The location of the directory where cached images will be saved.
 
+## API
+The following URLs are used to control the display:
+- `/image/<filename>`: Display an image on the display.
+- `/slideshow/<number>`: Start the slideshow, where every image can be displayed for a set number of seconds.
+- `/color/<hex>`: Display a hex color on the display.
+- `/off`: Turn off the display.
+- `/brightness/<number>`: Set the display brightness.
+- `/warmth/<number>`: Set the display warmth.
+
+You can visit these in your browser or use a GET request to get to the web UI. Use a POST request to do the same actions without grabbing the entire web page in the process.
+
 ## Demonstration
 
 [Watch on YouTube](https://youtu.be/zxgAzgMzVN0)
