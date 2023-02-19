@@ -8,13 +8,13 @@ from graphics import display, image, slideshow, color
 import os
 import config
 
+current_mode = None
+
 
 class Server(BaseHTTPRequestHandler):
     """
     Simple web server to control the Unicorn HAT
     """
-
-    current_mode = None
 
     def do_HEAD(self):
         """
@@ -28,27 +28,22 @@ class Server(BaseHTTPRequestHandler):
         """
         Process requests for displaying for GET requests
         """
-        # Get pictures from Pictures folder on Pi
-        files = os.listdir(config.pictures_dir)
-        links = []
-        files.sort()
-        for file in files:
-            links.append(f"<a href=\"/image/{file}\">{file}</a>")
-        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
+
+        global current_mode
 
         # Process requests
         if self.path.startswith("/image/"):
             display.clear()
             file = self.path.replace("/image/", "")
             image.show(file, True)
-            self.current_mode = "image"
+            current_mode = "image"
         elif self.path.startswith("/slideshow/"):
             try:
                 display.clear()
                 display_time = int(self.path.replace("/slideshow/", ""))
                 slideshow.set_display_time(display_time)
                 slideshow.show(config.pictures_dir)
-                self.current_mode = "slideshow"
+                current_mode = "slideshow"
             except ValueError:
                 display.clear()
                 return
@@ -56,10 +51,10 @@ class Server(BaseHTTPRequestHandler):
             display.clear()
             color.current_color = self.path.replace("/color/", "")
             color.show()
-            self.current_mode = "color"
+            current_mode = "color"
         elif self.path == "/off":
             display.clear()
-            self.current_mode = "off"
+            current_mode = "off"
         elif self.path.startswith("/brightness/"):
             try:
                 brightness = int(self.path.replace("/brightness/", ""))
@@ -75,6 +70,14 @@ class Server(BaseHTTPRequestHandler):
                 display.clear()
                 return
 
+        # Get pictures from Pictures folder on Pi
+        files = os.listdir(config.pictures_dir)
+        links = []
+        files.sort()
+        for file in files:
+            links.append(f"<a href=\"/image/{file}\">{file}</a>")
+        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
+
         # Send the HTML over to create the web page
         time.sleep(0.5)
         with open("./server/index.html") as fd:
@@ -85,13 +88,13 @@ class Server(BaseHTTPRequestHandler):
                 .replace("{brightness}", str(display.get_brightness())) \
                 .replace("{warmth}", str(display.current_warmth)) \
 
-            if self.current_mode == "image":
+            if current_mode == "image":
                 html = html.replace("{imagemode}", ">")
-            elif self.current_mode == "slideshow":
+            elif current_mode == "slideshow":
                 html = html.replace("{slideshowmode}", ">")
-            elif self.current_mode == "color":
+            elif current_mode == "color":
                 html = html.replace("{colormode}", ">")
-            elif self.current_mode == "off":
+            elif current_mode == "off":
                 html = html.replace("{offmode}", ">")
 
             html = html.replace("{imagemode}", "-") \
