@@ -85,13 +85,13 @@ class Server(BaseHTTPRequestHandler):
                 .replace("{brightness}", str(display.get_brightness())) \
                 .replace("{warmth}", str(display.current_warmth)) \
 
-            if self.current_mode is "image":
+            if self.current_mode == "image":
                 html = html.replace("{imagemode}", ">")
-            elif self.current_mode is "slideshow":
+            elif self.current_mode == "slideshow":
                 html = html.replace("{slideshowmode}", ">")
-            elif self.current_mode is "color":
+            elif self.current_mode == "color":
                 html = html.replace("{colormode}", ">")
-            elif self.current_mode is "off":
+            elif self.current_mode == "off":
                 html = html.replace("{offmode}", ">")
 
             html = html.replace("{imagemode}", "-") \
