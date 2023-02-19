@@ -112,11 +112,14 @@ def clear():
     if image.image_thread is not None:
         image.image_thread.loop = False
         image.image_thread.join()
+        image.current_image = ""
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
+        slideshow.display_time = 0
     if color.color_thread is not None:
         color.color_thread.loop = False
         color.color_thread.join()
+        color.current_color = "000000"
 
     unicorn.clear()
 

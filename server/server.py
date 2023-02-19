@@ -8,7 +8,7 @@ from graphics import display, image, slideshow, color
 import os
 import config
 
-current_mode = None
+current_mode = "off"
 
 
 class Server(BaseHTTPRequestHandler):

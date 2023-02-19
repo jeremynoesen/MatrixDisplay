@@ -15,7 +15,7 @@ import pickle
 
 image_thread = None
 fade_thread = None
-current_image = None
+current_image = ""
 
 
 def __process(image_path):
@@ -201,4 +201,6 @@ def clear():
         loading.clear(False)
         image_thread.loop = False
         image_thread.join()
+        global current_image
+        current_image = ""
         unicorn.clear()

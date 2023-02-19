@@ -7,7 +7,7 @@ from graphics import display
 from PIL import ImageColor
 import threading
 
-current_color = "ffffff"
+current_color = "000000"
 color_thread = None
 fade_thread = None
 

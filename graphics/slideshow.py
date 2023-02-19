@@ -9,7 +9,7 @@ import threading
 import random
 
 slideshow_thread = None
-display_time = 30
+display_time = 0
 
 
 def __show(pictures_dir):
@@ -61,4 +61,4 @@ def set_display_time(time):
     :param time: time in seconds to display images
     """
     global display_time
-    display_time = round(max(1, time))
+    display_time = round(max(0, time))
