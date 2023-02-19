@@ -67,7 +67,7 @@
     <input type="number" value="{duration}" id="slideshow" style="width: 100%">
     <script>
         document.getElementById("slideshow").oninput = function () {
-            fetch("/slideshow/" + this.value)
+            fetch("/slideshow/" + this.value, {method: "post"})
             document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image"
             document.getElementById("imagetitle").textContent = document.getElementById("imagetitle").textContent.replace(">", "-")
             document.getElementById("colortitle").textContent = document.getElementById("colortitle").textContent.replace(">", "-")
@@ -78,7 +78,7 @@
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
         document.getElementById("colorpicker").oninput = function () {
-            fetch("/color/" + this.value.replace("#", ""))
+            fetch("/color/" + this.value.replace("#", ""), {method: "post"})
             document.getElementById("colortitle").textContent = "> Color: #" + this.value
             document.getElementById("imagetitle").textContent = document.getElementById("imagetitle").textContent.replace(">", "-")
             document.getElementById("slideshowtitle").textContent = document.getElementById("slideshowtitle").textContent.replace(">", "-")
@@ -96,7 +96,7 @@
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
         document.getElementById("brightness").oninput = function () {
-            fetch("/brightness/" + this.value)
+            fetch("/brightness/" + this.value, {method: "post"})
             document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%"
         }
     </script>
@@ -104,7 +104,7 @@
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
         document.getElementById("warmth").oninput = function () {
-            fetch("/warmth/" + this.value)
+            fetch("/warmth/" + this.value, {method: "post"})
             document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%"
         }
     </script>

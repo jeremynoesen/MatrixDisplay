@@ -113,6 +113,8 @@ class Server(BaseHTTPRequestHandler):
                 display.clear()
                 return
 
+        self.do_HEAD()
+
 def start():
     """
     Start the web control panel server
