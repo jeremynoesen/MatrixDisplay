@@ -79,7 +79,7 @@
     <script>
         document.getElementById("colorpicker").oninput = function () {
             fetch("/color/" + this.value.replace("#", ""), {method: "post"})
-            document.getElementById("colortitle").textContent = "> Color: #" + this.value
+            document.getElementById("colortitle").textContent = "> Color: #" + this.value.replace("#", "")
             document.getElementById("imagetitle").textContent = document.getElementById("imagetitle").textContent.replace(">", "-")
             document.getElementById("slideshowtitle").textContent = document.getElementById("slideshowtitle").textContent.replace(">", "-")
             document.getElementById("offtitle").textContent = document.getElementById("offtitle").textContent.replace(">", "-")
