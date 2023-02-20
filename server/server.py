@@ -35,27 +35,25 @@ class Server(BaseHTTPRequestHandler):
 
         # Get pictures from Pictures folder on Pi and generate buttons
         files = os.listdir(config.pictures_dir)
-        links = []
-        scripts = []
         files.sort()
+        links = ""
+        scripts = ""
         for file in files:
-            links.append(f'<a href=javascript:image{files.index(file)}()>{file}</a>')
-            scripts.append(f'<script>')
-            scripts.append(f'    function image{files.index(file)}() {{')
-            scripts.append(f'        fetch("/image/{file}", {{method: "post"}})')
-            scripts.append(f'        document.getElementById("imagetitle").textContent = "> Image: {file}"')
-            scripts.append(f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"')
-            scripts.append(f'        document.getElementById("colortitle").textContent = "- Color: #000000"')
-            scripts.append(f'        document.getElementById("offtitle").textContent = "- Off"')
-            scripts.append(f'    }}')
-            scripts.append(f'</script>')
-        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
-        scripts_str = str(scripts).removeprefix("[").removesuffix("]").replace("'", "").replace(",", "")
+            links.join(f'<a href=javascript:image{files.index(file)}()>{file}</a>, ')
+            scripts.join(f'<script>\n'
+                           f'    function image{files.index(file)}() {{\n'
+                           f'        fetch("/image/{file}", {{method: "post"}})\n'
+                           f'        document.getElementById("imagetitle").textContent = "> Image: {file}"\n'
+                           f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"\n'
+                           f'        document.getElementById("colortitle").textContent = "- Color: #000000"\n'
+                           f'        document.getElementById("offtitle").textContent = "- Off"\n'
+                           f'    }}\n'
+                           f'</script>\n\n')
 
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
-            html = fd.read().replace("{links_str}", links_str) \
-                .replace("{scripts_str}", scripts_str) \
+            html = fd.read().replace("{links}", links.removesuffix(", ")) \
+                .replace("{scripts}", scripts) \
                 .replace("{image}", str(image.current_image)) \
                 .replace("{duration}", str(slideshow.display_time)) \
                 .replace("{color}", color.current_color) \
