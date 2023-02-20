@@ -33,31 +33,13 @@ class Server(BaseHTTPRequestHandler):
 
         global current_mode
 
-        # Get pictures from Pictures folder on Pi and generate buttons
-        files = os.listdir(config.pictures_dir)
-        links = []
-        files.sort()
-        for file in files:
-            links.append(f'<h4><a href="javascript:image{files.index(file)}()">{file}</a></h4>'
-                         f'<script>'
-                         f'    function image{files.index(file)}() {{'
-                         f'        fetch("/image/{file}", {{method: "post"}})'
-                         f'        document.getElementById("imagetitle").textContent = "> Image: {file}"'
-                         f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"'
-                         f'        document.getElementById("colortitle").textContent = "- Color: #000000"'
-                         f'        document.getElementById("offtitle").textContent = "- Off"'
-                         f'    }}'
-                         f'</script>')
-        links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
-
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
-            html = fd.read().replace("{links_str}", links_str) \
-                .replace("{image}", str(image.current_image)) \
+            html = fd.read().replace("{image}", str(image.current_image)) \
                 .replace("{duration}", str(slideshow.display_time)) \
                 .replace("{color}", color.current_color) \
                 .replace("{brightness}", str(display.get_brightness())) \
-                .replace("{warmth}", str(display.current_warmth)) \
+                .replace("{warmth}", str(display.current_warmth))
 
             if current_mode == "image":
                 html = html.replace("{imagemode}", ">")
@@ -72,6 +54,26 @@ class Server(BaseHTTPRequestHandler):
                 .replace("{slideshowmode}", "-") \
                 .replace("{colormode}", "-") \
                 .replace("{offmode}", "-")
+
+            # Get pictures from Pictures folder on Pi and generate buttons
+            files = os.listdir(config.pictures_dir)
+            links = []
+            files.sort()
+            for file in files:
+                links.append(f'<h4><a href="javascript:image{files.index(file)}()">{file}</a></h4>')
+                html = html.join(f'<script>'
+                            f'    function image{files.index(file)}() {{'
+                            f'        fetch("/image/{file}", {{method: "post"}})'
+                            f'        document.getElementById("imagetitle").textContent = "> Image: {file}"'
+                            f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"'
+                            f'        document.getElementById("colortitle").textContent = "- Color: #000000"'
+                            f'        document.getElementById("offtitle").textContent = "- Off"'
+                            f'    }}'
+                            f'</script>'
+                            '')
+
+            links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
+            html = html.replace("{links_str}", links_str)
             self.wfile.write(html.encode("utf-8"))
 
 
