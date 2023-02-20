@@ -4,20 +4,29 @@
 MatrixDisplay is a Python program used to display images on the Pimoroni Unicorn HAT for Raspberry Pi through a web interface.
 
 ## Purpose
-This project exists mainly as a way for me to try a new programming language, as well as to create a project that has both software and hardware aspects in it.
+This project exists mainly as a way for me to try a new programming language, as well as to create a project that has both software and hardware aspects in it. I also just wanted to make my own smart home gadget.
 
 ## Usage
 On the same network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080`. From there, you can control the display output from a web interface.
 
 <div align="center" ><img src="img/webinterface.png" alt="Example Web Interface" title="Example Web Interface" /></div>
 
+### API
+The following endpoints can be used to externally control the display through POST requests:
+- `/image/<filename>`: Display an image on the display.
+- `/slideshow/<number>`: Start the slideshow, where every image can be displayed for a set number of seconds.
+- `/color/<hex>`: Display a hex color on the display.
+- `/off`: Turn off the display.
+- `/brightness/<number>`: Set the display brightness.
+- `/warmth/<number>`: Set the display warmth.
+
 ## Requirements
-Software:
+### Software:
 - Python 3
 - [unicorn-hat](https://github.com/pimoroni/unicorn-hat) library
 - [Pillow](https://pypi.org/project/Pillow/) library
 
-Hardware:
+### Hardware:
 - Raspberry Pi with the 40-pin header
 - [Pimoroni Unicorn HAT](https://shop.pimoroni.com/products/unicorn-hat)
 - [Pibow Ninja](https://shop.pimoroni.com/products/pibow-for-raspberry-pi-3-b-plus?variant=2601126395914) case (optional)
@@ -37,15 +46,6 @@ Hardware:
 There are two configurable values located in `config.py`:
 - `pictures_dir`: The location of the directory where images are stored.
 - `cache_dir`: The location of the directory where cached images will be saved.
-
-## API
-The following endpoints can be used to externally control the display through POST requests:
-- `/image/<filename>`: Display an image on the display.
-- `/slideshow/<number>`: Start the slideshow, where every image can be displayed for a set number of seconds.
-- `/color/<hex>`: Display a hex color on the display.
-- `/off`: Turn off the display.
-- `/brightness/<number>`: Set the display brightness.
-- `/warmth/<number>`: Set the display warmth.
 
 ## Demonstration
 
