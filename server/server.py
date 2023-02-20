@@ -47,8 +47,8 @@ class Server(BaseHTTPRequestHandler):
                        f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
                        f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
                        f'        document.getElementById("offtitle").textContent = "- Off";\n' + \
-                       f'        document.getElementById("slideshowduration").value = 0' \
-                       f'        document.getElementById("colorpicker").value = "#000000"' \
+                       f'        document.getElementById("slideshowduration").value = 0;\n' \
+                       f'        document.getElementById("colorpicker").value = "#000000";\n' \
                        f'    }}\n' + \
                        f'</script>\n\n'
 
