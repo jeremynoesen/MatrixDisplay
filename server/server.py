@@ -39,16 +39,16 @@ class Server(BaseHTTPRequestHandler):
         links = ""
         scripts = ""
         for file in files:
-            links.join(f'<a href=javascript:image{files.index(file)}()>{file}</a>, ')
-            scripts.join(f'<script>\n'
-                           f'    function image{files.index(file)}() {{\n'
-                           f'        fetch("/image/{file}", {{method: "post"}})\n'
-                           f'        document.getElementById("imagetitle").textContent = "> Image: {file}"\n'
-                           f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"\n'
-                           f'        document.getElementById("colortitle").textContent = "- Color: #000000"\n'
-                           f'        document.getElementById("offtitle").textContent = "- Off"\n'
-                           f'    }}\n'
-                           f'</script>\n\n')
+            links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
+            scripts += f'<script>\n' + \
+                       f'    function image{files.index(file)}() {{\n' + \
+                       f'        fetch("/image/{file}", {{method: "post"}})\n' + \
+                       f'        document.getElementById("imagetitle").textContent = "> Image: {file}"\n' + \
+                       f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"\n' + \
+                       f'        document.getElementById("colortitle").textContent = "- Color: #000000"\n' + \
+                       f'        document.getElementById("offtitle").textContent = "- Off"\n' + \
+                       f'    }}\n' + \
+                       f'</script>\n\n'
 
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
