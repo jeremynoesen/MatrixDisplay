@@ -13,7 +13,7 @@ On the same network as the Raspberry Pi, open your browser to `http://yourpihost
 
 ## Requirements
 Software:
-- Python 3 or higher
+- Python 3
 - [unicorn-hat](https://github.com/pimoroni/unicorn-hat) library
 - [Pillow](https://pypi.org/project/Pillow/) library
 
@@ -39,15 +39,13 @@ There are two configurable values located in `config.py`:
 - `cache_dir`: The location of the directory where cached images will be saved.
 
 ## API
-The following URLs are used to control the display:
+The following endpoints can be used to externally control the display through POST requests:
 - `/image/<filename>`: Display an image on the display.
 - `/slideshow/<number>`: Start the slideshow, where every image can be displayed for a set number of seconds.
 - `/color/<hex>`: Display a hex color on the display.
 - `/off`: Turn off the display.
 - `/brightness/<number>`: Set the display brightness.
 - `/warmth/<number>`: Set the display warmth.
-
-You can visit these in your browser or use a GET request to get to the web UI. Use a POST request to do the same actions without grabbing the entire web page in the process.
 
 ## Demonstration
 
