@@ -29,21 +29,28 @@ class Server(BaseHTTPRequestHandler):
         Process GET requests, which includes sending the web panel
         """
 
-        # Process the api call
-        self.do_POST()
+        self.do_HEAD()
 
         global current_mode
 
-        # Get pictures from Pictures folder on Pi
+        # Get pictures from Pictures folder on Pi and generate buttons
         files = os.listdir(config.pictures_dir)
         links = []
         files.sort()
         for file in files:
-            links.append(f"<a href=\"/image/{file}\">{file}</a>")
+            links.append(f'<h4><a href="javascript:image{files.index(file)}()">{file}</a></h4>'
+                         f'<script>'
+                         f'    function image{files.index(file)}() {{'
+                         f'        fetch("/image/{file}", {{method: "post"}})'
+                         f'        document.getElementById("imagetitle").textContent = "> Image: {file}"'
+                         f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"'
+                         f'        document.getElementById("colortitle").textContent = "- Color: #000000"'
+                         f'        document.getElementById("offtitle").textContent = "- Off"'
+                         f'    }}'
+                         f'</script>')
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
 
         # Send the HTML over to create the web page
-        time.sleep(0.5)
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links_str}", links_str) \
                 .replace("{image}", str(image.current_image)) \
@@ -72,6 +79,9 @@ class Server(BaseHTTPRequestHandler):
         """
         Process POST requests, which only updates the display
         """
+
+        self.do_HEAD()
+
         global current_mode
 
         if self.path.startswith("/image/"):
@@ -111,8 +121,6 @@ class Server(BaseHTTPRequestHandler):
             except ValueError:
                 display.clear()
                 return
-
-        self.do_HEAD()
 
 def start():
     """
