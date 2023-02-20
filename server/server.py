@@ -40,15 +40,15 @@ class Server(BaseHTTPRequestHandler):
         files.sort()
         for file in files:
             links.append(f'<a href=javascript:image{files.index(file)}()>{file}</a>')
-            scripts.append(f'<script>'
-                           f'    function image{files.index(file)}() {{'
-                           f'        fetch("/image/{file}", {{method: "post"}})'
-                           f'        document.getElementById("imagetitle").textContent = "> Image: {file}"'
-                           f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"'
-                           f'        document.getElementById("colortitle").textContent = "- Color: #000000"'
-                           f'        document.getElementById("offtitle").textContent = "- Off"'
-                           f'    }}'
-                           f'</script>')
+            scripts.append(f'<script>\n'
+                           f'    function image{files.index(file)}() {{\n'
+                           f'        fetch("/image/{file}", {{method: "post"}})\n'
+                           f'        document.getElementById("imagetitle").textContent = "> Image: {file}"\n'
+                           f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"\n'
+                           f'        document.getElementById("colortitle").textContent = "- Color: #000000"\n'
+                           f'        document.getElementById("offtitle").textContent = "- Off"\n'
+                           f'    }}\n'
+                           f'</script>\n\n')
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
         scripts_str = str(scripts).removeprefix("[").removesuffix("]").replace("'", "").replace(",", "")
 
