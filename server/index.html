@@ -67,7 +67,7 @@
     <h3 id="slideshowtitle">{slideshowtitle}</h3>
     <input type="number" value="{duration}" id="slideshowduration" style="width: 100%">
     <script>
-        document.getElementById("slideshowduration").oninput = () => {
+        document.getElementById("slideshowduration").oninput = function slideshow() {
             fetch("/slideshow/" + this.value, {method: "post"});
             document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image";
             document.getElementById("imagetitle").textContent = "- Image";
@@ -79,7 +79,7 @@
     <h3 id="colortitle">{colortitle}</h3>
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
-        document.getElementById("colorpicker").oninput = () => {
+        document.getElementById("colorpicker").oninput = function color() {
             fetch("/color/" + this.value.replace("#", ""), {method: "post"});
             document.getElementById("colortitle").textContent = "> Color: " + this.value;
             document.getElementById("imagetitle").textContent = "- Image";
@@ -109,7 +109,7 @@
     <h3 id="brightnesstitle">{brightnesstitle}</h3>
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
-        document.getElementById("brightness").oninput = () => {
+        document.getElementById("brightness").oninput = function brightness() {
             fetch("/brightness/" + this.value, {method: "post"});
             document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%";
         }
@@ -117,7 +117,7 @@
     <h3 id="warmthtitle">{warmthtitle}</h3>
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
-        document.getElementById("warmth").oninput = () => {
+        document.getElementById("warmth").oninput = function warmth() {
             fetch("/warmth/" + this.value, {method: "post"});
             document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%";
         }
