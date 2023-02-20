@@ -42,11 +42,13 @@ class Server(BaseHTTPRequestHandler):
             links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
             scripts += f'<script>\n' + \
                        f'    function image{files.index(file)}() {{\n' + \
-                       f'        fetch("/image/{file}", {{method: "post"}})\n' + \
-                       f'        document.getElementById("imagetitle").textContent = "> Image: {file}"\n' + \
-                       f'        document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"\n' + \
-                       f'        document.getElementById("colortitle").textContent = "- Color: #000000"\n' + \
-                       f'        document.getElementById("offtitle").textContent = "- Off"\n' + \
+                       f'        fetch("/image/{file}", {{method: "post"}});\n' + \
+                       f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
+                       f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
+                       f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
+                       f'        document.getElementById("offtitle").textContent = "- Off";\n' + \
+                       f'        document.getElementById("slideshowduration").value = 0' \
+                       f'        document.getElementById("colorpicker").value = "#000000"' \
                        f'    }}\n' + \
                        f'</script>\n\n'
 
@@ -54,25 +56,27 @@ class Server(BaseHTTPRequestHandler):
         with open("./server/index.html") as fd:
             html = fd.read().replace("{links}", links.removesuffix(", ")) \
                 .replace("{scripts}", scripts) \
-                .replace("{image}", str(image.current_image)) \
                 .replace("{duration}", str(slideshow.display_time)) \
                 .replace("{color}", color.current_color) \
-                .replace("{brightness}", str(display.get_brightness())) \
+                .replace("{brightness}", str(display.current_brightness)) \
                 .replace("{warmth}", str(display.current_warmth)) \
+                .replace("{brightnesstitle}", f"- Brightness {display.current_brightness}%") \
+                .replace("{warmthtitle}", f"- Warmth {display.current_warmth}%")
 
             if current_mode == "image":
-                html = html.replace("{imagemode}", ">")
+                html = html.replace("{imagetitle}", f"> Image: {image.current_image}")
             elif current_mode == "slideshow":
-                html = html.replace("{slideshowmode}", ">")
+                html = html.replace("{slideshowtitle}", f"> Slideshow: {slideshow.display_time} seconds per image")
+                html = html.replace("{imagetitle}", f"- Image: {image.current_image}")
             elif current_mode == "color":
-                html = html.replace("{colormode}", ">")
+                html = html.replace("{colortitle}", f"> Color: #{color.current_color}")
             elif current_mode == "off":
-                html = html.replace("{offmode}", ">")
+                html = html.replace("{offtitle}", "> Off")
 
-            html = html.replace("{imagemode}", "-") \
-                .replace("{slideshowmode}", "-") \
-                .replace("{colormode}", "-") \
-                .replace("{offmode}", "-")
+            html = html.replace("{imagetitle}", "- Image") \
+                .replace("{slideshowtitle}", "- Slideshow") \
+                .replace("{colortitle}", "- Color") \
+                .replace("{offtitle}", "- Off")
             self.wfile.write(html.encode("utf-8"))
 
 

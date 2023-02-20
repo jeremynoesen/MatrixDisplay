@@ -38,14 +38,6 @@ def set_warmth(warmth):
     current_warmth = round(min(max(warmth, 0), 100))
 
 
-def get_warmth():
-    """
-    Get the warmth of the display
-    :return: Warmth of the display 0 to 100
-    """
-    return current_warmth
-
-
 def set_brightness(brightness):
     """
     Set software display brightness
@@ -54,14 +46,6 @@ def set_brightness(brightness):
     global current_brightness, modified_brightness
     current_brightness = round(min(max(brightness, 0), 100))
     modified_brightness = (((current_brightness * (100 - 17)) / 100) + 17) / 100
-
-
-def get_brightness():
-    """
-    Get the software display brightness
-    :return: Brightness of display 0 to 100
-    """
-    return current_brightness
 
 
 def fade(start, end, duration):

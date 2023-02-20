@@ -61,39 +61,43 @@
 
 <h2>Modes</h2>
 <div style="width: 95%; margin: auto">
-    <h3 id="imagetitle">{imagemode} Image: {image}</h3>
+    <h3 id="imagetitle">{imagetitle}</h3>
     <h4>{links}</h4>
     {scripts}
-    <h3 id="slideshowtitle">{slideshowmode} Slideshow: {duration} seconds per image</h3>
-    <input type="number" value="{duration}" id="slideshow" style="width: 100%">
+    <h3 id="slideshowtitle">{slideshowtitle}</h3>
+    <input type="number" value="{duration}" id="slideshowduration" style="width: 100%">
     <script>
-        document.getElementById("slideshow").oninput = function slideshow() {
-            fetch("/slideshow/" + this.value, {method: "post"})
-            document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image"
-            document.getElementById("imagetitle").textContent = "- Image:"
-            document.getElementById("colortitle").textContent = "- Color: #000000"
-            document.getElementById("offtitle").textContent = "- Off"
+        document.getElementById("slideshowduration").oninput = () => {
+            fetch("/slideshow/" + this.value, {method: "post"});
+            document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image";
+            document.getElementById("imagetitle").textContent = "- Image";
+            document.getElementById("colortitle").textContent = "- Color";
+            document.getElementById("offtitle").textContent = "- Off";
+            document.getElementById("colorpicker").value = "#000000"
         }
     </script>
-    <h3 id="colortitle">{colormode} Color: #{color}</h3>
+    <h3 id="colortitle">{colortitle}</h3>
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
-        document.getElementById("colorpicker").oninput = function color() {
-            fetch("/color/" + this.value.replace("#", ""), {method: "post"})
-            document.getElementById("colortitle").textContent = "> Color: #" + this.value.replace("#", "")
-            document.getElementById("imagetitle").textContent = "- Image:"
-            document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"
-            document.getElementById("offtitle").textContent = "- Off"
+        document.getElementById("colorpicker").oninput = () => {
+            fetch("/color/" + this.value.replace("#", ""), {method: "post"});
+            document.getElementById("colortitle").textContent = "> Color: " + this.value;
+            document.getElementById("imagetitle").textContent = "- Image";
+            document.getElementById("slideshowtitle").textContent = "- Slideshow";
+            document.getElementById("offtitle").textContent = "- Off";
+            document.getElementById("slideshowduration").value = 0
         }
     </script>
-    <h3><a id="offtitle" href=javascript:off()>{offmode} Off</a></h3>
+    <h3><a id="offtitle" href=javascript:off()>{offtitle}</a></h3>
     <script>
         function off() {
-            fetch("/off", {method: "post"})
-            document.getElementById("offtitle").textContent = "> Off"
-            document.getElementById("imagetitle").textContent = "- Image:"
-            document.getElementById("slideshowtitle").textContent = "- Slideshow: 0 seconds per image"
-            document.getElementById("colortitle").textContent = "- Color: #000000"
+            fetch("/off", {method: "post"});
+            document.getElementById("offtitle").textContent = "> Off";
+            document.getElementById("imagetitle").textContent = "- Image";
+            document.getElementById("slideshowtitle").textContent = "- Slideshow";
+            document.getElementById("colortitle").textContent = "- Color";
+            document.getElementById("slideshowduration").value = 0
+            document.getElementById("colorpicker").value = "#000000"
         }
     </script>
 </div>
@@ -102,20 +106,20 @@
 
 <h2>Settings</h2>
 <div style="width: 95%; margin: auto">
-    <h3 id="brightnesstitle">- Brightness: {brightness}%</h3>
+    <h3 id="brightnesstitle">{brightnesstitle}</h3>
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
-        document.getElementById("brightness").oninput = function () {
-            fetch("/brightness/" + this.value, {method: "post"})
-            document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%"
+        document.getElementById("brightness").oninput = () => {
+            fetch("/brightness/" + this.value, {method: "post"});
+            document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%";
         }
     </script>
-    <h3 id="warmthtitle">- Warmth: {warmth}%</h3>
+    <h3 id="warmthtitle">{warmthtitle}</h3>
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
-        document.getElementById("warmth").oninput = function () {
-            fetch("/warmth/" + this.value, {method: "post"})
-            document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%"
+        document.getElementById("warmth").oninput = () => {
+            fetch("/warmth/" + this.value, {method: "post"});
+            document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%";
         }
     </script>
 </div>
