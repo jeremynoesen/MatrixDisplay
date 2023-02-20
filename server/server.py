@@ -39,7 +39,7 @@ class Server(BaseHTTPRequestHandler):
         scripts = []
         files.sort()
         for file in files:
-            links.append(f'<h4><a href="javascript:image{files.index(file)}()">{file}</a></h4>')
+            links.append(f'<a href=javascript:image{files.index(file)}()>{file}</a>')
             scripts.append(f'<script>'
                            f'    function image{files.index(file)}() {{'
                            f'        fetch("/image/{file}", {{method: "post"}})'
@@ -50,7 +50,7 @@ class Server(BaseHTTPRequestHandler):
                            f'    }}'
                            f'</script>')
         links_str = str(links).removeprefix("[").removesuffix("]").replace("'", "")
-        scripts_str = str(scripts).removeprefix("[").removesuffix("]").replace("'", "").replace("", "")
+        scripts_str = str(scripts).removeprefix("[").removesuffix("]").replace("'", "").replace(",", "")
 
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
