@@ -50,7 +50,7 @@ class Server(BaseHTTPRequestHandler):
                        f'        document.getElementById("slideshowduration").value = 0;\n' \
                        f'        document.getElementById("colorpicker").value = "#000000";\n' \
                        f'    }}\n' + \
-                       f'</script>\n\n'
+                       f'</script>\n'
 
         # Send the HTML over to create the web page
         with open("./server/index.html") as fd:
