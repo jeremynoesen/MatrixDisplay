@@ -120,48 +120,46 @@ class Server(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
 
-            # Read request data
-            data = json.loads(self.rfile.read().decode("utf-8"))
+            # Process request data
+            with json.load(self.rfile) as data:
+                try:
+                    if "mode" in data.keys():
+                        if data["mode"] == "image":
+                            if "image" in data.keys():
+                                if os.path.exists(f'{config.cache_dir}{data["image"]}.pickle') or \
+                                        os.path.exists(f'{config.pictures_dir}{data["image"]}'):
+                                    current_mode = "image"
+                                    display.clear()
+                                    image.show(data["image"], True)
+                                else:
+                                    current_mode = "off"
+                                    display.clear()
 
-            # Process request
-            try:
-                if "mode" in data.keys():
-                    if data["mode"] == "image":
-                        if "image" in data.keys():
-                            if os.path.exists(f'{config.cache_dir}{data["image"]}.pickle') or \
-                                    os.path.exists(f'{config.pictures_dir}{data["image"]}'):
-                                current_mode = "image"
+                        elif data["mode"] == "slideshow":
+                            if "display_time" in data.keys():
+                                current_mode = "slideshow"
                                 display.clear()
-                                image.show(data["image"], True)
-                            else:
-                                current_mode = "off"
+                                slideshow.show(data["display_time"])
+
+                        elif data["mode"] == "color":
+                            if "color" in data.keys():
+                                current_mode = "color"
                                 display.clear()
+                                color.show(data["color"])
 
-                    elif data["mode"] == "slideshow":
-                        if "display_time" in data.keys():
-                            current_mode = "slideshow"
+                        elif data["mode"] == "off":
+                            current_mode = "off"
                             display.clear()
-                            slideshow.show(data["display_time"])
 
-                    elif data["mode"] == "color":
-                        if "color" in data.keys():
-                            current_mode = "color"
-                            display.clear()
-                            color.show(data["color"])
+                    if "brightness" in data.keys():
+                        display.set_brightness(data["brightness"])
 
-                    elif data["mode"] == "off":
-                        current_mode = "off"
-                        display.clear()
+                    if "warmth" in data.keys():
+                        display.set_warmth(data["warmth"])
 
-                if "brightness" in data.keys():
-                    display.set_brightness(data["brightness"])
-
-                if "warmth" in data.keys():
-                    display.set_warmth(data["warmth"])
-
-            except TypeError:
-                current_mode = "off"
-                display.clear()
+                except TypeError:
+                    current_mode = "off"
+                    display.clear()
 
 
 def start():
