@@ -24,7 +24,7 @@ On the same network as the Raspberry Pi, open your browser to `http://yourpihost
 {
   "mode": "off",
   "image": "image.png",
-  "display-time": 0,
+  "display_time": 0,
   "color": "000000",
   "brightness": 100,
   "warmth": 0
@@ -32,7 +32,7 @@ On the same network as the Raspberry Pi, open your browser to `http://yourpihost
 ```
 - `mode`: `image`, `slideshow`, `color`, or `off`
 - `image`: Image file name
-- `display-time`: Display time for slideshow in seconds
+- `display_time`: Display time for slideshow in seconds
 - `color`: Color for color mode in hex
 - `brightness`: Display brightness as a percent
 - `warmth`: Display warmth as a percent

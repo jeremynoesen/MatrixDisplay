@@ -69,7 +69,11 @@
     <input type="number" value="{display_time}" id="slideshowdisplaytime" style="width: 100%">
     <script>
         document.getElementById("slideshowduration").oninput = function slideshow() {
-            fetch("/slideshow/" + this.value, {method: "post"});
+            fetch("/api" + this.value, {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({mode: "slideshow", display_time: this.value})
+            });
             document.getElementById("slideshowdisplaytime").textContent = "> Slideshow: " + this.value + " seconds per image";
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("colortitle").textContent = "- Color";
@@ -81,7 +85,11 @@
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
         document.getElementById("colorpicker").oninput = function color() {
-            fetch("/color/" + this.value.replace("#", ""), {method: "post"});
+            fetch("/api" + this.value, {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({mode: "color", color: this.value.replace("#", "")})
+            });
             document.getElementById("colortitle").textContent = "> Color: " + this.value;
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
@@ -92,7 +100,11 @@
     <h3><a id="offtitle" href=javascript:off()>{offtitle}</a></h3>
     <script>
         function off() {
-            fetch("/off", {method: "post"});
+            fetch("/api" + this.value, {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({mode: "off"})
+            });
             document.getElementById("offtitle").textContent = "> Off";
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
@@ -111,7 +123,11 @@
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
         document.getElementById("brightness").oninput = function brightness() {
-            fetch("/brightness/" + this.value, {method: "post"});
+            fetch("/api" + this.value, {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({brightness: this.value})
+            });
             document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%";
         }
     </script>
@@ -119,7 +135,11 @@
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
         document.getElementById("warmth").oninput = function warmth() {
-            fetch("/warmth/" + this.value, {method: "post"});
+            fetch("/api" + this.value, {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({warmth: this.value})
+            });
             document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%";
         }
     </script>

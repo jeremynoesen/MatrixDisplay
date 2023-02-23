@@ -44,7 +44,11 @@ class Server(BaseHTTPRequestHandler):
                 links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
                 scripts += f'<script>\n' + \
                            f'    function image{files.index(file)}() {{\n' + \
-                           f'        fetch("/image/{file}", {{method: "post"}});\n' + \
+                           f'        fetch("/api" + this.value, {{\n' \
+                           f'            method: "POST",\n' \
+                           f'            headers: {{"Content-Type":"application/json"}},\n' \
+                           f'            body: JSON.stringify({{mode: "image", image: {file}}})\n' \
+                           f'        }});\n' \
                            f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
                            f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
                            f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
@@ -92,7 +96,7 @@ class Server(BaseHTTPRequestHandler):
             data = f'{{' \
                    f'"mode": "{current_mode}", ' \
                    f'"image": "{image.current_image}", ' \
-                   f'"display-time": {slideshow.display_time}, ' \
+                   f'"display_time": {slideshow.display_time}, ' \
                    f'"color": "{color.current_color}", ' \
                    f'"brightness": {display.current_brightness}, ' \
                    f'"warmth": {display.current_warmth}' \
@@ -130,10 +134,10 @@ class Server(BaseHTTPRequestHandler):
                                 display.clear()
 
                     elif data["mode"] == "slideshow":
-                        if data.__contains__("display-time"):
+                        if data.__contains__("display_time"):
                             current_mode = "slideshow"
                             display.clear()
-                            slideshow.show(data["display-time"])
+                            slideshow.show(data["display_time"])
 
                     elif data["mode"] == "color":
                         if data.__contains__("color"):
