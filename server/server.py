@@ -114,7 +114,8 @@ class Server(BaseHTTPRequestHandler):
             self.end_headers()
 
             # Read request data
-            data: dict = json.loads(self.rfile.read().decode("utf-8"))
+            data = json.loads(self.rfile.read().decode("utf-8"))
+            self.wfile.write(data.encode("utf-8"))
 
             # Process request
             try:
