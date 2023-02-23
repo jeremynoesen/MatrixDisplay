@@ -115,7 +115,8 @@ class Server(BaseHTTPRequestHandler):
 
             # Read request data
             data = json.loads(self.rfile.read().decode("utf-8"))
-            self.wfile.write(data.encode("utf-8"))
+            with open("dump.json", "w") as outfile:
+                json.dump(data, outfile)
 
             # Process request
             try:
