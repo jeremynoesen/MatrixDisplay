@@ -90,15 +90,15 @@ class Server(BaseHTTPRequestHandler):
             self.end_headers()
 
             # Write state as JSON
-            data = f'{{' \
-                   f'"mode": "{current_mode}", ' \
-                   f'"image": "{image.current_image}", ' \
-                   f'"display_time": {slideshow.display_time}, ' \
-                   f'"color": "{color.current_color}", ' \
-                   f'"brightness": {display.current_brightness}, ' \
-                   f'"warmth": {display.current_warmth}' \
-                   f'}}'
-            self.wfile.write(data.encode("utf-8"))
+            data = {
+                "mode": current_mode,
+                "image": image.current_image,
+                "display_time": slideshow.display_time,
+                "color": color.current_color,
+                "brightness": display.current_brightness,
+                "warmth": display.current_warmth
+            }
+            self.wfile.write(json.dumps(data).encode("utf-8"))
 
 
     def do_POST(self):
@@ -115,16 +115,14 @@ class Server(BaseHTTPRequestHandler):
 
             # Read request data
             data = json.loads(self.rfile.read().decode("utf-8"))
-            with open("dump", "w") as outfile:
-                outfile.write(str(data))
 
             # Process request
             try:
-                if data.__contains__("mode"):
+                if "mode" in data.keys():
                     if data["mode"] == "image":
-                        if data.__contains__("image"):
-                            if os.path.exists(f'{config.cache_dir}{data["image"]}.pickle") or \
-                                    os.path.exists(f"{config.pictures_dir}{data["image"]}'):
+                        if "image" in data.keys():
+                            if os.path.exists(f'{config.cache_dir}{data["image"]}.pickle') or \
+                                    os.path.exists(f'{config.pictures_dir}{data["image"]}'):
                                 current_mode = "image"
                                 display.clear()
                                 image.show(data["image"], True)
@@ -133,13 +131,13 @@ class Server(BaseHTTPRequestHandler):
                                 display.clear()
 
                     elif data["mode"] == "slideshow":
-                        if data.__contains__("display_time"):
+                        if "display_time" in data.keys():
                             current_mode = "slideshow"
                             display.clear()
                             slideshow.show(data["display_time"])
 
                     elif data["mode"] == "color":
-                        if data.__contains__("color"):
+                        if "color" in data.keys():
                             current_mode = "color"
                             display.clear()
                             color.show(data["color"])
@@ -148,10 +146,10 @@ class Server(BaseHTTPRequestHandler):
                         current_mode = "off"
                         display.clear()
 
-                if data.__contains__("brightness"):
+                if "brightness" in data.keys():
                     display.set_brightness(data["brightness"])
 
-                if data.__contains__("warmth"):
+                if "warmth" in data.keys():
                     display.set_warmth(data["warmth"])
 
             except TypeError:
