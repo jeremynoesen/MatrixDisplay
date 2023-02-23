@@ -91,6 +91,8 @@ def fade_async(start, end, duration):
     :param duration: Duration of fade in seconds
     """
     global fade_thread
+    if fade_thread is not None:
+        fade_thread.join()
     fade_thread = threading.Thread(target=fade, args=(start, end, duration))
     fade_thread.start()
 
