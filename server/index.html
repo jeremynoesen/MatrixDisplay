@@ -67,7 +67,7 @@
     <h3 id="slideshowtitle">{slideshowtitle}</h3>
     <input type="number" value="{display_time}" id="slideshowdisplaytime" style="width: 100%">
     <script>
-        document.getElementById("slideshowduration").oninput = function slideshow() {
+        document.getElementById("slideshowdisplaytime").oninput = function slideshow() {
             fetch("/api", {
                 method: "POST",
                 headers: {
