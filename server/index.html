@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -65,11 +66,11 @@
     <h4>{links}</h4>
     {scripts}
     <h3 id="slideshowtitle">{slideshowtitle}</h3>
-    <input type="number" value="{duration}" id="slideshowduration" style="width: 100%">
+    <input type="number" value="{display_time}" id="slideshowdisplaytime" style="width: 100%">
     <script>
         document.getElementById("slideshowduration").oninput = function slideshow() {
             fetch("/slideshow/" + this.value, {method: "post"});
-            document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image";
+            document.getElementById("slideshowdisplaytime").textContent = "> Slideshow: " + this.value + " seconds per image";
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("colortitle").textContent = "- Color";
             document.getElementById("offtitle").textContent = "- Off";
@@ -85,7 +86,7 @@
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
             document.getElementById("offtitle").textContent = "- Off";
-            document.getElementById("slideshowduration").value = 0;
+            document.getElementById("slideshowdisplaytime").value = 0;
         }
     </script>
     <h3><a id="offtitle" href=javascript:off()>{offtitle}</a></h3>
@@ -96,7 +97,7 @@
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
             document.getElementById("colortitle").textContent = "- Color";
-            document.getElementById("slideshowduration").value = 0;
+            document.getElementById("slideshowdisplaytime").value = 0;
             document.getElementById("colorpicker").value = "#000000";
         }
     </script>

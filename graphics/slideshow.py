@@ -4,7 +4,9 @@ Show a slideshow of images on the Unicorn HAT
 
 import time
 import os
-from graphics import loading, image
+
+import config
+from graphics import loading, image, display
 import threading
 import random
 
@@ -12,14 +14,14 @@ slideshow_thread = None
 display_time = 0
 
 
-def __show(pictures_dir):
+def __show():
     """
     Show the slideshow on the Unicorn HAT
-    :param pictures_dir: directory where images are stored
     """
+
     thread = threading.current_thread()
     index = 0
-    files = os.listdir(pictures_dir)
+    files = os.listdir(config.pictures_dir)
     random.shuffle(files)
 
     while getattr(thread, "loop", True):
@@ -33,32 +35,31 @@ def __show(pictures_dir):
             index = 0
 
         # Wait for image to load
-        time.sleep(0.5)
-        while loading.loading:
+        if getattr(thread, "loop", True):
             time.sleep(0.5)
+            while loading.loading and getattr(thread, "loop", True):
+                time.sleep(0.5)
 
         # Show image for set amount of time
-        time.sleep(display_time)
+        if getattr(thread, "loop", True):
+            time.sleep(display_time)
 
         # Clear image
         if getattr(thread, "loop", True):
             image.clear()
 
 
-def show(pictures_dir):
+def show(time):
     """
     Show the slideshow on the Unicorn HAT
-    :param pictures_dir: directory where images are stored
+    :param time: how long to display images in seconds
     """
-    global slideshow_thread
-    slideshow_thread = threading.Thread(target=__show, args=(pictures_dir,))
-    slideshow_thread.start()
 
-
-def set_display_time(time):
-    """
-    Set the display time for images in the slideshow
-    :param time: time in seconds to display images
-    """
+    # Parse time
     global display_time
     display_time = round(max(1, time))
+
+    # Start thread
+    global slideshow_thread
+    slideshow_thread = threading.Thread(target=__show)
+    slideshow_thread.start()

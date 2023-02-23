@@ -12,13 +12,30 @@ On the same network as the Raspberry Pi, open your browser to `http://yourpihost
 <div align="center" ><img src="img/webinterface.png" alt="Example Web Interface" title="Example Web Interface" /></div>
 
 ### API
-The following endpoints can be used to externally control the display through POST requests:
-- `/image/<filename>`: Display an image on the display.
-- `/slideshow/<number>`: Start the slideshow, where every image can be displayed for a set number of seconds.
-- `/color/<hex>`: Display a hex color on the display.
-- `/off`: Turn off the display.
-- `/brightness/<number>`: Set the display brightness.
-- `/warmth/<number>`: Set the display warmth.
+#### GET
+- `http://pi-address:8080/ui`: Get web interface
+- `http://pi-address:8080/api`: Get device state as JSON
+
+#### POST
+- `http://pi-address:8080/api`: Set device state with JSON
+
+#### JSON Format
+```json
+{
+  "mode": "off",
+  "image": "image.png",
+  "display-time": 0,
+  "color": "000000",
+  "brightness": 100,
+  "warmth": 0
+}
+```
+- `mode`: `image`, `slideshow`, `color`, or `off`
+- `image`: Image file name
+- `display-time`: Display time for slideshow in seconds
+- `color`: Color for color mode in hex
+- `brightness`: Display brightness as a percent
+- `warmth`: Display warmth as a percent
 
 ## Requirements
 ### Software:

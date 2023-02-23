@@ -1,6 +1,7 @@
 """
 Display actions and effects for the Unicorn HAT
 """
+import threading
 
 import unicornhat as unicorn
 import time
@@ -12,6 +13,7 @@ unicorn.rotation(270)
 current_warmth = 0
 current_brightness = 100
 modified_brightness = 1.0
+fade_thread = None
 
 
 def set_pixel(x, y, r, g, b):
@@ -77,18 +79,26 @@ def fade(start, end, duration):
             break
 
 
+def fade_async(start, end, duration):
+    """
+    Fade in or out the Unicorn HAT asynchronously
+    :param start: Starting brightness 0 to 100
+    :param end: Ending brightness 0 to 100
+    :param duration: Duration of fade in seconds
+    """
+    global fade_thread
+    fade_thread = threading.Thread(target=fade, args=(start, end, duration))
+    fade_thread.start()
+
+
 def clear():
     """
     Clear the display of the Unicorn HAT
     """
-    if loading.fade_thread is not None:
-        loading.fade_thread.join()
-    if image.fade_thread is not None:
-        image.fade_thread.join()
-    if color.fade_thread is not None:
-        color.fade_thread.join()
-
-    fade(100, 0, 0.5)
+    if fade_thread is not None:
+        fade_thread.join()
+    else:
+        fade(100, 0, 0.5)
 
     if loading.loading_thread is not None:
         loading.loading_thread.loop = False

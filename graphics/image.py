@@ -14,8 +14,8 @@ import os
 import pickle
 
 image_thread = None
-fade_thread = None
 current_image = ""
+loading_indicator = False
 
 
 def __process(image_path):
@@ -127,30 +127,27 @@ def __draw(image_array):
                         break
 
 
-def __show(file_name, show_loading):
+def __show():
     """
     Show an image on the Unicorn HAT. Must be run in a separate thread to not lock up!
-    :param file_name: Name of image file to show
-    :param show_loading: whether to show the loading icon or not
     """
     thread = threading.current_thread()
 
-    # Start loading indicator
-    if getattr(thread, "loop", True):
-        loading.show(show_loading)
-
-    global current_image
-    if os.path.exists(f"{config.cache_dir}{file_name}.pickle"):
-        current_image = file_name
+    if os.path.exists(f"{config.cache_dir}{current_image}.pickle"):
+        # Start loading indicator
+        loading.show(loading_indicator)
 
         # Get cached image
-        with open(f"{config.cache_dir}{file_name}.pickle", 'rb') as f:
+        with open(f"{config.cache_dir}{current_image}.pickle", 'rb') as f:
             display_image = pickle.load(f)
-    elif os.path.exists(f"{config.pictures_dir}{file_name}"):
-        current_image = file_name
+
+    elif os.path.exists(f"{config.pictures_dir}{current_image}"):
+        # Start loading indicator
+        loading.show(loading_indicator)
 
         # Get and process image
-        display_image = __process(f"{config.pictures_dir}{file_name}")
+        if getattr(thread, "loop", True):
+            display_image = __process(f"{config.pictures_dir}{current_image}")
 
         # Save image to cached folder
         if getattr(thread, "loop", True):
@@ -159,24 +156,23 @@ def __show(file_name, show_loading):
                 os.makedirs(config.cache_dir)
 
             # Save serialized version of processed image as pickle file
-            with open(f"{config.cache_dir}{file_name}.pickle", 'wb') as f:
+            with open(f"{config.cache_dir}{current_image}.pickle", 'wb') as f:
                 pickle.dump(display_image, f)
     else:
-        display.clear()
+        # Clear image
+        clear()
         return
 
     # Clear loading indicator
     if getattr(thread, "loop", True):
-        loading.clear(show_loading)
+        loading.clear(loading_indicator)
 
-    # Fade in image
     if getattr(thread, "loop", True):
-        global fade_thread
-        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade_thread.start()
+        # Fade in image
+        display.fade_async(0, 100, 0.2)
 
-    # Draw image to display
-    __draw(display_image)
+        # Draw image to display
+        __draw(display_image)
 
 
 def show(file_name, show_loading):
@@ -185,8 +181,15 @@ def show(file_name, show_loading):
     :param file_name: Name of image to show
     :param show_loading: whether to show the loading icon or not
     """
+
+    # Assign variables
+    global current_image, loading_indicator
+    current_image = file_name
+    loading_indicator = show_loading
+
+    # Start thread
     global image_thread
-    image_thread = threading.Thread(target=__show, args=(file_name, show_loading))
+    image_thread = threading.Thread(target=__show)
     image_thread.start()
 
 
@@ -195,8 +198,6 @@ def clear():
     Clear the image off of the Unicorn HAT
     """
     if image_thread is not None:
-        if fade_thread is not None:
-            fade_thread.join()
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
