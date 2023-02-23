@@ -16,6 +16,14 @@ class Server(BaseHTTPRequestHandler):
     Simple web server to control the Unicorn HAT
     """
 
+    def do_HEAD(self):
+        """
+        Default response headers
+        """
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html')
+        self.end_headers()
+
     def do_GET(self):
         """
         Process GET requests, which includes sending the web panel
@@ -99,7 +107,6 @@ class Server(BaseHTTPRequestHandler):
                 "warmth": display.current_warmth
             }
             self.wfile.write(json.dumps(data).encode("utf-8"))
-
 
     def do_POST(self):
         """

@@ -158,10 +158,6 @@ def __show():
             # Save serialized version of processed image as pickle file
             with open(f"{config.cache_dir}{current_image}.pickle", 'wb') as f:
                 pickle.dump(display_image, f)
-    else:
-        # Clear image
-        clear()
-        return
 
     # Clear loading indicator
     if getattr(thread, "loop", True):
