@@ -46,7 +46,10 @@ class Server(BaseHTTPRequestHandler):
                            f'    function image{files.index(file)}() {{\n' + \
                            f'        fetch("/api" + this.value, {{\n' \
                            f'            method: "POST",\n' \
-                           f'            headers: {{"Content-Type":"application/json"}},\n' \
+                           f'            headers: {{\n' \
+                           f'                         "Accept": "application/json",\n' \
+                           f'                         "Content-Type": "application/json"\n' \
+                           f'                     }},\n' \
                            f'            body: JSON.stringify({{mode: "image", image: {file}}})\n' \
                            f'        }});\n' \
                            f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \

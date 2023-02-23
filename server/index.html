@@ -71,7 +71,10 @@
         document.getElementById("slideshowduration").oninput = function slideshow() {
             fetch("/api" + this.value, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({mode: "slideshow", display_time: this.value})
             });
             document.getElementById("slideshowdisplaytime").textContent = "> Slideshow: " + this.value + " seconds per image";
@@ -87,7 +90,10 @@
         document.getElementById("colorpicker").oninput = function color() {
             fetch("/api" + this.value, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({mode: "color", color: this.value.replace("#", "")})
             });
             document.getElementById("colortitle").textContent = "> Color: " + this.value;
@@ -102,7 +108,10 @@
         function off() {
             fetch("/api" + this.value, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({mode: "off"})
             });
             document.getElementById("offtitle").textContent = "> Off";
@@ -125,7 +134,10 @@
         document.getElementById("brightness").oninput = function brightness() {
             fetch("/api" + this.value, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({brightness: this.value})
             });
             document.getElementById("brightnesstitle").textContent = "- Brightness: " + this.value + "%";
@@ -137,7 +149,10 @@
         document.getElementById("warmth").oninput = function warmth() {
             fetch("/api" + this.value, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({warmth: this.value})
             });
             document.getElementById("warmthtitle").textContent = "- Warmth: " + this.value + "%";
