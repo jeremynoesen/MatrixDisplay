@@ -39,6 +39,8 @@ def __show():
 
             time.sleep(0.0333)
 
+    display.fade_thread.join()
+
 
 def show(animated):
     """

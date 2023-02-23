@@ -170,6 +170,8 @@ def __show():
         # Draw image to display
         __draw(display_image)
 
+        display.fade_thread.join()
+
 
 def show(file_name, show_loading):
     """

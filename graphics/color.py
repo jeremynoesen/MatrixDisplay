@@ -27,6 +27,8 @@ def __show():
                 display.set_pixel(i, j, rgb_color[0], rgb_color[1], rgb_color[2])
         time.sleep(0.0333)
 
+    display.fade_thread.join()
+
 
 def show(color):
     """
