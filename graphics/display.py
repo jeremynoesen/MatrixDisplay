@@ -78,6 +78,10 @@ def fade(start, end, duration):
         if current >= duration:
             break
 
+    global fade_thread
+    if fade_thread is not None:
+        fade_thread = None
+
 
 def fade_async(start, end, duration):
     """
@@ -95,24 +99,30 @@ def clear():
     """
     Clear the display of the Unicorn HAT
     """
+    global fade_thread
     if fade_thread is not None:
         fade_thread.join()
-    else:
-        fade(100, 0, 0.5)
+
+    fade(100, 0, 0.5)
 
     if loading.loading_thread is not None:
         loading.loading_thread.loop = False
         loading.loading_thread.join()
+        loading.loading_thread = None
     if image.image_thread is not None:
         image.image_thread.loop = False
         image.image_thread.join()
+        image.image_thread = None
         image.current_image = ""
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
+        slideshow.slideshow_thread.join()
+        slideshow.slideshow_thread = None
         slideshow.display_time = 0
     if color.color_thread is not None:
         color.color_thread.loop = False
         color.color_thread.join()
+        color.color_thread = None
         color.current_color = "000000"
 
     unicorn.clear()
