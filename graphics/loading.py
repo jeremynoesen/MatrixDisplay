@@ -22,8 +22,7 @@ def __show():
               (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
     # Fade in
-    if getattr(thread, "loop", True):
-        display.fade_async(0, 100, 0.2)
+    display.fade_async(0, 100, 0.2)
 
     # Do pixel animation
     while getattr(thread, "loop", True):

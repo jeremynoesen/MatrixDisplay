@@ -21,7 +21,7 @@ class Server(BaseHTTPRequestHandler):
         Default response headers
         """
         self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Type', 'text/html')
         self.end_headers()
 
     def do_GET(self):
@@ -50,7 +50,7 @@ class Server(BaseHTTPRequestHandler):
                            f'                         "Accept": "application/json",\n' \
                            f'                         "Content-Type": "application/json"\n' \
                            f'                     }},\n' \
-                           f'            body: JSON.stringify({{mode: "image", image: {file}}})\n' \
+                           f'            body: JSON.stringify({{mode: "image", image: "{file}"}})\n' \
                            f'        }});\n' \
                            f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
                            f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
