@@ -28,12 +28,14 @@ class Server(BaseHTTPRequestHandler):
         """
         Process GET requests, which includes sending the web panel
         """
-        self.do_HEAD()
-
         global current_mode
 
         # GET the web UI
         if self.path == "/ui":
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html')
+            self.end_headers()
 
             # Create image buttons
             files = os.listdir(config.pictures_dir)
@@ -91,6 +93,10 @@ class Server(BaseHTTPRequestHandler):
         # GET the state of the device
         elif self.path == "/api":
 
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
             # Write state as JSON
             data = {
                 "mode": current_mode,
@@ -106,11 +112,13 @@ class Server(BaseHTTPRequestHandler):
         """
         Process POST requests, which only updates the display
         """
-        self.do_HEAD()
-
         global current_mode
 
         if self.path == "/api":
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
 
             # Read request data
             data = json.loads(self.rfile.read().decode("utf-8"))
