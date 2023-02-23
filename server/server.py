@@ -16,14 +16,6 @@ class Server(BaseHTTPRequestHandler):
     Simple web server to control the Unicorn HAT
     """
 
-    def do_HEAD(self):
-        """
-        Response headers
-        """
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-
     def do_GET(self):
         """
         Process GET requests, which includes sending the web panel
@@ -31,9 +23,11 @@ class Server(BaseHTTPRequestHandler):
         global current_mode
 
         # GET the web UI
-        if (self.path == "/ui"):
+        if self.path == "/ui":
             # Headers
-            self.do_HEAD()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html')
+            self.end_headers()
 
             # Create image buttons
             files = os.listdir(config.pictures_dir)
@@ -89,10 +83,10 @@ class Server(BaseHTTPRequestHandler):
                 self.wfile.write(data.encode("utf-8"))
 
         # GET the state of the device
-        elif (self.path == "/api"):
+        elif self.path == "/api":
             # Headers
             self.send_response(200)
-            self.send_header('Content-type', 'application/json')
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
 
             # Write state as JSON
@@ -116,7 +110,7 @@ class Server(BaseHTTPRequestHandler):
         if self.path == "/api":
             # Headers
             self.send_response(200)
-            self.send_header('Content-type', 'application/json')
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
 
             # Read request data
