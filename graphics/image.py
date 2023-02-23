@@ -14,6 +14,7 @@ import os
 import pickle
 
 image_thread = None
+fade_thread = None
 current_image = ""
 loading_indicator = False
 
@@ -163,14 +164,14 @@ def __show():
     if getattr(thread, "loop", True):
         loading.clear(loading_indicator)
 
+    # Fade in image
     if getattr(thread, "loop", True):
-        # Fade in image
-        display.fade_async(0, 100, 0.2)
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
         # Draw image to display
         __draw(display_image)
-
-        display.fade_thread.join()
 
 
 def show(file_name, show_loading):
@@ -197,10 +198,11 @@ def clear():
     """
     global image_thread, current_image
     if image_thread is not None:
+        if fade_thread is not None:
+            fade_thread.join()
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
         image_thread.join()
-        image_thread = None
         current_image = ""
         unicorn.clear()

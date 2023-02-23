@@ -6,7 +6,7 @@ import time
 import os
 
 import config
-from graphics import loading, image, display
+from graphics import loading, image
 import threading
 import random
 

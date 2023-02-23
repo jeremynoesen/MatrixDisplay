@@ -10,24 +10,27 @@ import threading
 current_color = "000000"
 rgb_color = None
 color_thread = None
+fade_thread = None
 
 
 def __show():
     """
     Show a solid color on the Unicorn HAT
     """
+    thread = threading.current_thread()
 
     # Fade in
-    display.fade_async(0, 100, 0.2)
+    if getattr(thread, "loop", True):
+        global fade_thread
+        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+        fade_thread.start()
 
     # Show color
-    while getattr(threading.current_thread(), "loop", True):
+    while getattr(thread, "loop", True):
         for i in range(8):
             for j in range(8):
                 display.set_pixel(i, j, rgb_color[0], rgb_color[1], rgb_color[2])
         time.sleep(0.0333)
-
-    display.fade_thread.join()
 
 
 def show(color):
