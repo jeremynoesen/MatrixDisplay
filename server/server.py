@@ -44,7 +44,7 @@ class Server(BaseHTTPRequestHandler):
                 links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
                 scripts += f'<script>\n' + \
                            f'    function image{files.index(file)}() {{\n' + \
-                           f'        fetch("/api" + this.value, {{\n' \
+                           f'        fetch("/api", {{\n' \
                            f'            method: "POST",\n' \
                            f'            headers: {{\n' \
                            f'                         "Accept": "application/json",\n' \

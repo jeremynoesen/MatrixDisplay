@@ -69,7 +69,7 @@
     <input type="number" value="{display_time}" id="slideshowdisplaytime" style="width: 100%">
     <script>
         document.getElementById("slideshowduration").oninput = function slideshow() {
-            fetch("/api" + this.value, {
+            fetch("/api", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -88,7 +88,7 @@
     <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
     <script>
         document.getElementById("colorpicker").oninput = function color() {
-            fetch("/api" + this.value, {
+            fetch("/api", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -106,7 +106,7 @@
     <h3><a id="offtitle" href=javascript:off()>{offtitle}</a></h3>
     <script>
         function off() {
-            fetch("/api" + this.value, {
+            fetch("/api", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -132,7 +132,7 @@
     <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
     <script>
         document.getElementById("brightness").oninput = function brightness() {
-            fetch("/api" + this.value, {
+            fetch("/api", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -147,7 +147,7 @@
     <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
     <script>
         document.getElementById("warmth").oninput = function warmth() {
-            fetch("/api" + this.value, {
+            fetch("/api", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
