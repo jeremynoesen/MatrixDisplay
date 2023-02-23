@@ -8,6 +8,7 @@ from PIL import ImageColor
 import threading
 
 current_color = "000000"
+rgb_color = None
 color_thread = None
 
 
@@ -23,7 +24,7 @@ def __show():
     while getattr(threading.current_thread(), "loop", True):
         for i in range(8):
             for j in range(8):
-                display.set_pixel(i, j, current_color[0], current_color[1], current_color[2])
+                display.set_pixel(i, j, rgb_color[0], rgb_color[1], rgb_color[2])
         time.sleep(0.0333)
 
 
@@ -34,8 +35,9 @@ def show(color):
     """
 
     # Parse color
-    global current_color
-    current_color = ImageColor.getcolor(f"#{color}", "RGB")
+    global current_color, rgb_color
+    rgb_color = ImageColor.getcolor(f"#{color}", "RGB")
+    current_color = color
 
     # Start thread
     global color_thread
