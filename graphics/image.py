@@ -196,13 +196,15 @@ def clear():
     """
     Clear the image off of the Unicorn HAT
     """
-    global image_thread, current_image
+    global image_thread, current_image, fade_thread
     if image_thread is not None:
         if fade_thread is not None:
             fade_thread.join()
+            fade_thread = None
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
         image_thread.join()
+        image_thread = None
         current_image = ""
         unicorn.clear()

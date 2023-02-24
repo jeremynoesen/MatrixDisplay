@@ -83,27 +83,34 @@ def clear():
     """
     if loading.fade_thread is not None:
         loading.fade_thread.join()
+        loading.fade_thread = None
     if image.fade_thread is not None:
         image.fade_thread.join()
+        image.fade_thread = None
     if color.fade_thread is not None:
         color.fade_thread.join()
+        color.fade_thread = None
 
     fade(100, 0, 0.5)
 
     if loading.loading_thread is not None:
         loading.loading_thread.loop = False
         loading.loading_thread.join()
+        loading.loading_thread = None
     if image.image_thread is not None:
         image.image_thread.loop = False
         image.image_thread.join()
+        image.image_thread = None
         image.current_image = ""
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
         slideshow.slideshow_thread.join()
+        slideshow.slideshow_thread = None
         slideshow.display_time = 0
     if color.color_thread is not None:
         color.color_thread.loop = False
         color.color_thread.join()
+        color.color_thread = None
         color.current_color = "000000"
 
     unicorn.clear()

@@ -61,13 +61,16 @@ def clear(animated):
     Clear the loading animation off of the Unicorn HAT
     :param animated: true to animate clearing the loading animation
     """
+    global loading_thread, fade_thread
     if loading_thread is not None:
         if fade_thread is not None:
             fade_thread.join()
+            fade_thread = None
         if animated:
             display.fade(100, 0, 0.2)
         loading_thread.loop = False
         loading_thread.join()
+        loading_thread = None
         unicorn.clear()
     global loading
     loading = False
