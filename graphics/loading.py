@@ -23,10 +23,9 @@ def __show():
               (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
     # Fade in
-    if getattr(thread, "loop", True):
-        global fade_thread
-        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade_thread.start()
+    global fade_thread
+    fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+    fade_thread.start()
 
     # Do pixel animation
     while getattr(thread, "loop", True):
@@ -49,7 +48,6 @@ def show(animated):
     Show the loading animation on the Unicorn HAT
     :param animated: true to animate the loading animation
     """
-    clear(animated)
     if animated:
         global loading_thread
         loading_thread = threading.Thread(target=__show)

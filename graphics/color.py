@@ -20,10 +20,9 @@ def __show():
     thread = threading.current_thread()
 
     # Fade in
-    if getattr(thread, "loop", True):
-        global fade_thread
-        fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-        fade_thread.start()
+    global fade_thread
+    fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
+    fade_thread.start()
 
     # Show color
     while getattr(thread, "loop", True):
