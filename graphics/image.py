@@ -134,21 +134,16 @@ def __show():
     """
     thread = threading.current_thread()
 
-    if os.path.exists(f"{config.cache_dir}{current_image}.pickle"):
-        # Start loading indicator
-        loading.show(loading_indicator)
+    # Start loading indicator
+    loading.show(loading_indicator)
 
+    if os.path.exists(f"{config.cache_dir}{current_image}.pickle"):
         # Get cached image
         with open(f"{config.cache_dir}{current_image}.pickle", 'rb') as f:
             display_image = pickle.load(f)
-
-    elif os.path.exists(f"{config.pictures_dir}{current_image}"):
-        # Start loading indicator
-        loading.show(loading_indicator)
-
+    else:
         # Get and process image
-        if getattr(thread, "loop", True):
-            display_image = __process(f"{config.pictures_dir}{current_image}")
+        display_image = __process(f"{config.pictures_dir}{current_image}")
 
         # Save image to cached folder
         if getattr(thread, "loop", True):

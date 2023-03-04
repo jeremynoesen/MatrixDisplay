@@ -120,8 +120,7 @@ class Server(BaseHTTPRequestHandler):
                 if "mode" in data.keys():
                     if data["mode"] == "image":
                         if "image" in data.keys():
-                            if os.path.exists(f'{config.cache_dir}{data["image"]}.pickle') or \
-                                    os.path.exists(f'{config.pictures_dir}{data["image"]}'):
+                            if os.path.exists(f'{config.pictures_dir}{data["image"]}'):
                                 current_mode = "image"
                                 display.clear()
                                 image.show(data["image"], True)
