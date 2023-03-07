@@ -120,10 +120,11 @@ class Server(BaseHTTPRequestHandler):
                 if "mode" in data.keys():
                     if data["mode"] == "image":
                         if "image" in data.keys():
-                            if os.path.exists(f'{config.pictures_dir}{data["image"]}'):
+                            sanitized = data["image"].replace("/", "").replace("..", "")
+                            if os.path.exists(f'{config.pictures_dir}{sanitized}'):
                                 current_mode = "image"
                                 display.clear()
-                                image.show(data["image"], True)
+                                image.show(sanitized, True)
                             else:
                                 current_mode = "off"
                                 display.clear()
