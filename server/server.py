@@ -16,6 +16,14 @@ class Server(BaseHTTPRequestHandler):
     Simple web server to control the Unicorn HAT
     """
 
+    def do_HEAD(self):
+        """
+        Process HEAD requests, which are used to check if the server is alive
+        """
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html')
+        self.end_headers()
+
     def do_GET(self):
         """
         Process GET requests, which includes sending the web panel
