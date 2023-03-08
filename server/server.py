@@ -4,7 +4,7 @@ A simple web server and interface used to easily control the Unicorn HAT
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from graphics import display, image, slideshow, color
+from graphics import display, image, slideshow, color, boot
 import os
 import config
 
@@ -178,3 +178,4 @@ def start():
     """
     http_server = HTTPServer(("", 8080), Server)
     http_server.serve_forever()
+    boot.show()

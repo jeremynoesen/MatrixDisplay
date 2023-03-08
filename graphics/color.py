@@ -10,7 +10,6 @@ import threading
 current_color = "000000"
 rgb_color = None
 color_thread = None
-fade_thread = None
 
 
 def __show():
@@ -18,11 +17,6 @@ def __show():
     Show a solid color on the Unicorn HAT
     """
     thread = threading.current_thread()
-
-    # Fade in
-    global fade_thread
-    fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-    fade_thread.start()
 
     # Show color
     while getattr(thread, "loop", True):
@@ -47,3 +41,4 @@ def show(color):
     global color_thread
     color_thread = threading.Thread(target=__show)
     color_thread.start()
+    display.fade(0, 100, 0.2)

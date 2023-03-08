@@ -9,7 +9,6 @@ import threading
 
 loading_thread = None
 loading = False
-fade_thread = None
 
 
 def __show():
@@ -21,11 +20,6 @@ def __show():
     # Pixels in order of animation
     pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
               (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
-
-    # Fade in
-    global fade_thread
-    fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
-    fade_thread.start()
 
     # Do pixel animation
     while getattr(thread, "loop", True):
@@ -52,6 +46,7 @@ def show(animated):
         global loading_thread
         loading_thread = threading.Thread(target=__show)
         loading_thread.start()
+        display.fade(0, 100, 0.2)
     global loading
     loading = True
 
@@ -61,11 +56,8 @@ def clear(animated):
     Clear the loading animation off of the Unicorn HAT
     :param animated: true to animate clearing the loading animation
     """
-    global loading_thread, fade_thread
+    global loading_thread
     if loading_thread is not None:
-        if fade_thread is not None:
-            fade_thread.join()
-            fade_thread = None
         if animated:
             display.fade(100, 0, 0.2)
         loading_thread.loop = False
