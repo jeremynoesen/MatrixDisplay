@@ -95,21 +95,17 @@ def clear():
 
     if loading.loading_thread is not None:
         loading.loading_thread.loop = False
-        loading.loading_thread.join()
         loading.loading_thread = None
     if image.image_thread is not None:
         image.image_thread.loop = False
-        image.image_thread.join()
         image.image_thread = None
         image.current_image = ""
     if slideshow.slideshow_thread is not None:
         slideshow.slideshow_thread.loop = False
-        slideshow.slideshow_thread.join()
         slideshow.slideshow_thread = None
         slideshow.display_time = 0
     if color.color_thread is not None:
         color.color_thread.loop = False
-        color.color_thread.join()
         color.color_thread = None
         color.current_color = "000000"
 

@@ -69,7 +69,6 @@ def clear(animated):
         if animated:
             display.fade(100, 0, 0.2)
         loading_thread.loop = False
-        loading_thread.join()
         loading_thread = None
         unicorn.clear()
     global loading

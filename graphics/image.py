@@ -199,7 +199,6 @@ def clear():
         display.fade(100, 0, 0.5)
         loading.clear(False)
         image_thread.loop = False
-        image_thread.join()
         image_thread = None
         current_image = ""
         unicorn.clear()
