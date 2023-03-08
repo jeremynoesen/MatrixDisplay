@@ -12,7 +12,7 @@ import threading
 threading.Thread(target=display.start).start()
 
 # Show boot animation
-threading.Thread(target=boot.show()).start()
+boot.show()
 
 # Start control server
-threading.Thread(target=server.start).start()
+server.start()
