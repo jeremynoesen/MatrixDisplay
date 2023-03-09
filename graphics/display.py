@@ -1,6 +1,7 @@
 """
 Display actions and effects for the Unicorn HAT
 """
+import threading
 
 import unicornhat as unicorn
 import time
@@ -14,7 +15,7 @@ current_brightness = 100
 modified_brightness = 1.0
 
 
-def set_pixel(x, y, r, g, b):
+def set_pixel(x: int, y: int, r: int, g: int, b: int):
     """
     Set the color of a pixel
     :param x: Matrix pixel x coordinate
@@ -29,26 +30,26 @@ def set_pixel(x, y, r, g, b):
                       round(max(b - (current_warmth * 1.5), 0) * modified_brightness))
 
 
-def set_warmth(warmth):
+def set_warmth(warmth: int):
     """
     Set blue light filter amount
     :param warmth: 0 to 100 intensity of blue light filter
     """
     global current_warmth
-    current_warmth = round(min(max(warmth, 0), 100))
+    current_warmth = min(max(warmth, 0), 100)
 
 
-def set_brightness(brightness):
+def set_brightness(brightness: int):
     """
     Set software display brightness
     :param brightness: 0 to 100 brightness of display
     """
     global current_brightness, modified_brightness
-    current_brightness = round(min(max(brightness, 0), 100))
+    current_brightness = min(max(brightness, 0), 100)
     modified_brightness = (((current_brightness * (100 - 17)) / 100) + 17) / 100
 
 
-def fade(start, end, duration):
+def fade(start: int, end: int, duration: float):
     """
     Fade in or out the Unicorn HAT
     :param start: Starting brightness 0 to 100
@@ -106,10 +107,18 @@ def clear():
     unicorn.clear()
 
 
-def start():
+def __start():
     """
     Update the display of the Unicorn HAT
     """
     while True:
         unicorn.show()
         time.sleep(0.0333)
+
+
+def start():
+    """
+    Start the display update thread
+    """
+    display_thread = threading.Thread(target=__start)
+    display_thread.start()

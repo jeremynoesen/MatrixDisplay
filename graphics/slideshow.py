@@ -49,7 +49,7 @@ def __show():
             image.clear()
 
 
-def show(time):
+def show(time: int):
     """
     Show the slideshow on the Unicorn HAT
     :param time: how long to display images in seconds
@@ -57,7 +57,7 @@ def show(time):
 
     # Parse time
     global display_time
-    display_time = round(max(1, time))
+    display_time = max(1, time)
 
     # Start thread
     global slideshow_thread

@@ -26,7 +26,7 @@ def __show():
         time.sleep(0.0333)
 
 
-def show(color):
+def show(color: str):
     """
     Show a solid color on the Unicorn HAT
     :param color: hex color code to display

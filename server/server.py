@@ -145,7 +145,7 @@ class Server(BaseHTTPRequestHandler):
                         if "display_time" in data.keys():
                             current_mode = "slideshow"
                             display.clear()
-                            slideshow.show(int(data["display_time"]))
+                            slideshow.show(round(data["display_time"]))
 
                     elif data["mode"] == "color":
                         if "color" in data.keys():
@@ -158,10 +158,10 @@ class Server(BaseHTTPRequestHandler):
                         display.clear()
 
                 if "brightness" in data.keys():
-                    display.set_brightness(int(data["brightness"]))
+                    display.set_brightness(round(data["brightness"]))
 
                 if "warmth" in data.keys():
-                    display.set_warmth(int(data["warmth"]))
+                    display.set_warmth(round(data["warmth"]))
 
             except TypeError:
                 current_mode = "off"

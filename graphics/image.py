@@ -19,7 +19,7 @@ current_image = ""
 loading_indicator = False
 
 
-def __process(image_path):
+def __process(image_path: str):
     """
     Load an image and scale it down into an array for displaying.
     :param image_path: full path to image to load
@@ -87,7 +87,7 @@ def __process(image_path):
     return processed_frames, frame_durations
 
 
-def __draw(image_array):
+def __draw(image_array: tuple):
     """
     draw the image on the Unicorn HAT
     :param image_array: tuple of the processed frames and the frame durations
@@ -169,7 +169,7 @@ def __show():
         __draw(display_image)
 
 
-def show(file_name, show_loading):
+def show(file_name: str, show_loading: bool):
     """
     Show an image on the Unicorn HAT
     :param file_name: Name of image to show

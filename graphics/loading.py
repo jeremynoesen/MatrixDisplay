@@ -37,7 +37,7 @@ def __show():
             time.sleep(0.0333)
 
 
-def show(animated):
+def show(animated: bool):
     """
     Show the loading animation on the Unicorn HAT
     :param animated: true to animate the loading animation
@@ -51,7 +51,7 @@ def show(animated):
     loading = True
 
 
-def clear(animated):
+def clear(animated: bool):
     """
     Clear the loading animation off of the Unicorn HAT
     :param animated: true to animate clearing the loading animation
