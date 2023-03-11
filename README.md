@@ -64,6 +64,21 @@ There are two configurable values located in `config.py`:
 - `pictures_dir`: The location of the directory where images are stored.
 - `cache_dir`: The location of the directory where cached images will be saved.
 
+## Home Assistant
+This project can be added to Home Assistant using the RESTful Switch integration. The following is an example entry in `configuration.yaml` to add a switch to Home Assistant that turns the display on to slideshow mode with set brightness and warmth, as well as turn it off:
+```yaml
+switch:
+  - platform: rest
+    resource: http://DISPLAY-IP:8080/api
+    body_on: '{"mode": "slideshow", "display_time": 60, "brightness": 40, "warmth": 20}'
+    body_off: '{"mode": "off"}'
+    is_on_template: '{{ value_json.mode != "off" }}'
+    headers:
+      Content-Type: application/json
+    verify_ssl: false
+    name: matrix_display
+```
+
 ## Demonstration
 
 [Watch on YouTube](https://youtu.be/zxgAzgMzVN0)
