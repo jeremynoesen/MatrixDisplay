@@ -7,17 +7,20 @@ MatrixDisplay is a Python program used to display images on the Pimoroni Unicorn
 This project exists mainly as a way for me to try a new programming language, as well as to create a project that has both software and hardware aspects in it. I also just wanted to make my own smart home gadget.
 
 ## Usage
+### Web Interface
 On the same network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080`. From there, you can control the display output from a web interface.
 
 <div align="center" ><img src="img/webinterface.png" alt="Example Web Interface" title="Example Web Interface" /></div>
 
 ### API
+This API is used by the web interface, but can also be used by other programs to control the display.
+
 #### GET
-- `http://pi-address:8080/ui`: Get web interface
-- `http://pi-address:8080/api`: Get device state as JSON
+- `http://DISPLAY-IP:8080/ui`: Get web interface HTML
+- `http://DISPLAY-IP:8080/api`: Get device state as JSON
 
 #### POST
-- `http://pi-address:8080/api`: Set device state with JSON
+- `http://DISPLAY-IP:8080/api`: Set device state with JSON
 
 #### JSON Format
 ```json
