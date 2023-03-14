@@ -26,7 +26,7 @@ def show():
             time.sleep(0.0333)
 
     # Fade in then out
-    display.fade(50, 100, 0.1)
+    display.fade(50, 100, 0.05)
     display.fade(100, 0, 1)
 
     # Clear screen
