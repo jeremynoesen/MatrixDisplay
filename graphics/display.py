@@ -1,15 +1,14 @@
 """
 Display actions and effects for the Unicorn HAT
 """
-import threading
 
+import threading
 import unicornhat as unicorn
 import time
 from graphics import image, slideshow, loading, color
 
 unicorn.set_layout(unicorn.HAT)
 unicorn.rotation(270)
-
 current_warmth = 0
 current_brightness = 100
 modified_brightness = 1.0
@@ -21,8 +20,8 @@ def set_pixel(x: int, y: int, r: int, g: int, b: int):
     :param x: Matrix pixel x coordinate
     :param y: Matrix pixel y coordinate
     :param r: Red value
-    :param g: green value
-    :param b: blue value
+    :param g: Green value
+    :param b: Blue value
     """
     unicorn.set_pixel(x, y,
                       round(r * modified_brightness),
@@ -32,7 +31,7 @@ def set_pixel(x: int, y: int, r: int, g: int, b: int):
 
 def set_warmth(warmth: int):
     """
-    Set blue light filter amount
+    Set blue light filter intensity
     :param warmth: 0 to 100 intensity of blue light filter
     """
     global current_warmth
@@ -56,11 +55,8 @@ def fade(start: int, end: int, duration: float):
     :param end: Ending brightness 0 to 100
     :param duration: Duration of fade in seconds
     """
-    # Map start and end value to visible range
     start_visible = ((start * (100 - 17)) / 100) + 17
     end_visible = ((end * (100 - 17)) / 100) + 17
-
-    # Do fading with delta time to ensure the fades last exactly the specified duration
     delta = 0
     current = 0
     while True:
@@ -85,9 +81,7 @@ def clear():
     if image.fade_thread is not None:
         image.fade_thread.join()
         image.fade_thread = None
-
     fade(100, 0, 0.5)
-
     if loading.loading_thread is not None:
         loading.loading_thread.loop = False
         loading.loading_thread = None
@@ -103,13 +97,12 @@ def clear():
         color.color_thread.loop = False
         color.color_thread = None
         color.current_color = "000000"
-
     unicorn.clear()
 
 
 def __start():
     """
-    Update the display of the Unicorn HAT
+    Update the display of the Unicorn HAT. Must be run in a separate thread!
     """
     while True:
         unicorn.show()

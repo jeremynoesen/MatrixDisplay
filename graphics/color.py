@@ -14,11 +14,9 @@ color_thread = None
 
 def __show():
     """
-    Show a solid color on the Unicorn HAT
+    Show a solid color on the Unicorn HAT. Must be run in a separate thread!
     """
     thread = threading.current_thread()
-
-    # Show color
     while getattr(thread, "loop", True):
         for i in range(8):
             for j in range(8):
@@ -29,16 +27,11 @@ def __show():
 def show(color: str):
     """
     Show a solid color on the Unicorn HAT
-    :param color: hex color code to display
+    :param color: Hex color to display
     """
-
-    # Parse color
-    global current_color, rgb_color
+    global current_color, rgb_color, color_thread
     rgb_color = ImageColor.getcolor(f"#{color}", "RGB")
     current_color = color
-
-    # Start thread
-    global color_thread
     color_thread = threading.Thread(target=__show)
     color_thread.start()
     display.fade(0, 100, 0.2)
