@@ -79,6 +79,7 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+Then run `sudo systemctl enable matrixdisplay && sudo systemctl start matrixdisplay` to start the service and set it to run at boot.
 
 ## Configuration
 There are two configurable values located in `config.py`:
