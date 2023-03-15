@@ -8,7 +8,7 @@ This project exists mainly as a way for me to try a new programming language, as
 
 ## Usage
 ### Web Interface
-On the same network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080`. From there, you can control the display output from a web interface.
+On the same network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080/ui`. From there, you can control the display output from a web interface.
 
 <div align="center" ><img src="img/webinterface.png" alt="Example Web Interface" title="Example Web Interface" /></div>
 
@@ -55,15 +55,12 @@ This API is used by the web interface, but can also be used by other programs to
 - Micro SD card
 
 ## Installation
-Simply clone or download this repository onto the Raspberry Pi.
-
-## Running
 ### Manual
-1. Open a terminal.
-2. Run `sudo python3 /path/to/main.py`.
+Clone or download this repository onto the Raspberry Pi.
 
-### Automatic
-To set the program to run automatically on boot, create this service file at `/etc/systemd/system/matrixdisplay.service`. Fill in the paths to the program folder and `main.py`, as well as the user to run the program as:
+### Systemd
+1. Clone or download this repository onto the Raspberry Pi.
+2. Create the following `matrixdisplay.service` file in `/etc/systemd/system/`, making sure to change the `WorkingDirectory` and `ExecStart`, as well as the `User`:
 ```
 [Unit]
 Description=Matrix Display Program
@@ -79,7 +76,13 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
-Then run `sudo systemctl enable matrixdisplay && sudo systemctl start matrixdisplay` to start the service and set it to run at boot.
+
+## Running
+### Manual
+Run `sudo python3 /path/to/main.py`.
+
+### Systemd
+Run `sudo systemctl enable matrixdisplay && sudo systemctl start matrixdisplay` to start the service and set it to run at boot.
 
 ## Configuration
 There are two configurable values located in `config.py`:
