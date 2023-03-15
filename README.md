@@ -61,7 +61,7 @@ Clone or download this repository onto the Raspberry Pi.
 ### Systemd
 1. Clone or download this repository onto the Raspberry Pi.
 2. Create the following `matrixdisplay.service` file in `/etc/systemd/system/`, making sure to change the `WorkingDirectory` and `ExecStart`, as well as the `User`:
-```
+```ini
 [Unit]
 Description=Matrix Display Program
 After=network-online.target
