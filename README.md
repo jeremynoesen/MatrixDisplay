@@ -55,12 +55,30 @@ This API is used by the web interface, but can also be used by other programs to
 - Micro SD card
 
 ## Installation
-1. Clone or download this repository onto the Raspberry Pi.
-2. Set `main.py` to start when the Pi turns on.
+Simply clone or download this repository onto the Raspberry Pi.
 
 ## Running
+### Manual
 1. Open a terminal.
 2. Run `sudo python3 /path/to/main.py`.
+
+### Automatic
+To set the program to run automatically on boot, create this service file at `/etc/systemd/system/matrixdisplay.service`. Fill in the paths to the program folder and `main.py`, as well as the user to run the program as:
+```
+[Unit]
+Description=Matrix Display Program
+After=network-online.target
+
+[Service]
+WorkingDirectory=/path/to/MatrixDisplay/
+ExecStart=/usr/bin/sudo /usr/bin/python3 /path/to/main.py
+User=set_user_here
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
 
 ## Configuration
 There are two configurable values located in `config.py`:
