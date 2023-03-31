@@ -116,7 +116,8 @@ at boot.
 
 There are two configurable values located in `config.py`:
 
-- `pictures_dir`: The location of the directory where images are stored.
+- `pictures_dir`: The location of the directory where images are stored. This directory should only contain images and
+  no hidden files.
 - `cache_dir`: The location of the directory where cached images will be saved.
 
 ## Home Assistant
