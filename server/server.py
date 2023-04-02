@@ -38,25 +38,27 @@ class Server(BaseHTTPRequestHandler):
             links = ""
             scripts = ""
             for file in files:
-                links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
-                scripts += f'<script>\n' + \
-                           f'    function image{files.index(file)}() {{\n' + \
-                           f'        fetch("/api", {{\n' \
-                           f'            method: "POST",\n' \
-                           f'            headers: {{\n' \
-                           f'                         "Accept": "application/json",\n' \
-                           f'                         "Content-Type": "application/json"\n' \
-                           f'                     }},\n' \
-                           f'            body: JSON.stringify({{mode: "image", image: "{file}"}})\n' \
-                           f'        }});\n' \
-                           f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
-                           f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
-                           f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
-                           f'        document.getElementById("offtitle").textContent = "- Off";\n' + \
-                           f'        document.getElementById("slideshowdisplaytime").value = 0;\n' \
-                           f'        document.getElementById("colorpicker").value = "#000000";\n' \
-                           f'    }}\n' + \
-                           f'</script>\n'
+                if os.path.isfile(f'{config.pictures_dir}{file}') and \
+                        not file.startswith("."):
+                    links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
+                    scripts += f'<script>\n' + \
+                               f'    function image{files.index(file)}() {{\n' + \
+                               f'        fetch("/api", {{\n' \
+                               f'            method: "POST",\n' \
+                               f'            headers: {{\n' \
+                               f'                         "Accept": "application/json",\n' \
+                               f'                         "Content-Type": "application/json"\n' \
+                               f'                     }},\n' \
+                               f'            body: JSON.stringify({{mode: "image", image: "{file}"}})\n' \
+                               f'        }});\n' \
+                               f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
+                               f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
+                               f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
+                               f'        document.getElementById("offtitle").textContent = "- Off";\n' + \
+                               f'        document.getElementById("slideshowdisplaytime").value = 0;\n' \
+                               f'        document.getElementById("colorpicker").value = "#000000";\n' \
+                               f'    }}\n' + \
+                               f'</script>\n'
             with open("./server/index.html") as fd:
                 data = fd.read().replace("{links}", links.removesuffix(", ")) \
                     .replace("{scripts}", scripts) \
@@ -113,7 +115,9 @@ class Server(BaseHTTPRequestHandler):
                     if data["mode"] == "image":
                         if "image" in data.keys():
                             sanitized = data["image"].replace("/", "").replace("..", "")
-                            if os.path.exists(f'{config.pictures_dir}{sanitized}'):
+                            if os.path.exists(f'{config.pictures_dir}{sanitized}') and\
+                                    os.path.isfile(f'{config.pictures_dir}{sanitized}') and\
+                                    not sanitized.startswith("."):
                                 current_mode = "image"
                                 display.clear()
                                 image.show(sanitized, True)

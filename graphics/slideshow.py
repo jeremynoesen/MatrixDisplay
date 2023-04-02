@@ -22,19 +22,21 @@ def __show():
     files = os.listdir(config.pictures_dir)
     random.shuffle(files)
     while getattr(thread, "loop", True):
-        image.show(files[index], False)
+        if os.path.isfile(f'{config.pictures_dir}{files[index]}') and \
+                not files[index].startswith("."):
+            image.show(files[index], False)
+            if getattr(thread, "loop", True):
+                time.sleep(0.5)
+                while loading.loading and getattr(thread, "loop", True):
+                    time.sleep(0.5)
+            if getattr(thread, "loop", True):
+                time.sleep(display_time)
+            if getattr(thread, "loop", True):
+                image.clear()
         if index < len(files) - 1:
             index += 1
         else:
             index = 0
-        if getattr(thread, "loop", True):
-            time.sleep(0.5)
-            while loading.loading and getattr(thread, "loop", True):
-                time.sleep(0.5)
-        if getattr(thread, "loop", True):
-            time.sleep(display_time)
-        if getattr(thread, "loop", True):
-            image.clear()
 
 
 def show(time: int):
