@@ -75,6 +75,9 @@ This API is used by the web interface, but can also be used by other programs to
 
 ## Installation
 
+For all installation methods, you must first install Python 3. After doing so, run `pip3 install -r requirements.txt` to
+install the required libraries.
+
 ### Manual
 
 Clone or download this repository onto the Raspberry Pi.
