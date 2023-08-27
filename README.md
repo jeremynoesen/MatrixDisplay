@@ -121,7 +121,12 @@ There are two configurable values located in `config.py`:
 
 - `pictures_dir`: The location of the directory where images are stored. This directory should only contain images and
   no hidden files.
+  - When adding images to this directory, you must refresh the web interface for the images list to
+    update.
+  - If running the slideshow, you must restart the slideshow mode for the new images to show up.
 - `cache_dir`: The location of the directory where cached images will be saved.
+  - If an image is ever modified in the
+    pictures directory, remove the corresponding file from this directory to have it be regenerated.
 
 ## Home Assistant
 
