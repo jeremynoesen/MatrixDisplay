@@ -115,8 +115,7 @@ class Server(BaseHTTPRequestHandler):
                     if data["mode"] == "image":
                         if "image" in data.keys():
                             sanitized = data["image"].replace("/", "").replace("..", "")
-                            if os.path.exists(f'{config.pictures_dir}{sanitized}') and\
-                                    os.path.isfile(f'{config.pictures_dir}{sanitized}') and\
+                            if os.path.isfile(f'{config.pictures_dir}{sanitized}') and\
                                     not sanitized.startswith("."):
                                 current_mode = "image"
                                 display.clear()
