@@ -17,7 +17,8 @@ both software and hardware aspects in it. I also just wanted to make my own smar
 ### Web Interface
 
 On the same network as the Raspberry Pi, open your browser to `http://yourpihostname.local:8080/ui`. From there, you can
-control the display output from a web interface.
+control the display output from a web interface. Note that this page does not automatically refresh; it only updates 
+when you click something or manually refresh the page.
 
 <div align="center" ><img src="img/webinterface.png" alt="Example Web Interface" title="Example Web Interface" /></div>
 
@@ -90,7 +91,7 @@ Clone or download this repository onto the Raspberry Pi.
 
 ```ini
 [Unit]
-Description = Matrix Display Program
+Description = MatrixDisplay Program
 After = network-online.target
 
 [Service]
