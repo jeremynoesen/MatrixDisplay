@@ -55,7 +55,7 @@
 </head>
 <body>
 
-<h1><a href="https://github.com/jeremynoesen/MatrixDisplay">MatrixDisplay</a></h1>
+<h1><a href="https://github.com/jeremynoesen/MatrixDisplay" title="View MatrixDisplay on GitHub">MatrixDisplay</a></h1>
 
 <hr>
 
@@ -65,7 +65,8 @@
     <h4>{links}</h4>
     {scripts}
     <h3 id="slideshowtitle">{slideshowtitle}</h3>
-    <input type="number" value="{display_time}" id="slideshowdisplaytime" style="width: 100%">
+    <input type="number" value="{display_time}" id="slideshowdisplaytime" title="Show the slideshow on the display"
+           style="width: 100%">
     <script>
         document.getElementById("slideshowdisplaytime").oninput = function slideshow() {
             fetch("/api", {
@@ -84,7 +85,7 @@
         }
     </script>
     <h3 id="colortitle">{colortitle}</h3>
-    <input type="color" value="#{color}" style="width: 100%" id="colorpicker">
+    <input type="color" value="#{color}" style="width: 100%" id="colorpicker" title="Show a color on the display">
     <script>
         document.getElementById("colorpicker").oninput = function color() {
             fetch("/api", {
@@ -102,7 +103,7 @@
             document.getElementById("slideshowdisplaytime").value = 0;
         }
     </script>
-    <h3><a id="offtitle" href=javascript:off()>{offtitle}</a></h3>
+    <h3><a id="offtitle" href=javascript:off() title="Turn off the display">{offtitle}</a></h3>
     <script>
         function off() {
             fetch("/api", {
@@ -128,7 +129,8 @@
 <h2>Settings</h2>
 <div style="width: 95%; margin: auto">
     <h3 id="brightnesstitle">{brightnesstitle}</h3>
-    <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%">
+    <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%"
+           title="Set the display brightness">
     <script>
         document.getElementById("brightness").oninput = function brightness() {
             fetch("/api", {
@@ -143,7 +145,8 @@
         }
     </script>
     <h3 id="warmthtitle">{warmthtitle}</h3>
-    <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%">
+    <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%"
+           title="Set the display warmth">
     <script>
         document.getElementById("warmth").oninput = function warmth() {
             fetch("/api", {

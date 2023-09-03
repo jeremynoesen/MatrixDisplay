@@ -40,7 +40,8 @@ class Server(BaseHTTPRequestHandler):
             for file in files:
                 if os.path.isfile(f'{config.pictures_dir}{file}') and \
                         not file.startswith("."):
-                    links += f'<a href=javascript:image{files.index(file)}()>{file}</a>, '
+                    links += (f'<a href=javascript:image{files.index(file)}() title="Show {file} on the display">{file}'
+                              f'</a>, ')
                     scripts += f'<script>\n' + \
                                f'    function image{files.index(file)}() {{\n' + \
                                f'        fetch("/api", {{\n' \
@@ -115,7 +116,7 @@ class Server(BaseHTTPRequestHandler):
                     if data["mode"] == "image":
                         if "image" in data.keys():
                             sanitized = data["image"].replace("/", "").replace("..", "")
-                            if os.path.isfile(f'{config.pictures_dir}{sanitized}') and\
+                            if os.path.isfile(f'{config.pictures_dir}{sanitized}') and \
                                     not sanitized.startswith("."):
                                 current_mode = "image"
                                 display.clear()
