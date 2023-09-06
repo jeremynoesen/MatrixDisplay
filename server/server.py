@@ -52,7 +52,7 @@ class Server(BaseHTTPRequestHandler):
                                f'                     }},\n' \
                                f'            body: JSON.stringify({{mode: "image", image: "{file}"}})\n' \
                                f'        }});\n' \
-                               f'        document.getElementById("imagetitle").textContent = "> Image: {file}";\n' + \
+                               f'        document.getElementById("imagetitle").textContent = "* Image: {file}";\n' + \
                                f'        document.getElementById("slideshowtitle").textContent = "- Slideshow";\n' + \
                                f'        document.getElementById("colortitle").textContent = "- Color";\n' + \
                                f'        document.getElementById("offtitle").textContent = "- Off";\n' + \
@@ -67,17 +67,17 @@ class Server(BaseHTTPRequestHandler):
                     .replace("{color}", color.current_color) \
                     .replace("{brightness}", str(display.current_brightness)) \
                     .replace("{warmth}", str(display.current_warmth)) \
-                    .replace("{brightnesstitle}", f"- Brightness {display.current_brightness}%") \
-                    .replace("{warmthtitle}", f"- Warmth {display.current_warmth}%")
+                    .replace("{brightnesstitle}", f"- Brightness: {display.current_brightness}%") \
+                    .replace("{warmthtitle}", f"- Warmth: {display.current_warmth}%")
                 if current_mode == "image":
-                    data = data.replace("{imagetitle}", f"> Image: {image.current_image}")
+                    data = data.replace("{imagetitle}", f"* Image: {image.current_image}")
                 elif current_mode == "slideshow":
-                    data = data.replace("{slideshowtitle}", f"> Slideshow: {slideshow.display_time} seconds per image")
+                    data = data.replace("{slideshowtitle}", f"* Slideshow: {slideshow.display_time} seconds per image")
                     data = data.replace("{imagetitle}", f"- Image: {image.current_image}")
                 elif current_mode == "color":
-                    data = data.replace("{colortitle}", f"> Color: #{color.current_color}")
+                    data = data.replace("{colortitle}", f"* Color: #{color.current_color}")
                 elif current_mode == "off":
-                    data = data.replace("{offtitle}", "> Off")
+                    data = data.replace("{offtitle}", "* Off")
                 data = data.replace("{imagetitle}", "- Image") \
                     .replace("{slideshowtitle}", "- Slideshow") \
                     .replace("{colortitle}", "- Color") \

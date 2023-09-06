@@ -6,53 +6,96 @@
     <meta property="description" content="MatrixDisplay Web Interface"/>
     <meta name="theme-color" content="#000000">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-
         body {
-            font-family: "Nunito", sans-serif;
-            background-color: black;
-            color: white;
+            font-family: "Verdana", sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
             text-decoration: none;
-            margin: 6vh auto;
+            margin: 4vh auto;
             padding: 0 4vw;
             font-size: 2vh;
-            line-height: 4vh;
-            max-width: 768px;
+            max-width: 720px;
         }
 
         a {
-            color: white;
+            color: #FFFFFF;
             text-decoration: none;
             transition: 0.2s;
         }
 
         a:hover {
-            color: #999999;
+            color: #BBBBBB;
             transition: 0.2s;
         }
 
         hr {
-            color: #333333;
-            border-color: #333333;
+            color: #222222;
+            border-color: #222222;
             border-style: solid;
-        }
-
-        .slider {
-            appearance: none;
-            -webkit-appearance: none;
-            background-color: #333333;
-            border-radius: 100vw;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .slider:hover {
-            background-color: #666666;
-            transition: 0.2s;
         }
 
         h1 {
             text-align: center;
+        }
+
+        input {
+            width: 100%;
+            height: 2vh;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #333333;
+            outline: none;
+            transition: 0.2s;
+            border: none;
+        }
+
+        input:hover {
+            background-color: #444444;
+            transition: 0.2s;
+        }
+
+        div {
+            width: 90%;
+            margin: auto;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 2vh;
+            width: 2vh;
+            background: #FFFFFF;
+            border-radius: 0%;
+            border: none;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            appearance: none;
+            height: 2vh;
+            width: 2vh;
+            background: #FFFFFF;
+            border-radius: 0%;
+            border: none;
+        }
+
+        input[type="number"] {
+            font-family: "Verdana", sans-serif;
+            font-size: 1.5vh;
+            color: #FFFFFF;
+            padding: 1.1vh 0.5vh;
+            -moz-appearance: textfield;
+        }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input::-webkit-color-swatch {
+            border: none;
+        }
+
+        input::-moz-color-swatch {
+            border: none;
         }
     </style>
 </head>
@@ -63,13 +106,12 @@
 <hr>
 
 <h2>Modes</h2>
-<div style="width: 95%; margin: auto">
+<div>
     <h3 id="imagetitle">{imagetitle}</h3>
-    <h4>{links}</h4>
+    <p>{links}</p>
     {scripts}
     <h3 id="slideshowtitle">{slideshowtitle}</h3>
-    <input type="number" value="{display_time}" id="slideshowdisplaytime" title="Show the slideshow on the display"
-           style="width: 100%">
+    <input type="number" value="{display_time}" id="slideshowdisplaytime" title="Show the slideshow on the display">
     <script>
         document.getElementById("slideshowdisplaytime").oninput = function slideshow() {
             fetch("/api", {
@@ -80,7 +122,7 @@
                 },
                 body: JSON.stringify({mode: "slideshow", display_time: this.value})
             });
-            document.getElementById("slideshowtitle").textContent = "> Slideshow: " + this.value + " seconds per image";
+            document.getElementById("slideshowtitle").textContent = "* Slideshow: " + this.value + " seconds per image";
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("colortitle").textContent = "- Color";
             document.getElementById("offtitle").textContent = "- Off";
@@ -88,7 +130,7 @@
         }
     </script>
     <h3 id="colortitle">{colortitle}</h3>
-    <input type="color" value="#{color}" style="width: 100%" id="colorpicker" title="Show a color on the display">
+    <input type="color" value="#{color}" id="colorpicker" title="Show a color on the display">
     <script>
         document.getElementById("colorpicker").oninput = function color() {
             fetch("/api", {
@@ -99,7 +141,7 @@
                 },
                 body: JSON.stringify({mode: "color", color: this.value.replace("#", "")})
             });
-            document.getElementById("colortitle").textContent = "> Color: " + this.value;
+            document.getElementById("colortitle").textContent = "* Color: " + this.value;
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
             document.getElementById("offtitle").textContent = "- Off";
@@ -117,7 +159,7 @@
                 },
                 body: JSON.stringify({mode: "off"})
             });
-            document.getElementById("offtitle").textContent = "> Off";
+            document.getElementById("offtitle").textContent = "* Off";
             document.getElementById("imagetitle").textContent = "- Image";
             document.getElementById("slideshowtitle").textContent = "- Slideshow";
             document.getElementById("colortitle").textContent = "- Color";
@@ -130,10 +172,9 @@
 <hr>
 
 <h2>Settings</h2>
-<div style="width: 95%; margin: auto">
+<div>
     <h3 id="brightnesstitle">{brightnesstitle}</h3>
-    <input type="range" min="0" max="100" value="{brightness}" class="slider" id="brightness" style="width: 100%"
-           title="Set the display brightness">
+    <input type="range" min="0" max="100" value="{brightness}" id="brightness" title="Set the display brightness">
     <script>
         document.getElementById("brightness").oninput = function brightness() {
             fetch("/api", {
@@ -148,8 +189,7 @@
         }
     </script>
     <h3 id="warmthtitle">{warmthtitle}</h3>
-    <input type="range" min="0" max="100" value="{warmth}" class="slider" id="warmth" style="width: 100%"
-           title="Set the display warmth">
+    <input type="range" min="0" max="100" value="{warmth}" id="warmth" title="Set the display warmth">
     <script>
         document.getElementById("warmth").oninput = function warmth() {
             fetch("/api", {
