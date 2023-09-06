@@ -72,7 +72,8 @@ class Server(BaseHTTPRequestHandler):
                 if current_mode == "image":
                     data = data.replace("{imagetitle}", f"* Image: {image.current_image}")
                 elif current_mode == "slideshow":
-                    data = data.replace("{slideshowtitle}", f"* Slideshow: {slideshow.display_time} seconds per image")
+                    data = data.replace("{slideshowtitle}",
+                                        f"* Slideshow: {slideshow.display_time} sec/image")
                     data = data.replace("{imagetitle}", f"- Image: {image.current_image}")
                 elif current_mode == "color":
                     data = data.replace("{colortitle}", f"* Color: #{color.current_color}")
