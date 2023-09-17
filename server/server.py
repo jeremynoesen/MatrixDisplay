@@ -123,6 +123,8 @@ class Server(BaseHTTPRequestHandler):
                                 display.clear()
                                 image.show(sanitized, True)
                             else:
+                                print(f'File {config.pictures_dir}{sanitized} '
+                                      f'is either a directory, hidden, or doesn\'t exist; turning display off.')
                                 current_mode = "off"
                                 display.clear()
                     elif data["mode"] == "slideshow":

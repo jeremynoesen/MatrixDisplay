@@ -33,6 +33,9 @@ def __show():
                 time.sleep(display_time)
             if getattr(thread, "loop", True):
                 image.clear()
+        else:
+            print(f'File {config.pictures_dir}{files[index]} '
+                  f'is either a directory, hidden, or doesn\'t exist; skipping it.')
         if index < len(files) - 1:
             index += 1
         else:
