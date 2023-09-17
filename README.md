@@ -76,18 +76,11 @@ This API is used by the web interface, but can also be used by other programs to
 
 ## Installation
 
-For all installation methods, you must first install Python 3. After doing so, run `pip3 install -r requirements.txt` to
-install the required libraries.
-
-### Manual
-
-Clone or download this repository onto the Raspberry Pi.
-
-### Systemd
-
-1. Clone or download this repository onto the Raspberry Pi.
-2. Create the following `matrixdisplay.service` file in `/etc/systemd/system/`, making sure to change
-   the `WorkingDirectory` and `ExecStart`, as well as the `User`:
+1. Install Python 3.
+2. Clone or download this repository onto the Raspberry Pi.
+3. Run `pip3 install -r requirements.txt`.
+4. If using Systemd to auto-start the program, Create the following `matrixdisplay.service` file
+   in `/etc/systemd/system/`, making sure to change the `WorkingDirectory` and `ExecStart`, as well as the `User`:
 
 ```ini
 [Unit]
@@ -128,6 +121,12 @@ There are two configurable values located in `config.py`:
 - `cache_dir`: The location of the directory where cached images will be saved.
     - If an image is ever modified in the
       pictures directory, remove the corresponding file from this directory to have it be regenerated.
+
+## Updating
+
+1. Re-download or git pull (if you cloned) this repository.
+2. Run `pip3 install -r requirements.txt` to install any new requirements.
+3. Restart the program. (If using systemd, run `sudo systemctl restart matrixdisplay`).
 
 ## Home Assistant
 
