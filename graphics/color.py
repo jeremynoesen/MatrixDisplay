@@ -19,9 +19,14 @@ def __show():
     thread = threading.current_thread()
     while getattr(thread, "loop", True):
         for i in range(8):
+            if not getattr(thread, "loop", True):
+                break
             for j in range(8):
+                if not getattr(thread, "loop", True):
+                    break
                 display.set_pixel(i, j, rgb_color[0], rgb_color[1], rgb_color[2])
-        time.sleep(display.frame_delay)
+        if getattr(thread, "loop", True):
+            time.sleep(display.frame_delay)
 
 
 def show(color: str):

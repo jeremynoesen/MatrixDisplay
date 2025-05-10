@@ -21,12 +21,15 @@ def __show():
             if not getattr(thread, "loop", True):
                 break
             for j in range(10):
+                if not getattr(thread, "loop", True):
+                    break
                 pixel = display.loading_indicator[(i + j + 1) % len(display.loading_indicator)]
                 pixel2 = display.loading_indicator[(i - j + len(display.loading_indicator)) % len(display.loading_indicator)]
                 x = 255 - (j * 20)
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)
-            time.sleep(display.frame_delay)
+            if getattr(thread, "loop", True):
+                time.sleep(display.frame_delay)
 
 
 def show(animated: bool):

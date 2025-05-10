@@ -41,6 +41,8 @@ def __process(image_path: str):
         input_image.seek(i)
         image = input_image.convert("RGBA")
         for matrix_x in range(8):
+            if not getattr(thread, "loop", True):
+                break
             for matrix_y in range(8):
                 if not getattr(thread, "loop", True):
                     break
@@ -48,6 +50,8 @@ def __process(image_path: str):
                 g = 0
                 b = 0
                 for block_x in range((matrix_x * scale_x) + offset_x, ((matrix_x * scale_x) + scale_x) + offset_x):
+                    if not getattr(thread, "loop", True):
+                        break
                     for block_y in range((matrix_y * scale_y) + offset_y, ((matrix_y * scale_y) + scale_y) + offset_y):
                         if not getattr(thread, "loop", True):
                             break
@@ -73,6 +77,7 @@ def __draw(image_array: tuple):
     Draw the image on the Unicorn HAT. Must be run in a separate thread!
     :param image_array: Tuple of the processed frames and the frame durations
     """
+    thread = threading.current_thread()
     frame_durations = image_array[1]
     frame_count = len(frame_durations)
     current_frame_index = 0
@@ -80,12 +85,19 @@ def __draw(image_array: tuple):
     while getattr(threading.current_thread(), "loop", True):
         start_time = time.time()
         for matrix_x in range(8):
+            if not getattr(thread, "loop", True):
+                break
             for matrix_y in range(8):
+                if not getattr(thread, "loop", True):
+                    break
                 pixel = image_array[0][current_frame_index][matrix_x][matrix_y]
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
-        time.sleep(display.frame_delay)
+        if getattr(thread, "loop", True):
+            time.sleep(display.frame_delay)
         if frame_count > 1:
             for delta_frame_index in range(frame_count):
+                if not getattr(thread, "loop", True):
+                    break
                 next_frame_index = current_frame_index + delta_frame_index
                 next_timestamp = current_timestamp + (time.time() - start_time)
                 if next_frame_index < frame_count:
