@@ -16,15 +16,13 @@ def __show():
     Show the loading animation. Must be run in a separate thread!
     """
     thread = threading.current_thread()
-    pixels = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
-              (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
     while getattr(thread, "loop", True):
-        for i in range(len(pixels)):
+        for i in range(len(display.loading_indicator)):
             if not getattr(thread, "loop", True):
                 break
             for j in range(10):
-                pixel = pixels[(i + j + 1) % len(pixels)]
-                pixel2 = pixels[(i - j + len(pixels)) % len(pixels)]
+                pixel = display.loading_indicator[(i + j + 1) % len(display.loading_indicator)]
+                pixel2 = display.loading_indicator[(i - j + len(display.loading_indicator)) % len(display.loading_indicator)]
                 x = 255 - (j * 20)
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)

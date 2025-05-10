@@ -34,10 +34,7 @@ def __show():
         else:
             print(f'File {config.pictures_dir}{files[index]} '
                   f'is either a directory, hidden, or doesn\'t exist; skipping it.')
-        if index < len(files) - 1:
-            index += 1
-        else:
-            index = 0
+        index = (index + 1) % len(files)
 
 
 def show(time: int):

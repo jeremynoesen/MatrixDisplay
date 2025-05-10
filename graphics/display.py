@@ -13,6 +13,8 @@ current_warmth = 0
 current_brightness = 100
 modified_brightness = 1.0
 frame_delay = 1 / 30
+loading_indicator = [(6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (5, 6), (4, 6), (3, 6), (2, 6),
+          (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)]
 
 
 def set_pixel(x: int, y: int, r: int, g: int, b: int):
