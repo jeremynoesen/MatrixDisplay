@@ -12,6 +12,7 @@ unicorn.rotation(270)
 current_warmth = 0
 current_brightness = 100
 modified_brightness = 1.0
+frame_delay = 1 / 30
 
 
 def set_pixel(x: int, y: int, r: int, g: int, b: int):
@@ -68,10 +69,10 @@ def fade(start: int, end: int, duration: float):
         else:
             unicorn.brightness(((((duration - min(current, duration)) * (
                     start_visible - end_visible)) / duration) + end_visible) / 100)
-        time.sleep(0.0333)
-        delta = time.time() - start_time
+        time.sleep(frame_delay)
         if current >= duration:
             break
+        delta = time.time() - start_time
 
 
 def clear():
@@ -106,7 +107,7 @@ def __start():
     """
     while True:
         unicorn.show()
-        time.sleep(0.0333)
+        time.sleep(frame_delay)
 
 
 def start():

@@ -5,7 +5,7 @@ Show a slideshow of images on the Unicorn HAT
 import time
 import os
 import config
-from graphics import loading, image
+from graphics import loading, image, display
 import threading
 import random
 
@@ -26,9 +26,9 @@ def __show():
                 not files[index].startswith("."):
             image.show(files[index], False)
             if getattr(thread, "loop", True):
-                time.sleep(0.5)
+                time.sleep(display.frame_delay)
                 while loading.loading and getattr(thread, "loop", True):
-                    time.sleep(0.5)
+                    time.sleep(display.frame_delay)
             if getattr(thread, "loop", True):
                 time.sleep(display_time)
             if getattr(thread, "loop", True):

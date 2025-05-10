@@ -21,7 +21,7 @@ def __show():
         for i in range(8):
             for j in range(8):
                 display.set_pixel(i, j, rgb_color[0], rgb_color[1], rgb_color[2])
-        time.sleep(0.0333)
+        time.sleep(display.frame_delay)
 
 
 def show(color: str):

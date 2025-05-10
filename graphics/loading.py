@@ -28,7 +28,7 @@ def __show():
                 x = 255 - (j * 20)
                 display.set_pixel(pixel[0], pixel[1], x, x, x)
                 display.set_pixel(pixel2[0], pixel2[1], x, x, x)
-            time.sleep(0.0333)
+            time.sleep(display.frame_delay)
 
 
 def show(animated: bool):

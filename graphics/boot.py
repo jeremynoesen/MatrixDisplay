@@ -19,7 +19,7 @@ def show():
         for j in range(2):
             x = (j * 127) + 128
             display.set_pixel(pixel[0], pixel[1], x, x, x)
-            time.sleep(0.0333)
+            time.sleep(display.frame_delay)
     display.fade(50, 100, 0.05)
     display.fade(100, 0, 1)
     unicorn.clear()

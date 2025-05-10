@@ -73,33 +73,23 @@ def __draw(image_array: tuple):
     Draw the image on the Unicorn HAT. Must be run in a separate thread!
     :param image_array: Tuple of the processed frames and the frame durations
     """
-    thread = threading.current_thread()
-    processed_frames = image_array[0]
     frame_durations = image_array[1]
     frame_count = len(frame_durations)
     current_frame_index = 0
-    timestamp = 0
-    while getattr(thread, "loop", True):
+    current_timestamp = 0
+    while getattr(threading.current_thread(), "loop", True):
         start_time = time.time()
-        current_frame = processed_frames[current_frame_index]
         for matrix_x in range(8):
             for matrix_y in range(8):
-                pixel = current_frame[matrix_x][matrix_y]
+                pixel = image_array[0][current_frame_index][matrix_x][matrix_y]
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
-        time.sleep(0.0333)
-        if frame_count > 1:
-            timestamp = (timestamp + (time.time() - start_time))
-            for i in range(frame_count - 1):
-                temp_index = current_frame_index + i
-                if temp_index < frame_count - 1:
-                    if timestamp <= frame_durations[temp_index]:
-                        current_frame_index = temp_index
-                        break
-                else:
-                    if timestamp % frame_durations[frame_count - 1] <= frame_durations[temp_index % (frame_count - 1)]:
-                        current_frame_index = temp_index % (frame_count - 1)
-                        timestamp = timestamp % frame_durations[frame_count - 1]
-                        break
+        time.sleep(display.frame_delay)
+        for i in range(frame_count):
+            current_frame_index = (current_frame_index + 1) % frame_count
+            next_timestamp = (current_timestamp + (time.time() - start_time)) % frame_durations[-1]
+            if next_timestamp <= frame_durations[current_frame_index]:
+                current_timestamp = next_timestamp
+                break
 
 
 def __show():
