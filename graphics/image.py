@@ -85,11 +85,11 @@ def __draw(image_array: tuple):
                 display.set_pixel(matrix_x, matrix_y, pixel[0], pixel[1], pixel[2])
         time.sleep(display.frame_delay)
         for i in range(frame_count):
-            current_frame_index = (current_frame_index + 1) % frame_count
             next_timestamp = (current_timestamp + (time.time() - start_time)) % frame_durations[-1]
             if next_timestamp <= frame_durations[current_frame_index]:
                 current_timestamp = next_timestamp
                 break
+            current_frame_index = (current_frame_index + 1) % frame_count
 
 
 def __show():
