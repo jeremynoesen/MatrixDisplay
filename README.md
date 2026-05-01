@@ -59,7 +59,7 @@ This API is used by the web interface, but can also be used by other programs to
 
 ### Software:
 
-- Python 3
+- Python 3.10 or higher
 - [unicorn-hat](https://github.com/pimoroni/unicorn-hat) library
 - [Pillow](https://pypi.org/project/Pillow/) library
 
