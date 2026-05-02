@@ -25,7 +25,7 @@ def __show():
         if os.path.isfile(f'{config.pictures_dir}{files[index]}') and \
                 not files[index].startswith("."):
             image.show(files[index], False)
-            while loading.loading and getattr(thread, "loop", True):
+            while getattr(thread, "loop", True) and loading.loading:
                 time.sleep(display.frame_delay)
             if getattr(thread, "loop", True):
                 time.sleep(display_time)
