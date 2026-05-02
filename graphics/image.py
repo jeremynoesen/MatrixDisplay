@@ -28,6 +28,8 @@ def __process(image_path: str):
     thread = threading.current_thread()
     input_image = Image.open(image_path)
     if input_image.size[0] < 8 or input_image.size[1] < 8:
+        print(f"File {config.pictures_dir}{image_path}"
+              "is not at least 8x8 pixels; displaying a blank image.")
         return None
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]

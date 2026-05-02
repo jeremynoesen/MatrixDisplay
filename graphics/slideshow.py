@@ -32,8 +32,8 @@ def __show():
             if getattr(thread, "loop", True):
                 image.clear()
         else:
-            print(f'File {config.pictures_dir}{files[index]} '
-                  f'is either a directory, hidden, or doesn\'t exist; skipping it.')
+            print(f"File {config.pictures_dir}{files[index]}"
+                  " is either a directory, hidden, or doesn't exist; skipping it.")
         index = (index + 1) % len(files)
 
 
