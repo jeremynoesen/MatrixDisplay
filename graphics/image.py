@@ -6,7 +6,7 @@ mapped directly to one LED on the matrix. Essentially, this applies a pixelating
 
 import math
 import time
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import unicornhat as unicorn
 from graphics import loading, display
 import threading
@@ -26,7 +26,12 @@ def __process(image_path: str):
     :param image_path: Full path to image to load
     """
     thread = threading.current_thread()
-    input_image = Image.open(image_path)
+    try:
+        input_image = Image.open(image_path)
+    except UnidentifiedImageError:
+        print(f"File {config.pictures_dir}{image_path}"
+              "is not an image; displaying a blank image.")
+        return None
     if input_image.size[0] < 8 or input_image.size[1] < 8:
         print(f"File {config.pictures_dir}{image_path}"
               "is not at least 8x8 pixels; displaying a blank image.")
