@@ -27,6 +27,8 @@ def __process(image_path: str):
     """
     thread = threading.current_thread()
     input_image = Image.open(image_path)
+    if input_image.size[0] < 8 or input_image.size[1] < 8:
+        return None
     frame_count = getattr(input_image, "n_frames", 1)
     processed_frames = [[[(0, 0, 0)] * 8 for i in range(8)] for j in range(frame_count)]
     frame_durations = []
@@ -123,14 +125,14 @@ def __show():
             display_image = pickle.load(f)
     else:
         display_image = __process(f"{config.pictures_dir}{current_image}")
-        if getattr(thread, "loop", True):
+        if getattr(thread, "loop", True) and display_image is not None:
             if not os.path.exists(config.cache_dir):
                 os.makedirs(config.cache_dir)
             with open(f"{config.cache_dir}{current_image}.pickle", 'wb') as f:
                 pickle.dump(display_image, f)
     if getattr(thread, "loop", True):
         loading.clear(loading_indicator)
-    if getattr(thread, "loop", True):
+    if getattr(thread, "loop", True) and display_image is not None:
         global fade_thread
         fade_thread = threading.Thread(target=display.fade, args=(0, 100, 0.2))
         fade_thread.start()
